@@ -13,6 +13,8 @@ import com.example.gestorheme.Activities.Main.Fragments.Agenda.AgendaFragment;
 import com.example.gestorheme.Activities.Main.Fragments.Heme.HemeFragment;
 import com.example.gestorheme.Activities.Main.Fragments.ListaClientes.ClientesFragment;
 import com.example.gestorheme.Activities.Main.Fragments.Notificaciones.NotificacionesFragment;
+import com.example.gestorheme.Common.Constants;
+import com.example.gestorheme.LocalDatabase.DatabaseManager;
 import com.example.gestorheme.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -26,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Constants.databaseManager = new DatabaseManager(getApplicationContext());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setViews();
