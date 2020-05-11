@@ -26,7 +26,8 @@
             android:hint="Nombre"
             android:inputType="textPersonName"
             android:paddingLeft="10dp"
-            android:paddingRight="10dp" />
+            android:paddingRight="10dp"
+            android:focusableInTouchMode="true"/>
 
         <ImageButton
             android:id="@+id/clean_button"
@@ -58,5 +59,24 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/filter_view" />
+
+    <RelativeLayout
+        android:id="@+id/add_client_button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/rounded_view"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerInParent="true"
+            android:tint="@color/colorPrimary"
+            app:srcCompat="@drawable/plus_image" />
+    </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,10 +1,12 @@
 package com.example.gestorheme.Models.Service;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 
-public class ServiceModel {
+public class ServiceModel implements Serializable {
     private long clientId = 0;
-    private long serviceId = 0;
+    private long serviceId = new Date().getTime();
     private String nombre = "";
     private String apellidos = "";
     private long fecha = 0;

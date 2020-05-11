@@ -44,7 +44,20 @@ public class Constants {
     public static String databaseTarjeta = "tarjeta";
 
 
-    public static String cadaDosSemanas = "cada 2 semanas";
+    public static final String unaSemana = "cada semana";
+    public static final String dosSemanas = "cada 2 semanas";
+    public static final String tresSemanas = "cada 3 semanas";
+    public static final String unMes = "cada mes";
+    public static final String unMesUnaSemana = "cada mes y 1 semana";
+    public static final String unMesDosSemanas = "cada mes y 2 semanas";
+    public static final String unMesTresSemanas = "cada mes y 3 semanas";
+    public static final String dosMeses = "cada 2 meses";
+    public static final String dosMesesYUnaSemana = "cada 2 meses y 1 semana";
+    public static final String dosMesesYDosSemanas = "cada 2 meses y 2 semanas";
+    public static final String dosMesesYTresSemanas = "cada 2 meses y 3 semanas";
+    public static final String tresMeses = "cada 3 meses";
+    public static final String masDeTresMeses = "mas de 3 meses";
+
     public static DatabaseManager databaseManager;
 
 }

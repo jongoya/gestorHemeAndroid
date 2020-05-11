@@ -9,7 +9,7 @@
   },
   {
     "Nombre": "Adolfo",
-    "Apellidos" : "z",
+    "Apellidos" : "",
     "Direcion": "Zarautz",
     "Fecha": "2/7/20",
     "Servicio": "Corte",
@@ -43,7 +43,7 @@
   },
   {
     "Nombre": "Agutzane",
-    "Apellidos" : "z",
+    "Apellidos" : "",
     "Direcion": "Pamplona",
     "Fecha": "7/24/19",
     "Servicio": "Secar"
@@ -250,7 +250,7 @@
   },
   {
     "Nombre": "Alexia",
-    "Apellidos" : "z",
+    "Apellidos" : "",
     "Fecha": "7/24/19",
     "Servicio": "Corte",
     "Comentarios": "Amiga de Amaia Gallego"
@@ -750,7 +750,7 @@
   },
   {
     "Nombre": "Aranzazu",
-    "Apellidos" : "z",
+    "Apellidos" : "",
     "Direcion": "Oñati",
     "Telefono": "675715771",
     "Fecha": "12/26/19",
@@ -835,7 +835,7 @@
   },
   {
     "Nombre": "Aurora",
-    "Apellidos" : "z",
+    "Apellidos" : "",
     "Telefono": "620274958",
     "Fecha": "5/4/19",
     "Servicio": "Corte + color 60-6 + 40-7 a 18 v c/110 oxig/ barro 10, complex + 5-3´1 1+7 10 min 65+55",
@@ -998,7 +998,7 @@
   },
   {
     "Nombre": "Brigida",
-    "Apellidos" : "z",
+    "Apellidos" : "",
     "Direcion": "Donostia",
     "Fecha": "9/21/19",
     "Servicio": "Corte",
@@ -1074,7 +1074,7 @@
   },
   {
     "Nombre": "Cheila",
-    "Apellidos" : "z",
+    "Apellidos" : "",
     "Direcion": "Andoain",
     "Telefono": "637341918",
     "Fecha": "11/6/19",
@@ -1212,7 +1212,7 @@
   },
   {
     "Nombre": "Daniela",
-    "Apellidos" : "z",
+    "Apellidos" : "",
     "Direcion": "Donostia",
     "Fecha": "7/18/19",
     "Servicio": "Secar",
@@ -1487,7 +1487,7 @@
   },
   {
     "Nombre": "Estefan",
-    "Apellidos" : "z",
+    "Apellidos" : "",
     "Direcion": "Donostia",
     "Fecha": "6/19/19",
     "Servicio": "Corte",
@@ -1505,7 +1505,7 @@
   },
   {
     "Nombre": "Estela",
-    "Apellidos" : "z",
+    "Apellidos" : "",
     "Apellidos" : "Nuñez Gomez",
     "Direcion": "Hondarribia,  Caserio Arcoiar 6 buzon 3",
     "Cumpleaños": "7/9/67",
@@ -1725,7 +1725,7 @@
   },
   {
     "Nombre": "Ibone",
-    "Apellidos" : "z",
+    "Apellidos" : "",
     "Direcion": "Donostia",
     "Fecha": "2/16/19",
     "Servicio": "Corte + barro 60-3´2 1+4 40 min",
@@ -2095,7 +2095,7 @@
   },
   {
     "Nombre": "Joanes",
-    "Apellidos" : "z",
+    "Apellidos" : "",
     "Direcion": "Donostia",
     "Fecha": "9/19/19",
     "Servicio": "Corte",
@@ -2121,7 +2121,7 @@
   },
   {
     "Nombre": "Jose Ramon",
-    "Apellidos" : "z",
+    "Apellidos" : "",
     "Direcion": "SUIZA",
     "Telefono": "687077324",
     "Fecha": "1/17/20",
@@ -2214,7 +2214,7 @@
   },
   {
     "Nombre": "Kati",
-    "Apellidos" : "z",
+    "Apellidos" : "",
     "Direcion": "A CORUÑA",
     "Telefono": "619420831",
     "Fecha": "4/12/19",
@@ -2232,7 +2232,7 @@
   },
   {
     "Nombre": "Kayla",
-    "Apellidos" : "z",
+    "Apellidos" : "",
     "Direcion": "SUIZA",
     "Telefono": "+41788014077",
     "Fecha": "5/21/19",
@@ -2248,7 +2248,7 @@
   },
   {
     "Nombre": "Kin",
-    "Apellidos" : "z",
+    "Apellidos" : "",
     "Direcion": "NORUEGA",
     "Fecha": "4/4/19",
     "Servicio": "Corte + platas 1/4-12 a 40 v + neo 20-6 a 9v en las puntas libres + hidrat + secar 70+60+20"
@@ -2442,14 +2442,14 @@
   },
   {
     "Nombre": "Lierni",
-    "Apellidos" : "z",
+    "Apellidos" : "",
     "Direcion": "Donostia",
     "Fecha": "11/27/19",
     "Servicio": "Corte"
   },
   {
     "Nombre": "Lina",
-    "Apellidos" : "z",
+    "Apellidos" : "",
     "Direcion": "Antiguo",
     "Fecha": "2/12/19",
     "Servicio": "Lavar y secar"
@@ -2465,7 +2465,7 @@
   },
   {
     "Nombre": "Lola",
-    "Apellidos" : "z",
+    "Apellidos" : "",
     "Direcion": "Donostia",
     "Fecha": "9/20/19",
     "Servicio": "Corte + TM 28´20",
@@ -2524,7 +2524,7 @@
   },
   {
     "Nombre": "Lorenzo",
-    "Apellidos" : "z",
+    "Apellidos" : "",
     "Direcion": "Donostia",
     "Fecha": "2/21/20",
     "Servicio": "Corte",
@@ -2978,7 +2978,7 @@
   },
   {
     "Nombre": "Maria",
-    "Apellidos" : "z",
+    "Apellidos" : "",
     "Fecha": "9/3/19",
     "Servicio": "Color 1 tubo 8 + 1/4-7 a 20 v / barro en las puntas todo a la vez 5-3´1 + 5-7 1+5",
     "Comentarios": "Cejas 8 a 20 ol  15 min"
@@ -3533,7 +3533,7 @@
   },
   {
     "Nombre": "Mirian",
-    "Apellidos" : "z",
+    "Apellidos" : "",
     "Direcion": "Tolosa",
     "Telefono": "609452652",
     "Fecha": "8/1/19",
@@ -4047,7 +4047,7 @@
   },
   {
     "Nombre": "Pepa",
-    "Apellidos" : "z",
+    "Apellidos" : "",
     "Direcion": "Donostia",
     "Fecha": "8/6/19",
     "Servicio": "Secar",
@@ -4220,7 +4220,7 @@
   },
   {
     "Nombre": "Ricardo Nicolás",
-    "Apellidos" : "z",
+    "Apellidos" : "",
     "Direcion": "Donostia",
     "Fecha": "1/29/20",
     "Servicio": "Corte",
@@ -4397,7 +4397,7 @@
   },
   {
     "Nombre": "Sofia",
-    "Apellidos" : "z",
+    "Apellidos" : "",
     "Direcion": "Donostia",
     "Fecha": "3/6/20",
     "Servicio": "Corte en seco",
@@ -4473,7 +4473,7 @@
   },
   {
     "Nombre": "Suli",
-    "Apellidos" : "z",
+    "Apellidos" : "",
     "Direcion": "Francia",
     "Fecha": "8/16/19",
     "Servicio": "Corte",

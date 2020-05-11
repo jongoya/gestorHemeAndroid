@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.gestorheme"
-        minSdkVersion 15
+        minSdkVersion 23
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -34,4 +34,5 @@ dependencies {
     implementation 'com.google.android.material:material:1.1.0'
     implementation 'androidx.navigation:navigation-fragment:2.2.2'
     implementation 'androidx.navigation:navigation-ui:2.2.2'
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
 }

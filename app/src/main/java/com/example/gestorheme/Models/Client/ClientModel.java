@@ -1,6 +1,11 @@
 package com.example.gestorheme.Models.Client;
 
-public class ClientModel {
+import com.example.gestorheme.Common.Constants;
+
+import java.io.Serializable;
+import java.util.Date;
+
+public class ClientModel implements Serializable {
     private long clientId = 0;
     private String nombre = "";
     private String apellidos = "";
@@ -8,7 +13,7 @@ public class ClientModel {
     private String telefono = "";
     private String email = "";
     private String direccion = "";
-    private String cadenciaVisita = "";
+    private String cadenciaVisita = Constants.dosSemanas;
     private String observaciones = "";
     private long notificacionPersonalizada = 0;
     private String imagen = "";

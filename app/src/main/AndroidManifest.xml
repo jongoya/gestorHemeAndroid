@@ -16,6 +16,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Activities.ClientDetail.ClientDetailActivity">
+        </activity>
+        <activity android:name=".Activities.TextInputField.TextInputFieldActivity">
+        </activity>
+        <activity android:name=".Activities.DatePicker.DatePickerActivity">
+        </activity>
+        <activity android:name=".Activities.ItemSelector.ItemSelectorActivity">
+        </activity>
+        <activity android:name=".Activities.ServiceDetail.ServiceDetailActivity">
+        </activity>
+        <activity android:name=".Activities.ClientListSelector.ClientListSelectorActivity">
+        </activity>
     </application>
 
 </manifest>

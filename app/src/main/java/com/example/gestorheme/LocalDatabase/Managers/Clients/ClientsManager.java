@@ -25,10 +25,35 @@ public class ClientsManager {
             clientes.add(parseCursorToClientModel(cursor));
         }
 
+        cursor.close();
         return clientes;
     }
 
     public void addClientToDatabase(ClientModel client) {
+        if (!checkClientInDatabase(client.getClientId())) {
+            ContentValues cv = fillClientDataToDatabaseObject(client);
+            writableDatabase.insert(Constants.databaseClientesTableName, null, cv);
+        }
+    }
+
+    public void updateClientInDatabase(ClientModel cliente) {
+        ContentValues cv = fillClientDataToDatabaseObject(cliente);
+        writableDatabase.update(Constants.databaseClientesTableName, cv, Constants.databaseClientId + "=" + String.valueOf(cliente.getClientId()), null);
+    }
+
+    private boolean checkClientInDatabase(long clientId) {
+        String Query = "Select * from " + Constants.databaseClientesTableName + " where " + Constants.databaseClientId + " = " + String.valueOf(clientId);
+        Cursor cursor = readableDatabase.rawQuery(Query, null);
+        if (cursor.getCount() == 0){
+            cursor.close();
+            return false;
+        }
+
+        cursor.close();
+        return true;
+    }
+
+    private ContentValues fillClientDataToDatabaseObject(ClientModel client) {
         ContentValues cv = new ContentValues();
         cv.put(Constants.databaseClientId, client.getClientId());
         cv.put(Constants.databaseNombre, client.getNombre());
@@ -41,10 +66,11 @@ public class ClientsManager {
         cv.put(Constants.databaseObservaciones, client.getObservaciones());
         cv.put(Constants.databaseNotificacionPersonalizada, client.getNotificacionPersonalizada());
         cv.put(Constants.databaseImagen, client.getImagen());
-        writableDatabase.insert(Constants.databaseClientesTableName, null, cv);
+
+        return cv;
     }
 
-    public ClientModel parseCursorToClientModel(Cursor cursor) {
+    private ClientModel parseCursorToClientModel(Cursor cursor) {
         ClientModel cliente = new ClientModel();
         cliente.setClientId(cursor.getLong(cursor.getColumnIndex(Constants.databaseClientId)));
         cliente.setNombre(cursor.getString(cursor.getColumnIndex(Constants.databaseNombre)));

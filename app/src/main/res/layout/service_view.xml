@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/clear">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/rounded_view"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/titulo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:text="SERVICIO"
+            android:textColor="@android:color/black" />
+
+        <TextView
+            android:id="@+id/nombreField"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/titulo"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="15dp"
+            android:text="Nombre y Apellidos"
+            android:textColor="@android:color/black" />
+
+        <TextView
+            android:id="@+id/nombreLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/nombreField"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_toRightOf="@id/nombreField"
+            android:gravity="right" />
+
+        <RelativeLayout
+            android:id="@+id/nombreDivider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/nombreField"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/dividerColor">
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/fechaField"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/nombreDivider"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="15dp"
+            android:text="Fecha"
+            android:textColor="@android:color/black" />
+
+        <TextView
+            android:id="@+id/fechaLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/fechaField"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_toRightOf="@id/fechaField"
+            android:gravity="right" />
+
+        <RelativeLayout
+            android:id="@+id/fechaDivider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/fechaField"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="15dp"
+            android:background="@color/dividerColor">
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/profesionalField"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/fechaDivider"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="15dp"
+            android:text="Profesional"
+            android:textColor="@android:color/black" />
+
+        <TextView
+            android:id="@+id/profesionalLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/profesionalField"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_toRightOf="@id/profesionalField"
+            android:gravity="right" />
+
+        <RelativeLayout
+            android:id="@+id/profesionalDivider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/profesionalField"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="15dp"
+            android:background="@color/dividerColor">
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/serviciosField"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/profesionalDivider"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="15dp"
+            android:text="Servicios"
+            android:textColor="@android:color/black" />
+
+        <TextView
+            android:id="@+id/serviciosLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/serviciosField"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_toRightOf="@id/serviciosField"
+            android:gravity="right" />
+
+        <RelativeLayout
+            android:id="@+id/serviciosDivider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/serviciosField"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="15dp"
+            android:background="@color/dividerColor">
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/precioField"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/serviciosDivider"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="15dp"
+            android:text="Precio"
+            android:textColor="@android:color/black" />
+
+        <TextView
+            android:id="@+id/precioLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/precioField"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_toRightOf="@id/precioField"
+            android:gravity="right" />
+
+        <RelativeLayout
+            android:id="@+id/precioDivider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/precioField"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="15dp"
+            android:background="@color/dividerColor">
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/observacionesField"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/precioDivider"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:text="Añade una observación"
+            android:textColor="@android:color/black" />
+    </RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
