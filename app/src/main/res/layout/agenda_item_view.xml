@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:clipChildren="false"
+    android:clipToPadding="false">
+
+    <RelativeLayout
+        android:id="@+id/timeContent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:minHeight="60dp">
+
+        <TextView
+            android:id="@+id/time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="30dp"
+            android:text="TextView"
+            android:textColor="@android:color/black"
+            android:textSize="20sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/services_content"
+        android:layout_marginLeft="10dp"
+        android:background="@color/dividerColor">
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/services_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_toRightOf="@id/timeContent"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:minHeight="60dp"
+        android:orientation="vertical"></LinearLayout>
+
+</RelativeLayout>

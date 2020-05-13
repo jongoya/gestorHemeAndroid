@@ -28,6 +28,8 @@
         </activity>
         <activity android:name=".Activities.ClientListSelector.ClientListSelectorActivity">
         </activity>
+        <activity android:name=".Activities.CierreCaja.CierreCajaActivity">
+        </activity>
     </application>
 
 </manifest>

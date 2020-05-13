@@ -66,9 +66,9 @@ public class HemeFragment extends Fragment {
     }
 
     private void addEmpleados() {
-        EmpleadoModel empleado1 = new EmpleadoModel("Gilberto", "Da Camara Martuscelli", 642423638, "123456789", "gilberto@gmail.com", 642423638, 1,102/255,102/255);
-        EmpleadoModel empleado2 = new EmpleadoModel("Garazi", "Aranguren", 958042838, "123456789", "garazi@gmail.com", 958042838, 1,102/255,102/255);
-        EmpleadoModel empleado3 = new EmpleadoModel("Erregue", "Goya Mendizabal", 651154318, "123456789", "gilberto@gmail.com", 651154318, 1,102/255,102/255);
+        EmpleadoModel empleado1 = new EmpleadoModel("Gilberto", "Da Camara Martuscelli", 642423638, "123456789", "gilberto@gmail.com", 642423638, 255,102,102);
+        EmpleadoModel empleado2 = new EmpleadoModel("Garazi", "Aranguren", 958042838, "123456789", "garazi@gmail.com", 958042838, 255,102,102);
+        EmpleadoModel empleado3 = new EmpleadoModel("Erregue", "Goya Mendizabal", 651154318, "123456789", "gilberto@gmail.com", 651154318, 255,102,102);
         Constants.databaseManager.empleadosManager.addEmpleadoToDatabase(empleado1);
         Constants.databaseManager.empleadosManager.addEmpleadoToDatabase(empleado2);
         Constants.databaseManager.empleadosManager.addEmpleadoToDatabase(empleado3);

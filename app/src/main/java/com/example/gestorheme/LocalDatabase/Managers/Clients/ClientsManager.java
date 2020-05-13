@@ -29,6 +29,16 @@ public class ClientsManager {
         return clientes;
     }
 
+    public ClientModel getClientForClientId(long clientId) {
+        String Query = "Select * from " + Constants.databaseClientesTableName + " where " + Constants.databaseClientId + " = " + String.valueOf(clientId);
+        Cursor cursor = readableDatabase.rawQuery(Query, null);
+        if (cursor.moveToNext()) {
+            return parseCursorToClientModel(cursor);
+        }
+
+        return null;
+    }
+
     public void addClientToDatabase(ClientModel client) {
         if (!checkClientInDatabase(client.getClientId())) {
             ContentValues cv = fillClientDataToDatabaseObject(client);

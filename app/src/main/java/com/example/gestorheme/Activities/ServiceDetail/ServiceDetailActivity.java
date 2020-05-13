@@ -21,6 +21,7 @@ import com.example.gestorheme.Models.Service.ServiceModel;
 import com.example.gestorheme.Models.TipoServicio.TipoServicioModel;
 import com.example.gestorheme.R;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class ServiceDetailActivity extends AppCompatActivity {
     private static final int NOMBRE_FIELD_REF = 0;
@@ -39,6 +40,7 @@ public class ServiceDetailActivity extends AppCompatActivity {
 
     private ServiceModel servicio;
     private ClientModel cliente;
+    private long date;
     private boolean isEditingService;
 
     @Override
@@ -58,17 +60,20 @@ public class ServiceDetailActivity extends AppCompatActivity {
     private void getServiceIntent() {
         servicio = (ServiceModel) getIntent().getSerializableExtra("servicio");
         cliente = (ClientModel) getIntent().getSerializableExtra("cliente");
+        date = getIntent().getLongExtra("fecha", 0);
         if (servicio != null) {
             isEditingService = true;
             setServiceFields();
-        } else {
+        } else if (cliente != null) {
             servicio = new ServiceModel();
             servicio.setNombre(cliente.getNombre());
             servicio.setApellidos(cliente.getApellidos());
             nombreLabel.setText(cliente.getNombre() + " " + cliente.getApellidos());
+        } else {
+            servicio = new ServiceModel();
+            servicio.setFecha(date);
+            fechaLabel.setText(DateFunctions.convertTimestampToServiceDateString(date));
         }
-
-        //TODO implementar el flujo en añadir servicio en la agenda
     }
 
     private void getFields() {
@@ -230,7 +235,7 @@ public class ServiceDetailActivity extends AppCompatActivity {
                 servicio.setNombre(model.getCliente().getNombre());
                 servicio.setApellidos(model.getCliente().getApellidos());
                 servicio.setClientId(model.getCliente().getClientId());
-                servicio.setNombre(data.getExtras().getString("TEXTO"));
+                cliente = model.getCliente();
                 break;
             case PROFESIONAL_FIELD_REF:
                 servicio.setProfesional(data.getExtras().getLong("ITEM"));

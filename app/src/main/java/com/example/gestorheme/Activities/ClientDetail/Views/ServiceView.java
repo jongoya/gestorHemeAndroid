@@ -8,12 +8,9 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.example.gestorheme.Common.CommonFunctions;
 import com.example.gestorheme.Common.Constants;
 import com.example.gestorheme.Common.DateFunctions;
-import com.example.gestorheme.Models.Empleados.EmpleadoModel;
 import com.example.gestorheme.Models.Service.ServiceModel;
-import com.example.gestorheme.Models.TipoServicio.TipoServicioModel;
 import com.example.gestorheme.R;
 
-import java.util.ArrayList;
 
 public class ServiceView extends ConstraintLayout {
     private TextView nombreLabel;

@@ -1,6 +1,7 @@
 package com.example.gestorheme.Common;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -17,4 +18,58 @@ public class DateFunctions {
         Date date = new Date(timestamp);
         return  sf.format(date);
     }
+
+    public static String getHoursAndMinutesFromDate(long timestamp) {
+        SimpleDateFormat sf = new SimpleDateFormat("HH:mm", Locale.getDefault());
+        Date date = new Date(timestamp);
+        return  sf.format(date);
+    }
+
+    public static Date getBeginingOfWorkingDayFromDate(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.set(Calendar.HOUR_OF_DAY, 8);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+
+        return cal.getTime();
+    }
+
+    public static Date getEndOfWorkingDayFromDate(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.set(Calendar.HOUR_OF_DAY, 21);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+
+        return cal.getTime();
+    }
+
+    public static Date add15MinsToDate(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.MINUTE, 15);
+        return calendar.getTime();
+    }
+
+    public static Date getBeginingOfDayFromDate(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.set(Calendar.HOUR_OF_DAY, 1);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+
+        return cal.getTime();
+    }
+
+    public static Date getEndOfDayFromDate(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.set(Calendar.HOUR_OF_DAY, 23);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+
+        return cal.getTime();
+    }
+
 }

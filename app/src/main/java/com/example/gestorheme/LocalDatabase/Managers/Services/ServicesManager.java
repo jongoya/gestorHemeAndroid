@@ -5,9 +5,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 import com.example.gestorheme.Common.Constants;
+import com.example.gestorheme.Common.DateFunctions;
 import com.example.gestorheme.Models.Service.ServiceModel;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 
 public class ServicesManager {
     private SQLiteDatabase writableDatabase;
@@ -40,8 +42,25 @@ public class ServicesManager {
         writableDatabase.update(Constants.databaseServiciosTableName, cv, Constants.databaseServicioId + "=" + String.valueOf(servicio.getServiceId()), null);
     }
 
+    public ArrayList<ServiceModel> getServicesForDate(Date date) {
+        ArrayList<ServiceModel> arrayServicios = new ArrayList<>();
+        long beginingOfDay = DateFunctions.getBeginingOfWorkingDayFromDate(date).getTime();
+        long endOfDay = DateFunctions.getEndOfWorkingDayFromDate(date).getTime();
+        Cursor cursor = readableDatabase.rawQuery("SELECT * FROM " + Constants.databaseServiciosTableName + " WHERE " + Constants.databaseFecha + " >= " + beginingOfDay + " AND " + Constants.databaseFecha + " < " + endOfDay, null);
+        while (cursor.moveToNext()) {
+            arrayServicios.add(parseCursorToServiceModel(cursor));
+        }
+
+        cursor.close();
+        return arrayServicios;
+    }
+
+    public void deleteServiceFromDatabase(long serviceId) {
+        writableDatabase.delete(Constants.databaseServiciosTableName, Constants.databaseServicioId + " = " + serviceId, null);
+    }
+
     private boolean checkServiceInDatabase(long serviceId) {
-        String Query = "Select * from " + Constants.databaseServiciosTableName + " where " + Constants.databaseServicioId + " = " + String.valueOf(serviceId);
+        String Query = "Select * from " + Constants.databaseServiciosTableName + " where " + Constants.databaseServicioId + " = " + serviceId;
         Cursor cursor = readableDatabase.rawQuery(Query, null);
         if (cursor.getCount() == 0){
             cursor.close();
