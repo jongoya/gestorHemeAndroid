@@ -6,11 +6,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.util.Base64;
-
+import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import com.example.gestorheme.Models.Cadencia.CadenciaModel;
 import com.example.gestorheme.Models.TipoServicio.TipoServicioModel;
-
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -64,5 +66,28 @@ public class CommonFunctions {
     public static int convertToPx(int dp, Context context) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dp * scale + 0.5f);
+    }
+
+    public static RelativeLayout createLoadingStateView(Context context) {
+        RelativeLayout loadingStateView = new RelativeLayout(context);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        loadingStateView.setLayoutParams(params);
+
+        RelativeLayout backgroundGradient = new RelativeLayout(context);
+        RelativeLayout.LayoutParams gradientParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        backgroundGradient.setLayoutParams(gradientParams);
+        backgroundGradient.setBackgroundColor(Color.BLACK);
+        backgroundGradient.setAlpha(0.5f);
+
+        loadingStateView.addView(backgroundGradient);
+
+        ProgressBar progressBar = new ProgressBar(context);
+        RelativeLayout.LayoutParams progressParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        progressParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+        progressBar.setLayoutParams(progressParams);
+        progressBar.getIndeterminateDrawable().setColorFilter(Color.WHITE, android.graphics.PorterDuff.Mode.SRC_IN);
+        loadingStateView.addView(progressBar);
+
+        return loadingStateView;
     }
 }

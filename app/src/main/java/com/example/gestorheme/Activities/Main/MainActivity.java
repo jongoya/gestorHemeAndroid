@@ -8,8 +8,11 @@ import android.view.MenuItem;
 import com.example.gestorheme.Activities.Main.Fragments.Agenda.AgendaFragment;
 import com.example.gestorheme.Activities.Main.Fragments.Heme.HemeFragment;
 import com.example.gestorheme.Activities.Main.Fragments.ListaClientes.ClientesFragment;
+import com.example.gestorheme.Activities.Main.Fragments.Notificaciones.Functions.NotificationFunctions;
 import com.example.gestorheme.Activities.Main.Fragments.Notificaciones.NotificacionesFragment;
+import com.example.gestorheme.Common.CommonFunctions;
 import com.example.gestorheme.Common.Constants;
+import com.example.gestorheme.Common.SyncronizationManager;
 import com.example.gestorheme.LocalDatabase.DatabaseManager;
 import com.example.gestorheme.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -24,11 +27,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setViews();
         setNavigationTabClick();
+        NotificationFunctions.checkNotificaciones();
+        SyncronizationManager.syncAllDataFromServer();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        CommonFunctions.createLoadingStateView(getApplicationContext());
     }
 
     private void setViews() {
@@ -61,5 +67,4 @@ public class MainActivity extends AppCompatActivity {
     private void changeFragment(Fragment fragment) {
         getSupportFragmentManager().beginTransaction().replace(R.id.main_layout, fragment).addToBackStack(null).commit();
     }
-
 }

@@ -1,5 +1,7 @@
 package com.example.gestorheme.Common;
 
+import com.example.gestorheme.ApiServices.RetrofitClientInstance;
+import com.example.gestorheme.ApiServices.WebServices;
 import com.example.gestorheme.LocalDatabase.DatabaseManager;
 
 public class Constants {
@@ -22,10 +24,9 @@ public class Constants {
     public static String databaseDireccion = "direccion";
     public static String databaseCadenciaVisita = "cadenciaVisita";
     public static String databaseObservaciones = "observaciones";
-    public static String databaseNotificacionPersonalizada = "notificacionPersonalizada";
+    public static String databaseObservacion = "observacion";
     public static String databaseImagen = "imagen";
     public static String databaseServicioId = "servicioId";
-    public static String databaseProfesional = "profesional";
     public static String databaseServicios = "servicios";
     public static String databasePrecio = "precio";
     public static String databaseNotificationId = "notificationId";
@@ -36,12 +37,14 @@ public class Constants {
     public static String databaseRedColorValue = "redColorValue";
     public static String databaseGreenColorValue = "greenColorValue";
     public static String databaseBlueColorValue = "blueColorValue";
+    public static String databaseIsEmpleadoJefe = "is_empleado_jefe";
     public static String databaseCajaId = "cajaId";
     public static String databaseNumeroServicios = "numeroServicios";
     public static String databaseTotalCaja = "totalCaja";
     public static String databaseTotalProductos = "totalProductos";
     public static String databaseEfectivo = "efectivo";
     public static String databaseTarjeta = "tarjeta";
+    public static String databaseComercioId = "comercioId";
 
 
     public static final String unaSemana = "cada semana";
@@ -60,4 +63,12 @@ public class Constants {
 
     public static DatabaseManager databaseManager;
 
+    public static final String notificationCumpleañosType = "cumpleaños";
+    public static final String notificationCadenciaType = "cadencia";
+    public static final String notificationcajaType = "caja";
+    public static final String notificationpersonalizadaType = "personalizada";
+
+    public static final int developmentComercioId = 1;
+
+    public static WebServices webServices = RetrofitClientInstance.getRetrofitInstance().create(WebServices.class);
 }

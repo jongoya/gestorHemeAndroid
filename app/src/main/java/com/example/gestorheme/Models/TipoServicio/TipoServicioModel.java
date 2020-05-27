@@ -3,11 +3,12 @@ package com.example.gestorheme.Models.TipoServicio;
 import java.io.Serializable;
 
 public class TipoServicioModel implements Serializable {
-    private long serviceId;
+    private long servicioId;
     private String nombre;
+    private long comercioId;
 
-    public TipoServicioModel(long serviceId, String nombre) {
-        this.serviceId = serviceId;
+    public TipoServicioModel(long servicioId, String nombre) {
+        this.servicioId = servicioId;
         this.nombre = nombre;
     }
 
@@ -15,12 +16,12 @@ public class TipoServicioModel implements Serializable {
 
     }
 
-    public long getServiceId() {
-        return serviceId;
+    public long getServicioId() {
+        return servicioId;
     }
 
-    public void setServiceId(long serviceId) {
-        this.serviceId = serviceId;
+    public void setServicioId(long servicioId) {
+        this.servicioId = servicioId;
     }
 
     public String getNombre() {
@@ -29,5 +30,13 @@ public class TipoServicioModel implements Serializable {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public long getComercioId() {
+        return comercioId;
+    }
+
+    public void setComercioId(long comercioId) {
+        this.comercioId = comercioId;
     }
 }

@@ -30,7 +30,7 @@ public class TipoServicioManager {
     }
 
     public void addTipoServicioToDatabase(TipoServicioModel servicio) {
-        if (!checkTipoServicioInDatabase(servicio.getServiceId())) {
+        if (!checkTipoServicioInDatabase(servicio.getServicioId())) {
             ContentValues cv = fillTipoServicioDataToDatabaseObject(servicio);
             writableDatabase.insert(Constants.databaseTipoServiciosTableName, null, cv);
         }
@@ -60,7 +60,7 @@ public class TipoServicioManager {
 
     private ContentValues fillTipoServicioDataToDatabaseObject(TipoServicioModel servicio) {
         ContentValues cv = new ContentValues();
-        cv.put(Constants.databaseServicioId, servicio.getServiceId());
+        cv.put(Constants.databaseServicioId, servicio.getServicioId());
         cv.put(Constants.databaseNombre, servicio.getNombre());
 
         return cv;
@@ -68,7 +68,7 @@ public class TipoServicioManager {
 
     private TipoServicioModel parseCursorToTipoServicioModel(Cursor cursor) {
         TipoServicioModel servicio = new TipoServicioModel();
-        servicio.setServiceId(cursor.getLong(cursor.getColumnIndex(Constants.databaseServicioId)));
+        servicio.setServicioId(cursor.getLong(cursor.getColumnIndex(Constants.databaseServicioId)));
         servicio.setNombre(cursor.getString(cursor.getColumnIndex(Constants.databaseNombre)));
 
         return servicio;

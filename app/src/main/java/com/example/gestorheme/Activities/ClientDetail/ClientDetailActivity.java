@@ -14,6 +14,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import com.example.gestorheme.Activities.ClientDetail.Views.ServiceView;
 import com.example.gestorheme.Activities.DatePicker.DatePickerActivity;
 import com.example.gestorheme.Activities.ItemSelector.ItemSelectorActivity;
@@ -27,11 +28,14 @@ import com.example.gestorheme.Common.Views.ServiceAlarmButton;
 import com.example.gestorheme.Common.Views.ServiceHeaderTextView;
 import com.example.gestorheme.Models.Client.ClientModel;
 import com.example.gestorheme.Models.Service.ServiceModel;
+import com.example.gestorheme.Models.WebServicesModels.ClientesMasServiciosModel;
 import com.example.gestorheme.R;
 import java.util.ArrayList;
 import java.util.Date;
-
 import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ClientDetailActivity extends AppCompatActivity {
     private static final int NOMBRE_FIELD_REF = 0;
@@ -56,6 +60,8 @@ public class ClientDetailActivity extends AppCompatActivity {
     private CircleImageView clientImage;
     private LinearLayout scrollContentView;
     private RelativeLayout phoneButton;
+    private ConstraintLayout rootLayout;
+    private RelativeLayout loadingState;
 
     private ClientModel cliente;
     public boolean isClientDetail = false;
@@ -113,7 +119,8 @@ public class ClientDetailActivity extends AppCompatActivity {
         ArrayList<ServiceView> futurosServicios = new ArrayList<>();
         ArrayList<ServiceView> antiguosServicios = new ArrayList<>();
         for (int i = 0; i < services.size(); i++) {
-            ServiceView serviceView = new ServiceView(this, services.get(i));
+            ServiceModel servicio = services.get(i);
+            ServiceView serviceView = new ServiceView(this, servicio, servicio.getClientId() != 0 ? "" : cliente.getNombre(), servicio.getClientId() != 0 ? "" : cliente.getApellidos());
             if (isClientDetail) {
                 serviceView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -161,6 +168,7 @@ public class ClientDetailActivity extends AppCompatActivity {
         observacionLabel = findViewById(R.id.observacionesLabel);
         scrollContentView = findViewById(R.id.scrollContentView);
         phoneButton = findViewById(R.id.phone_button);
+        rootLayout = findViewById(R.id.root);
 
         if (cliente.getClientId() == 0) {
             phoneButton.setVisibility(View.INVISIBLE);
@@ -351,18 +359,10 @@ public class ClientDetailActivity extends AppCompatActivity {
         }
 
         if (isClientDetail) {
-            Constants.databaseManager.clientsManager.updateClientInDatabase(cliente);
+            actualizarClienteEnServidor();
         } else {
-            cliente.setClientId(new Date().getTime());
-            Constants.databaseManager.clientsManager.addClientToDatabase(cliente);
-            for (int i = 0; i < serviceArray.size(); i++) {
-                ServiceModel servicio = serviceArray.get(i);
-                servicio.setClientId(cliente.getClientId());
-                Constants.databaseManager.servicesManager.addServiceToDatabase(servicio);
-            }
+            guardarClienteEnServidor();
         }
-
-        super.onBackPressed();
     }
 
     @Override
@@ -418,5 +418,59 @@ public class ClientDetailActivity extends AppCompatActivity {
             default:
                 break;
         }
+    }
+
+    private void guardarClienteEnServidor() {
+        loadingState = CommonFunctions.createLoadingStateView(getApplicationContext());
+        rootLayout.addView(loadingState);
+        ClientesMasServiciosModel model = new ClientesMasServiciosModel(cliente, serviceArray);
+        Call<ClientesMasServiciosModel> call = Constants.webServices.saveCliente(model);
+        call.enqueue(new Callback<ClientesMasServiciosModel>() {
+            @Override
+            public void onResponse(Call<ClientesMasServiciosModel> call, Response<ClientesMasServiciosModel> response) {
+                rootLayout.removeView(loadingState);
+                if (response.code() == 200) {
+                    Constants.databaseManager.clientsManager.addClientToDatabase(response.body().getCliente());
+                    for (int i = 0; i < response.body().getServicios().size(); i++) {
+                        ServiceModel servicio = response.body().getServicios().get(i);
+                        Constants.databaseManager.servicesManager.addServiceToDatabase(servicio);
+                    }
+
+                    ClientDetailActivity.super.onBackPressed();
+                } else {
+                    CommonFunctions.showGenericAlertMessage(ClientDetailActivity.this, "Error guardando el cliente, inténtelo de nuevo");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ClientesMasServiciosModel> call, Throwable t) {
+                rootLayout.removeView(loadingState);
+                CommonFunctions.showGenericAlertMessage(ClientDetailActivity.this, "Error guardando el cliente, inténtelo de nuevo");
+            }
+        });
+    }
+
+    private void actualizarClienteEnServidor() {
+        loadingState = CommonFunctions.createLoadingStateView(getApplicationContext());
+        rootLayout.addView(loadingState);
+        Call<ClientesMasServiciosModel> call = Constants.webServices.updateCliente(cliente);
+        call.enqueue(new Callback<ClientesMasServiciosModel>() {
+            @Override
+            public void onResponse(Call<ClientesMasServiciosModel> call, Response<ClientesMasServiciosModel> response) {
+                rootLayout.removeView(loadingState);
+                if (response.code() == 200) {
+                    Constants.databaseManager.clientsManager.updateClientInDatabase(cliente);
+                    ClientDetailActivity.super.onBackPressed();
+                } else {
+                    CommonFunctions.showGenericAlertMessage(ClientDetailActivity.this, "Error actualizando cliente");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ClientesMasServiciosModel> call, Throwable t) {
+                rootLayout.removeView(loadingState);
+                CommonFunctions.showGenericAlertMessage(ClientDetailActivity.this, "Error actualizando cliente");
+            }
+        });
     }
 }

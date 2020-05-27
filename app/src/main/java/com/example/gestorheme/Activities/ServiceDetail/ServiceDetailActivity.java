@@ -5,9 +5,12 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 import com.example.gestorheme.Activities.ClientListSelector.ClientListSelectorActivity;
 import com.example.gestorheme.Activities.DatePicker.DatePickerActivity;
 import com.example.gestorheme.Activities.ItemSelector.ItemSelectorActivity;
@@ -23,6 +26,10 @@ import com.example.gestorheme.R;
 import java.util.ArrayList;
 import java.util.Date;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class ServiceDetailActivity extends AppCompatActivity {
     private static final int NOMBRE_FIELD_REF = 0;
     private static final int FECHA_FIELD_REF = 1;
@@ -37,6 +44,8 @@ public class ServiceDetailActivity extends AppCompatActivity {
     private TextView serviciosLabel;
     private TextView precioLabel;
     private EditText observacionesLabel;
+    private ConstraintLayout rootLayout;
+    private RelativeLayout loadingLayout;
 
     private ServiceModel servicio;
     private ClientModel cliente;
@@ -66,8 +75,6 @@ public class ServiceDetailActivity extends AppCompatActivity {
             setServiceFields();
         } else if (cliente != null) {
             servicio = new ServiceModel();
-            servicio.setNombre(cliente.getNombre());
-            servicio.setApellidos(cliente.getApellidos());
             nombreLabel.setText(cliente.getNombre() + " " + cliente.getApellidos());
         } else {
             servicio = new ServiceModel();
@@ -83,6 +90,7 @@ public class ServiceDetailActivity extends AppCompatActivity {
         serviciosLabel = findViewById(R.id.serviciosLabel);
         precioLabel = findViewById(R.id.precioLabel);
         observacionesLabel = findViewById(R.id.observacionesLabel);
+        rootLayout = findViewById(R.id.root);
     }
 
     private void setOnClickListeners() {
@@ -153,9 +161,10 @@ public class ServiceDetailActivity extends AppCompatActivity {
     }
 
     private void setServiceFields() {
-        nombreLabel.setText(servicio.getNombre() + " " + servicio.getApellidos());
+        ClientModel cliente = Constants.databaseManager.clientsManager.getClientForClientId(servicio.getClientId());
+        nombreLabel.setText(cliente.getNombre() + " " + cliente.getApellidos());
         fechaLabel.setText(DateFunctions.convertTimestampToServiceDateString(servicio.getFecha()));
-        profesionalLabel.setText(Constants.databaseManager.empleadosManager.getEmpleadoForEmpleadoId(servicio.getProfesional()).getNombre());
+        profesionalLabel.setText(Constants.databaseManager.empleadosManager.getEmpleadoForEmpleadoId(servicio.getEmpleadoId()).getNombre());
         serviciosLabel.setText(CommonFunctions.getServiciosForServicio(servicio.getServicios()));
         precioLabel.setText(Double.toString(servicio.getPrecio()) + " €");
         observacionesLabel.setText(servicio.getObservaciones().length() > 0 ? servicio.getObservaciones() : "Añade una observación");
@@ -173,7 +182,7 @@ public class ServiceDetailActivity extends AppCompatActivity {
     private ArrayList getServiciosIdFromServicios(ArrayList<TipoServicioModel> servicios) {
         ArrayList serviciosId = new ArrayList();
         for (int i = 0; i < servicios.size(); i++) {
-            serviciosId.add(servicios.get(i).getServiceId());
+            serviciosId.add(servicios.get(i).getServicioId());
         }
 
         return  serviciosId;
@@ -205,20 +214,19 @@ public class ServiceDetailActivity extends AppCompatActivity {
 
     private void saveService() {
         if (isEditingService) {
-            Constants.databaseManager.servicesManager.updateServiceInDatabase(servicio);
+            actualizarServicioEnServidor();
         } else {
             if (cliente.getClientId() == 0) {
                 Intent intent = getIntent();
                 intent.putExtra("Servicio", servicio);
                 setResult(RESULT_OK, intent);
+                ServiceDetailActivity.super.onBackPressed();
             } else {
                 servicio.setClientId(cliente.getClientId());
-                Constants.databaseManager.servicesManager.addServiceToDatabase(servicio);
-                //TODO revisar notificaciones cadencia del cliente
+                servicio.setComercioId(Constants.developmentComercioId);
+                guardarServicioEnServidor();
             }
         }
-
-        ServiceDetailActivity.super.onBackPressed();
     }
 
     @Override
@@ -232,13 +240,11 @@ public class ServiceDetailActivity extends AppCompatActivity {
             case NOMBRE_FIELD_REF:
                 ListaClienteCellModel model = (ListaClienteCellModel) data.getSerializableExtra("cliente");
                 nombreLabel.setText(model.getCliente().getNombre() + " " + model.getCliente().getApellidos());
-                servicio.setNombre(model.getCliente().getNombre());
-                servicio.setApellidos(model.getCliente().getApellidos());
                 servicio.setClientId(model.getCliente().getClientId());
                 cliente = model.getCliente();
                 break;
             case PROFESIONAL_FIELD_REF:
-                servicio.setProfesional(data.getExtras().getLong("ITEM"));
+                servicio.setEmpleadoId(data.getExtras().getLong("ITEM"));
                 profesionalLabel.setText(Constants.databaseManager.empleadosManager.getEmpleadoForEmpleadoId(data.getExtras().getLong("ITEM")).getNombre());
                 break;
             case SERVICIOS_FIELD_REF:
@@ -260,5 +266,54 @@ public class ServiceDetailActivity extends AppCompatActivity {
             default:
                 break;
         }
+    }
+
+    private void guardarServicioEnServidor() {
+        loadingLayout = CommonFunctions.createLoadingStateView(getApplicationContext());
+        rootLayout.addView(loadingLayout);
+        Call<ServiceModel> call = Constants.webServices.saveService(servicio);
+        call.enqueue(new Callback<ServiceModel>() {
+            @Override
+            public void onResponse(Call<ServiceModel> call, Response<ServiceModel> response) {
+                rootLayout.removeView(loadingLayout);
+                if (response.code() == 201) {
+                    Constants.databaseManager.servicesManager.addServiceToDatabase(response.body());
+                    //TODO revisar notificaciones cadencia del cliente
+                    ServiceDetailActivity.super.onBackPressed();
+                } else {
+                    CommonFunctions.showGenericAlertMessage(ServiceDetailActivity.this, "Error guardando servicio");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ServiceModel> call, Throwable t) {
+                rootLayout.removeView(loadingLayout);
+                CommonFunctions.showGenericAlertMessage(ServiceDetailActivity.this, "Error guardando servicio");
+            }
+        });
+    }
+
+    private void actualizarServicioEnServidor() {
+        loadingLayout = CommonFunctions.createLoadingStateView(getApplicationContext());
+        rootLayout.addView(loadingLayout);
+        Call<ServiceModel> call = Constants.webServices.updateService(servicio);
+        call.enqueue(new Callback<ServiceModel>() {
+            @Override
+            public void onResponse(Call<ServiceModel> call, Response<ServiceModel> response) {
+                if (response.code() == 200) {
+                    rootLayout.removeView(loadingLayout);
+                    Constants.databaseManager.servicesManager.updateServiceInDatabase(response.body());
+                    ServiceDetailActivity.super.onBackPressed();
+                } else {
+                    CommonFunctions.showGenericAlertMessage(ServiceDetailActivity.this, "Error actualizando el servicio");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ServiceModel> call, Throwable t) {
+                rootLayout.removeView(loadingLayout);
+                CommonFunctions.showGenericAlertMessage(ServiceDetailActivity.this, "Error actualizando el servicio");
+            }
+        });
     }
 }

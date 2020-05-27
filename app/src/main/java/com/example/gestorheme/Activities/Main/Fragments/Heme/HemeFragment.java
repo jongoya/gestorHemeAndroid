@@ -66,9 +66,9 @@ public class HemeFragment extends Fragment {
     }
 
     private void addEmpleados() {
-        EmpleadoModel empleado1 = new EmpleadoModel("Gilberto", "Da Camara Martuscelli", 642423638, "123456789", "gilberto@gmail.com", 642423638, 255,102,102);
-        EmpleadoModel empleado2 = new EmpleadoModel("Garazi", "Aranguren", 958042838, "123456789", "garazi@gmail.com", 958042838, 255,102,102);
-        EmpleadoModel empleado3 = new EmpleadoModel("Erregue", "Goya Mendizabal", 651154318, "123456789", "gilberto@gmail.com", 651154318, 255,102,102);
+        EmpleadoModel empleado1 = new EmpleadoModel("Gilberto", "Da Camara Martuscelli", 642423638, "123456789", "gilberto@gmail.com", 642423638, 255, 102, 102, 1, false);
+        EmpleadoModel empleado2 = new EmpleadoModel("Garazi", "Aranguren", 958042838, "123456789", "garazi@gmail.com", 958042838, 255, 102, 102,1, false);
+        EmpleadoModel empleado3 = new EmpleadoModel("Erregue", "Goya Mendizabal", 651154318, "123456789", "gilberto@gmail.com", 651154318, 255, 102, 102, 1, true);
         Constants.databaseManager.empleadosManager.addEmpleadoToDatabase(empleado1);
         Constants.databaseManager.empleadosManager.addEmpleadoToDatabase(empleado2);
         Constants.databaseManager.empleadosManager.addEmpleadoToDatabase(empleado3);
@@ -115,9 +115,7 @@ public class HemeFragment extends Fragment {
         ServiceModel servicio = new ServiceModel();
         servicio.setServiceId(date.getTime());
         servicio.setClientId(cliente.getClientId());
-        servicio.setNombre(cliente.getNombre());
-        servicio.setApellidos(cliente.getApellidos());
-        servicio.setProfesional(651154318);
+        servicio.setEmpleadoId(651154318);
         servicio.setFecha(jsonClient.has("Fecha") ? convertFechaToTimestamp(jsonClient.getString("Fecha")) : 0);
         servicio.setServicios(jsonClient.has("Servicio") ? getServiciosIdForService(jsonClient.getString("Servicio")) : new ArrayList());
         servicio.setObservaciones(jsonClient.has("Servicio") ? jsonClient.getString("Servicio") : "");
@@ -130,9 +128,7 @@ public class HemeFragment extends Fragment {
             ServiceModel servicio2 = new ServiceModel();
             servicio2.setServiceId(date.getTime());
             servicio2.setClientId(cliente.getClientId());
-            servicio2.setNombre(cliente.getNombre());
-            servicio2.setApellidos(cliente.getApellidos());
-            servicio2.setProfesional(651154318);
+            servicio2.setEmpleadoId(651154318);
             servicio2.setFecha(jsonClient.has("Fecha2") ? convertFechaToTimestamp(jsonClient.getString("Fecha2")) : 0);
             servicio2.setServicios(jsonClient.has("Servicio2") ? getServiciosIdForService(jsonClient.getString("Servicio2")) : new ArrayList());
             servicio2.setObservaciones(jsonClient.has("Servicio2") ? jsonClient.getString("Servicio2") : "");
@@ -159,7 +155,7 @@ public class HemeFragment extends Fragment {
         ArrayList<TipoServicioModel> tipoServicios = Constants.databaseManager.tipoServiciosManager.getTipoServiciosFromDatabase();
         for (int i = 0; i < tipoServicios.size(); i++) {
             if (servicioString.toLowerCase().contains(tipoServicios.get(i).getNombre().toLowerCase())) {
-                serviciosId.add(tipoServicios.get(i).getServiceId());
+                serviciosId.add(tipoServicios.get(i).getServicioId());
             }
         }
 

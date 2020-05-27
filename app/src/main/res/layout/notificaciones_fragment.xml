@@ -1,7 +1,152 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FF9800">
+    android:background="@color/backgroundColor">
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <RelativeLayout
+            android:id="@+id/cumpleButton"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/rounded_view"
+            android:backgroundTint="@color/colorPrimary"
+            android:backgroundTintMode="src_in">
+
+            <TextView
+                android:id="@+id/cumpleText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:clickable="false"
+                android:gravity="center_horizontal"
+                android:lines="1"
+                android:longClickable="false"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:text="Cumpleaños"
+                android:textColor="@color/white"
+                android:textIsSelectable="false" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/cadenciaButton"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_toRightOf="@id/cumpleButton"
+            android:background="@drawable/rounded_view"
+            android:backgroundTint="@color/colorPrimary"
+            android:backgroundTintMode="add">
+
+            <TextView
+                android:id="@+id/cadenciaText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:clickable="false"
+                android:gravity="center_horizontal"
+                android:lines="1"
+                android:longClickable="false"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:text="Cadencia"
+                android:textColor="@color/colorPrimary"
+                android:textIsSelectable="false" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/cajaButton"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_toRightOf="@id/cadenciaButton"
+            android:background="@drawable/rounded_view"
+            android:backgroundTint="@color/colorPrimary"
+            android:backgroundTintMode="add">
+
+            <TextView
+                android:id="@+id/cajaText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:clickable="false"
+                android:gravity="center_horizontal"
+                android:lines="1"
+                android:longClickable="false"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:text="Caja"
+                android:textColor="@color/colorPrimary"
+                android:textIsSelectable="false" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/personalizadaButton"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_toRightOf="@id/cajaButton"
+            android:background="@drawable/rounded_view"
+            android:backgroundTint="@color/colorPrimary"
+            android:backgroundTintMode="add">
+
+            <TextView
+                android:id="@+id/personalizadaText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:clickable="false"
+                android:gravity="center_horizontal"
+                android:lines="1"
+                android:longClickable="false"
+                android:paddingLeft="5dp"
+                android:text="Personalizada"
+                android:textColor="@color/colorPrimary"
+                android:textIsSelectable="false" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/notificationsList"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayout2" />
+
+    <TextView
+        android:id="@+id/emptyState"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="No hay notificaciones disponibles"
+        android:textColor="@android:color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/notificationsList"
+        app:layout_constraintStart_toStartOf="@+id/notificationsList"
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayout2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

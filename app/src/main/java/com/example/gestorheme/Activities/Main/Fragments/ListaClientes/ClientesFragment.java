@@ -11,11 +11,9 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
 import com.example.gestorheme.Activities.ClientDetail.ClientDetailActivity;
 import com.example.gestorheme.Activities.Main.Fragments.ListaClientes.Adapter.ClientListAdapter;
 import com.example.gestorheme.Activities.Main.Fragments.ListaClientes.Models.ListaClienteCellModel;

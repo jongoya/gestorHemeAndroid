@@ -74,7 +74,6 @@ public class ClientsManager {
         cv.put(Constants.databaseDireccion, client.getDireccion());
         cv.put(Constants.databaseCadenciaVisita, client.getCadenciaVisita());
         cv.put(Constants.databaseObservaciones, client.getObservaciones());
-        cv.put(Constants.databaseNotificacionPersonalizada, client.getNotificacionPersonalizada());
         cv.put(Constants.databaseImagen, client.getImagen());
 
         return cv;
@@ -91,7 +90,6 @@ public class ClientsManager {
         cliente.setDireccion(cursor.getString(cursor.getColumnIndex(Constants.databaseDireccion)));
         cliente.setCadenciaVisita(cursor.getString(cursor.getColumnIndex(Constants.databaseCadenciaVisita)));
         cliente.setObservaciones(cursor.getString(cursor.getColumnIndex(Constants.databaseObservaciones)));
-        cliente.setNotificacionPersonalizada(cursor.getLong(cursor.getColumnIndex(Constants.databaseNotificacionPersonalizada)));
         cliente.setImagen(cursor.getString(cursor.getColumnIndex(Constants.databaseImagen)));
 
         return cliente;

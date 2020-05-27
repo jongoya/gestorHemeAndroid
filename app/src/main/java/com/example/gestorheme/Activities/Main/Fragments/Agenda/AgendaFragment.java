@@ -32,10 +32,12 @@ import com.example.gestorheme.Models.Empleados.EmpleadoModel;
 import com.example.gestorheme.Models.Service.ServiceModel;
 import com.example.gestorheme.R;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+
+import devs.mulham.horizontalcalendar.HorizontalCalendar;
+import devs.mulham.horizontalcalendar.utils.HorizontalCalendarListener;
 
 public class AgendaFragment extends Fragment implements ServiceItemViewInterface, FilterActionSheetInterface {
     private LinearLayout scrollContentView;
@@ -44,9 +46,11 @@ public class AgendaFragment extends Fragment implements ServiceItemViewInterface
     private Date presentDate;
     private ConstraintLayout root;
     private RelativeLayout calendarButton;
-    private TextView filterText;
-    private boolean clientesVisible = false;
     private BottomSheetDialog filterDialog;
+    private TextView filterText;
+    private HorizontalCalendar horizontalCalendar;
+    private RelativeLayout loadingStateView;
+    private boolean clientesVisible = false;
     private long empleadoFilteredId = 0;
 
     @Override
@@ -61,6 +65,7 @@ public class AgendaFragment extends Fragment implements ServiceItemViewInterface
         presentDate = new Date();
         getFields();
         setOnClickListeners();
+        setHorizontalCalendarView();
     }
 
     @Override
@@ -129,6 +134,7 @@ public class AgendaFragment extends Fragment implements ServiceItemViewInterface
                 calendar.set(Calendar.DAY_OF_MONTH, i2);
                 presentDate = calendar.getTime();
                 clientesVisible = false;
+                updateCalendarView();
                 calendarButton.performClick();
             }
         });
@@ -154,6 +160,38 @@ public class AgendaFragment extends Fragment implements ServiceItemViewInterface
         });
     }
 
+    private void setHorizontalCalendarView() {
+        Calendar startDate = Calendar.getInstance();
+        startDate.setTime(DateFunctions.remove2MonthsToDate(presentDate));
+        Calendar endDate = Calendar.getInstance();
+        endDate.setTime(DateFunctions.add2MonthsToDate(presentDate));
+        horizontalCalendar = new HorizontalCalendar.Builder(root, R.id.horizontalCalendarView).range(startDate, endDate).datesNumberOnScreen(5).build();
+        horizontalCalendar.goToday(true);
+        horizontalCalendar.setCalendarListener(new HorizontalCalendarListener() {
+            @Override
+            public void onDateSelected(Calendar date, int position) {
+                presentDate = date.getTime();
+                if (clientesVisible) {
+                    buildClientesDay();
+                } else {
+                    buildAgendaDay();
+                }
+            }
+        });
+    }
+
+    private void updateCalendarView() {
+        Calendar startDate = Calendar.getInstance();
+        startDate.setTime(DateFunctions.remove2MonthsToDate(presentDate));
+        Calendar endDate = Calendar.getInstance();
+        endDate.setTime(DateFunctions.add2MonthsToDate(presentDate));
+        Calendar presentDate = Calendar.getInstance();
+        presentDate.setTime(this.presentDate);
+        horizontalCalendar.setRange(startDate, endDate);
+        horizontalCalendar.selectDate(presentDate, true);
+        horizontalCalendar.refresh();
+    }
+
     private void buildAgendaDay() {
         scrollContentView.removeAllViews();
         ArrayList<ServiceModel> servicios = Constants.databaseManager.servicesManager.getServicesForDate(presentDate);
@@ -176,7 +214,7 @@ public class AgendaFragment extends Fragment implements ServiceItemViewInterface
     private ArrayList<ServiceModel> filterServiciosWithEmpleadoId(ArrayList<ServiceModel> servicios) {
         ArrayList<ServiceModel> serviciosFiltrados = new ArrayList<>();
         for (int i = 0; i < servicios.size(); i++) {
-            if (servicios.get(i).getProfesional() == empleadoFilteredId) {
+            if (servicios.get(i).getEmpleadoId() == empleadoFilteredId) {
                 serviciosFiltrados.add(servicios.get(i));
             }
         }
@@ -215,7 +253,7 @@ public class AgendaFragment extends Fragment implements ServiceItemViewInterface
     }
 
     private void addCierreDeCajaButton() {
-        CerrarCajaButton button = new CerrarCajaButton(getContext(), presentDate);
+        CerrarCajaButton button = new CerrarCajaButton(getContext(), presentDate, getActivity());
         scrollContentView.addView(button);
     }
 
@@ -235,6 +273,22 @@ public class AgendaFragment extends Fragment implements ServiceItemViewInterface
     @Override
     public void serviceRemoved() {
         buildAgendaDay();
+    }
+
+    @Override
+    public void showLoadingState() {
+        loadingStateView = CommonFunctions.createLoadingStateView(getContext());
+        root.addView(loadingStateView);
+    }
+
+    @Override
+    public void hideLoadingState() {
+        root.removeView(loadingStateView);
+    }
+
+    @Override
+    public void showErrorMessage(String message) {
+        CommonFunctions.showGenericAlertMessage(getActivity(), message);
     }
 
     @Override

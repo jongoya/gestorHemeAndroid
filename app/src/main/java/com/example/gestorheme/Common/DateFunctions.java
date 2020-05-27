@@ -72,4 +72,27 @@ public class DateFunctions {
         return cal.getTime();
     }
 
+    public static Date add2MonthsToDate(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.MONTH, 2);
+        return calendar.getTime();
+    }
+
+    public static Date remove2MonthsToDate(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.MONTH, -2);
+        return calendar.getTime();
+    }
+
+    public static Date remove1DayToDate(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.DAY_OF_MONTH, -1);
+        return calendar.getTime();
+    }
+
+
+
 }

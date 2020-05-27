@@ -3,10 +3,9 @@ package com.example.gestorheme.Models.Client;
 import com.example.gestorheme.Common.Constants;
 
 import java.io.Serializable;
-import java.util.Date;
 
 public class ClientModel implements Serializable {
-    private long clientId = 0;
+    private long id = 0;
     private String nombre = "";
     private String apellidos = "";
     private long fecha = 0;
@@ -15,15 +14,15 @@ public class ClientModel implements Serializable {
     private String direccion = "";
     private String cadenciaVisita = Constants.dosSemanas;
     private String observaciones = "";
-    private long notificacionPersonalizada = 0;
     private String imagen = "";
+    private long comercioId = 0;
 
     public long getClientId() {
-        return clientId;
+        return id;
     }
 
     public void setClientId(long clientId) {
-        this.clientId = clientId;
+        this.id = clientId;
     }
 
     public String getNombre() {
@@ -90,19 +89,19 @@ public class ClientModel implements Serializable {
         this.observaciones = observaciones;
     }
 
-    public long getNotificacionPersonalizada() {
-        return notificacionPersonalizada;
-    }
-
-    public void setNotificacionPersonalizada(long notificacionPersonalizada) {
-        this.notificacionPersonalizada = notificacionPersonalizada;
-    }
-
     public String getImagen() {
         return imagen;
     }
 
     public void setImagen(String imagen) {
         this.imagen = imagen;
+    }
+
+    public long getComercioId() {
+        return comercioId;
+    }
+
+    public void setComercioId(long comercioId) {
+        this.comercioId = comercioId;
     }
 }

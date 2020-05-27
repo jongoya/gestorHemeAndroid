@@ -6,14 +6,13 @@ import java.util.Date;
 
 public class ServiceModel implements Serializable {
     private long clientId = 0;
-    private long serviceId = new Date().getTime();
-    private String nombre = "";
-    private String apellidos = "";
+    private long serviceId = 0;
     private long fecha = 0;
-    private long profesional = 0;
-    private ArrayList servicios = new ArrayList();
+    private long empleadoId = 0;
+    private ArrayList<Long> servicios = new ArrayList<>();
     private String observaciones = "";
     private double precio = 0.0;
+    private long comercioId = 0;
 
     public long getClientId() {
         return clientId;
@@ -31,22 +30,6 @@ public class ServiceModel implements Serializable {
         this.serviceId = serviceId;
     }
 
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getApellidos() {
-        return apellidos;
-    }
-
-    public void setApellidos(String apellidos) {
-        this.apellidos = apellidos;
-    }
-
     public long getFecha() {
         return fecha;
     }
@@ -55,19 +38,19 @@ public class ServiceModel implements Serializable {
         this.fecha = fecha;
     }
 
-    public long getProfesional() {
-        return profesional;
+    public long getEmpleadoId() {
+        return empleadoId;
     }
 
-    public void setProfesional(long profesional) {
-        this.profesional = profesional;
+    public void setEmpleadoId(long empleadoId) {
+        this.empleadoId = empleadoId;
     }
 
-    public ArrayList getServicios() {
+    public ArrayList<Long> getServicios() {
         return servicios;
     }
 
-    public void setServicios(ArrayList servicios) {
+    public void setServicios(ArrayList<Long> servicios) {
         this.servicios = servicios;
     }
 
@@ -85,5 +68,13 @@ public class ServiceModel implements Serializable {
 
     public void setPrecio(double precio) {
         this.precio = precio;
+    }
+
+    public long getComercioId() {
+        return comercioId;
+    }
+
+    public void setComercioId(long comercioId) {
+        this.comercioId = comercioId;
     }
 }

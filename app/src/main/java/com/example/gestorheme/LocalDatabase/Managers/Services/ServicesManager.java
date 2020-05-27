@@ -1,5 +1,6 @@
 package com.example.gestorheme.LocalDatabase.Managers.Services;
 
+import android.app.Service;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -25,6 +26,29 @@ public class ServicesManager {
             ContentValues cv = fillServiceDataToDatabaseObject(servicio);
             writableDatabase.insert(Constants.databaseServiciosTableName, null, cv);
         }
+    }
+
+    public ArrayList<ServiceModel> getServicesFromDatabase() {
+        ArrayList<ServiceModel> services = new ArrayList<>();
+        Cursor cursor = readableDatabase.rawQuery("SELECT * FROM " + Constants.databaseServiciosTableName, null);
+        while (cursor.moveToNext()) {
+            services.add(parseCursorToServiceModel(cursor));
+        }
+
+        cursor.close();
+        return services;
+    }
+
+    public ServiceModel getServiceForServiceId(long serviceId) {
+        Cursor cursor = readableDatabase.rawQuery("SELECT * FROM " + Constants.databaseServiciosTableName + " WHERE " + Constants.databaseServicioId + " = " + Long.toString(serviceId), null);
+        while (cursor.moveToNext()) {
+            ServiceModel service = parseCursorToServiceModel(cursor);
+            cursor.close();
+            return service;
+        }
+
+        cursor.close();
+        return null;
     }
 
     public ArrayList<ServiceModel> getServicesForClient(long clientId) {
@@ -75,12 +99,10 @@ public class ServicesManager {
         ContentValues cv = new ContentValues();
         cv.put(Constants.databaseClientId, servicio.getClientId());
         cv.put(Constants.databaseServicioId, servicio.getServiceId());
-        cv.put(Constants.databaseNombre, servicio.getNombre());
-        cv.put(Constants.databaseApellidos, servicio.getApellidos());
         cv.put(Constants.databaseFecha, servicio.getFecha());
-        cv.put(Constants.databaseProfesional, servicio.getProfesional());
+        cv.put(Constants.databaseEmpleadoId, servicio.getEmpleadoId());
         cv.put(Constants.databaseServicios, TextUtils.join(",", servicio.getServicios()));
-        cv.put(Constants.databaseObservaciones, servicio.getObservaciones());
+        cv.put(Constants.databaseObservacion, servicio.getObservaciones());
         cv.put(Constants.databasePrecio, servicio.getPrecio());
 
         return  cv;
@@ -90,13 +112,11 @@ public class ServicesManager {
         ServiceModel service = new ServiceModel();
         service.setClientId(cursor.getLong(cursor.getColumnIndex(Constants.databaseClientId)));
         service.setServiceId(cursor.getLong(cursor.getColumnIndex(Constants.databaseServicioId)));
-        service.setNombre(cursor.getString(cursor.getColumnIndex(Constants.databaseNombre)));
-        service.setApellidos(cursor.getString(cursor.getColumnIndex(Constants.databaseApellidos)));
         service.setFecha(cursor.getLong(cursor.getColumnIndex(Constants.databaseFecha)));
-        service.setProfesional(cursor.getLong(cursor.getColumnIndex(Constants.databaseProfesional)));//TODO get el nombre del profesional
+        service.setEmpleadoId(cursor.getLong(cursor.getColumnIndex(Constants.databaseEmpleadoId)));
         String text = cursor.getString(cursor.getColumnIndex(Constants.databaseServicios));
         service.setServicios(getServiciosFromString(text));
-        service.setObservaciones(cursor.getString(cursor.getColumnIndex(Constants.databaseObservaciones)));
+        service.setObservaciones(cursor.getString(cursor.getColumnIndex(Constants.databaseObservacion)));
         service.setPrecio(cursor.getDouble(cursor.getColumnIndex(Constants.databasePrecio)));
         return service;
     }

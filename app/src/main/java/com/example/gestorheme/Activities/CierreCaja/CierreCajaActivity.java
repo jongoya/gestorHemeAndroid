@@ -1,22 +1,57 @@
 package com.example.gestorheme.Activities.CierreCaja;
 
+import android.app.Service;
+import android.content.Intent;
 import android.os.Bundle;
-import android.os.PersistableBundle;
+import android.text.InputType;
+import android.view.View;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+
+import com.example.gestorheme.Activities.TextInputField.TextInputFieldActivity;
+import com.example.gestorheme.Common.CommonFunctions;
+import com.example.gestorheme.Common.Constants;
+import com.example.gestorheme.Models.CierreCaja.CierreCajaModel;
+import com.example.gestorheme.Models.Service.ServiceModel;
 import com.example.gestorheme.R;
 
+import java.util.ArrayList;
 import java.util.Date;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class CierreCajaActivity extends AppCompatActivity {
+    private static final int NUMSERVICIOS_FIELD_REF = 0;
+    private static final int TOTALCAJA_FIELD_REF = 1;
+    private static final int TOTALPRODUCTOS_FIELD_REF = 2;
+    private static final int EFECTIVO_FIELD_REF = 3;
+    private static final int TARJETA_FIELD_REF = 4;
+
+    private TextView numeroServiciosLabel;
+    private TextView totalCajaLabel;
+    private TextView totalProductosLabel;
+    private TextView efectivoLabel;
+    private TextView tarjetaLabel;
+    private ConstraintLayout rootLayout;
+    private RelativeLayout loadingView;
 
     private long fecha;
+    private CierreCajaModel cierreCaja = new CierreCajaModel();
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.cierre_caja_layout);
         getCierreCajaIntent();
+        getFields();
+        setOnClickListeners();
+        setFields();
     }
 
     @Override
@@ -26,5 +61,158 @@ public class CierreCajaActivity extends AppCompatActivity {
 
     private void getCierreCajaIntent() {
         fecha = getIntent().getLongExtra("fecha", 0);
+    }
+
+    private void getFields() {
+        numeroServiciosLabel = findViewById(R.id.numeroServiciosLabel);
+        totalCajaLabel = findViewById(R.id.totalCajaLabel);
+        totalProductosLabel = findViewById(R.id.totalProductosLabel);
+        efectivoLabel = findViewById(R.id.efectivoLabel);
+        tarjetaLabel = findViewById(R.id.tarjetaLabel);
+        rootLayout = findViewById(R.id.root);
+    }
+
+    private void setFields() {
+        ArrayList<ServiceModel> servicios = Constants.databaseManager.servicesManager.getServicesForDate(new Date(fecha));
+        cierreCaja.setNumeroServicios(servicios.size());
+        numeroServiciosLabel.setText(String.valueOf(servicios.size()));
+        double totalCaja = getTotalCaja(servicios);
+        cierreCaja.setTotalCaja(totalCaja);
+        totalCajaLabel.setText(String.valueOf(totalCaja) + " €");
+    }
+
+    private double getTotalCaja(ArrayList<ServiceModel> servicios) {
+        double totalCaja = 0;
+        for (int i = 0; i < servicios.size(); i++) {
+            totalCaja += servicios.get(i).getPrecio();
+        }
+
+        return totalCaja;
+    }
+
+    private void setOnClickListeners() {
+        findViewById(R.id.numeroServiciosView).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), TextInputFieldActivity.class);
+                intent.putExtra("keyboard", InputType.TYPE_CLASS_NUMBER);
+                startActivityForResult(intent, NUMSERVICIOS_FIELD_REF);
+
+            }
+        });
+
+        findViewById(R.id.totalCajaView).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), TextInputFieldActivity.class);
+                intent.putExtra("keyboard", InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                startActivityForResult(intent, TOTALCAJA_FIELD_REF);
+
+            }
+        });
+
+        findViewById(R.id.totalProductosView).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), TextInputFieldActivity.class);
+                intent.putExtra("keyboard", InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                startActivityForResult(intent, TOTALPRODUCTOS_FIELD_REF);
+
+            }
+        });
+
+        findViewById(R.id.efectivoView).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), TextInputFieldActivity.class);
+                intent.putExtra("keyboard", InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                startActivityForResult(intent, EFECTIVO_FIELD_REF);
+
+            }
+        });
+
+        findViewById(R.id.tarjetaView).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), TextInputFieldActivity.class);
+                intent.putExtra("keyboard", InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                startActivityForResult(intent, TARJETA_FIELD_REF);
+
+            }
+        });
+
+        findViewById(R.id.save_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cierreCaja.setFecha(fecha);
+                saveCierreCajaInServer(cierreCaja);
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_CANCELED) {
+            return;
+        }
+        String texto = data.getStringExtra("TEXTO").replace(",", ".");
+        if (texto.length() == 0) {
+            return;
+        }
+        switch (requestCode) {
+            case NUMSERVICIOS_FIELD_REF:
+                int numServicios = Integer.parseInt(texto);
+                cierreCaja.setNumeroServicios(numServicios);
+                numeroServiciosLabel.setText(texto);
+                break;
+            case TOTALCAJA_FIELD_REF:
+                double totalCaja = Double.parseDouble(texto);
+                cierreCaja.setTotalCaja(totalCaja);
+                totalCajaLabel.setText(texto + " €");
+                break;
+            case TOTALPRODUCTOS_FIELD_REF:
+                double totalProductos = Double.parseDouble(texto);
+                cierreCaja.setTotalProductos(totalProductos);
+                totalProductosLabel.setText(texto + " €");
+                break;
+            case EFECTIVO_FIELD_REF:
+                double efectivo = Double.parseDouble(texto);
+                cierreCaja.setEfectivo(efectivo);
+                efectivoLabel.setText(texto + " €");
+                break;
+            case TARJETA_FIELD_REF:
+                double tarjeta = Double.parseDouble(texto);
+                cierreCaja.setTarjeta(tarjeta);
+                tarjetaLabel.setText(texto + " €");
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void saveCierreCajaInServer(CierreCajaModel cierreCaja) {
+        loadingView = CommonFunctions.createLoadingStateView(getApplicationContext());
+        rootLayout.addView(loadingView);
+        cierreCaja.setComercioId(Constants.developmentComercioId);
+        Call<CierreCajaModel> call = Constants.webServices.saveCierreCaja(cierreCaja);
+        call.enqueue(new Callback<CierreCajaModel>() {
+            @Override
+            public void onResponse(Call<CierreCajaModel> call, Response<CierreCajaModel> response) {
+                rootLayout.removeView(loadingView);
+                if (response.code() == 201) {
+                    Constants.databaseManager.cierreCajaManager.addCierreCajaToDatabase(response.body());
+                    CierreCajaActivity.super.onBackPressed();
+                } else {
+                    CommonFunctions.showGenericAlertMessage(CierreCajaActivity.this, "Error guardando el cierre de caja");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CierreCajaModel> call, Throwable t) {
+                rootLayout.removeView(loadingView);
+                CommonFunctions.showGenericAlertMessage(CierreCajaActivity.this, "Error guardando el cierre de caja");
+            }
+        });
     }
 }

@@ -22,6 +22,10 @@ import com.example.gestorheme.Models.TipoServicio.TipoServicioModel;
 import com.example.gestorheme.R;
 import java.util.ArrayList;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class ServiceItemView extends RelativeLayout {
     private TextView nombreLabel;
     private TextView serviciosLabel;
@@ -50,8 +54,7 @@ public class ServiceItemView extends RelativeLayout {
         findViewById(R.id.cross_view).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                Constants.databaseManager.servicesManager.deleteServiceFromDatabase(servicio.getServiceId());
-                delegate.serviceRemoved();
+                deleteService(servicio);
             }
         });
 
@@ -137,8 +140,9 @@ public class ServiceItemView extends RelativeLayout {
     }
 
     private void setFields(ServiceModel servicio) {
-        EmpleadoModel empleado = Constants.databaseManager.empleadosManager.getEmpleadoForEmpleadoId(servicio.getProfesional());
-        nombreLabel.setText(servicio.getNombre() + " " + servicio.getApellidos());
+        EmpleadoModel empleado = Constants.databaseManager.empleadosManager.getEmpleadoForEmpleadoId(servicio.getEmpleadoId());
+        ClientModel cliente = Constants.databaseManager.clientsManager.getClientForClientId(servicio.getClientId());
+        nombreLabel.setText(cliente.getNombre() + " " + cliente.getApellidos());
         serviciosLabel.setText(getServicesStringFromIds(servicio.getServicios()));
         profesionalLabel.setText(empleado.getNombre());
         backgroundLayout.getBackground().setColorFilter(Color.rgb((int)empleado.getRedColorValue(),(int)empleado.getGreenColorValue(), (int)empleado.getBlueColorValue()), PorterDuff.Mode.SRC_ATOP);
@@ -151,5 +155,28 @@ public class ServiceItemView extends RelativeLayout {
             serviciosString += servicio.getNombre() + ", ";
         }
         return serviciosString;
+    }
+
+    private void deleteService(ServiceModel servicio) {
+        delegate.showLoadingState();
+        Call<Void> call = Constants.webServices.deleteService(servicio);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                delegate.hideLoadingState();
+                if (response.code() == 200) {
+                    Constants.databaseManager.servicesManager.deleteServiceFromDatabase(servicio.getServiceId());
+                    delegate.serviceRemoved();
+                } else {
+                    delegate.showErrorMessage("Error eliminando servicio");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                delegate.hideLoadingState();
+                delegate.showErrorMessage("Error eliminando servicio");
+            }
+        });
     }
 }
