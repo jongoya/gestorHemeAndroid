@@ -7,12 +7,21 @@ import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.util.Base64;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+
+import androidx.appcompat.content.res.AppCompatResources;
+import androidx.core.content.ContextCompat;
+
 import com.example.gestorheme.Models.Cadencia.CadenciaModel;
 import com.example.gestorheme.Models.TipoServicio.TipoServicioModel;
+import com.example.gestorheme.R;
+
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -89,5 +98,19 @@ public class CommonFunctions {
         loadingStateView.addView(progressBar);
 
         return loadingStateView;
+    }
+
+    public static void selectLayout(Context contexto, View layout, ImageView imagen) {
+        GradientDrawable unwrappedDrawable = (GradientDrawable) AppCompatResources.getDrawable(contexto, R.drawable.rounded_view);
+        unwrappedDrawable.setStroke(CommonFunctions.convertToPx(1, contexto), contexto.getResources().getColor(R.color.colorPrimary));
+        layout.setBackground(unwrappedDrawable);
+        imagen.setColorFilter(ContextCompat.getColor(contexto, R.color.colorPrimary), android.graphics.PorterDuff.Mode.MULTIPLY);
+    }
+
+    public static void unSelectLayout(Context contexto, View layout, ImageView imagen) {
+        GradientDrawable unwrappedDrawable = (GradientDrawable)AppCompatResources.getDrawable(contexto, R.drawable.rounded_view);
+        unwrappedDrawable.setStroke(CommonFunctions.convertToPx(1, contexto), contexto.getResources().getColor(R.color.dividerColor));
+        layout.setBackground(unwrappedDrawable);
+        imagen.setColorFilter(ContextCompat.getColor(contexto, R.color.dividerColor), android.graphics.PorterDuff.Mode.MULTIPLY);
     }
 }

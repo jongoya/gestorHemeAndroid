@@ -1,8 +1,9 @@
 package com.example.gestorheme.Models.Notification;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class NotificationModel {
+public class NotificationModel implements Serializable {
     private long clientId = 0;
     private long notificationId = 0;
     private String descripcion = "";

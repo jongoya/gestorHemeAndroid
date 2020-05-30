@@ -8,6 +8,7 @@ import com.example.gestorheme.Models.Notification.NotificationModel;
 import com.example.gestorheme.Models.Service.ServiceModel;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -212,27 +213,37 @@ public class NotificationFunctions {
     }
 
     private static ArrayList<NotificationModel> checkNotificacionesPersonalizadas() {
-        //TODO notificaciones personalizadas
+        ArrayList<ClientModel> clientes = Constants.databaseManager.clientsManager.getClientsFromDatabase();
+        long begginingOfDay = DateFunctions.getBeginingOfDayFromDate(new Date()).getTime();
+        long endOfDay = DateFunctions.getEndOfDayFromDate(new Date()).getTime();
+        ArrayList<NotificationModel> notificaciones = new ArrayList<>();
+        for (int i = 0; i < clientes.size(); i++) {
+            ClientModel cliente = clientes.get(i);
+            if (cliente.getFechaNotificacionPersonalizada() > begginingOfDay && cliente.getFechaNotificacionPersonalizada() < endOfDay && !clientHasNotificacionPersonalizada(cliente.getClientId())) {
+                NotificationModel notificacion = new NotificationModel();
+                notificacion.setFecha(cliente.getFechaNotificacionPersonalizada());
+                notificacion.setClientId(cliente.getClientId());
+                notificacion.setLeido(false);
+                notificacion.setComercioId(Constants.developmentComercioId);
+                notificacion.setDescripcion(cliente.getObservaciones());
+                notificacion.setType(Constants.notificationpersonalizadaType);
 
-        /*let clientes: [ClientModel] = Constants.databaseManager.clientsManager.getAllClientsFromDatabase()
-        let beginingOfDay: Int64 = Int64(AgendaFunctions.getBeginningOfDayFromDate(date: Date()).timeIntervalSince1970)
-        let endOfDay: Int64 = Int64(AgendaFunctions.getEndOfDayFromDate(date: Date()).timeIntervalSince1970)
-        var notificaciones: [NotificationModel] = []
-        for cliente in clientes {
-            if cliente.notificacionPersonalizada > beginingOfDay && cliente.notificacionPersonalizada < endOfDay && !existsNotificacionPersonalizada(clientId: cliente.id) {
-                let notificacion: NotificationModel = createNotificacionPersonalizada(fecha: cliente.notificacionPersonalizada, clientId: cliente.id, descripcion: cliente.observaciones)
-                notificaciones.append(notificacion)
-                _ = Constants.databaseManager.notificationsManager.addNotificationToDatabase(newNotification: notificacion)
+                notificaciones.add(notificacion);
             }
         }
 
-        Constants.cloudDatabaseManager.notificationManager.saveNotifications(notifications: notificaciones, delegate: nil)
+        return notificaciones;
+    }
 
-        DispatchQueue.main.async {
-            Constants.rootController.setNotificationBarItemBadge()
-        }*/
+    private static boolean clientHasNotificacionPersonalizada(long clientId) {
+        ArrayList<NotificationModel> notificaciones = Constants.databaseManager.notificationsManager.getNotificationsForType(Constants.notificationpersonalizadaType);
+        for (int i = 0; i < notificaciones.size(); i++) {
+            if (notificaciones.get(i).getClientId() == clientId) {
+                return true;
+            }
+        }
 
-        return new ArrayList<>();
+        return false;
     }
 
     public static void checkNotificaciones() {

@@ -7,12 +7,9 @@ import com.example.gestorheme.Models.Notification.NotificationModel;
 import com.example.gestorheme.Models.Service.ServiceModel;
 import com.example.gestorheme.Models.TipoServicio.TipoServicioModel;
 import com.example.gestorheme.Models.WebServicesModels.ClientesMasServiciosModel;
-
 import java.util.ArrayList;
-
 import retrofit2.Call;
 import retrofit2.http.Body;
-import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
@@ -60,11 +57,41 @@ public interface WebServices {
     @POST("save_notifications")
     Call<ArrayList<NotificationModel>> saveNotifications(@Body ArrayList<NotificationModel> notifications);
 
+    @Headers("Content-Type: application/json")
+    @PUT("update_notificacion_personalizada")
+    Call<ClientModel> updateNotificacionPersonalizada(@Body ClientModel cliente);
+
+    @Headers("Content-Type: application/json")
+    @PUT("update_notification")
+    Call<NotificationModel> updateNotificacion(@Body NotificationModel notification);
+
+    @Headers("Content-Type: application/json")
+    @PUT("update_notifications")
+    Call<ArrayList<NotificationModel>> updateNotificaciones(@Body ArrayList<NotificationModel> notifications);
+
+    @Headers("Content-Type: application/json")
+    @POST("delete_notification")
+    Call<Void> deleteNotificacion(@Body NotificationModel notification);
+
     @GET("get_empleados")
     Call<ArrayList<EmpleadoModel>> getAllEmpleados();
+
+    @Headers("Content-Type: application/json")
+    @POST("save_empleado")
+    Call <EmpleadoModel> saveEmpleado(@Body EmpleadoModel empleado);
+
+    @Headers("Content-Type: application/json")
+    @PUT("update_empleado")
+    Call <EmpleadoModel> updateEmpleado(@Body EmpleadoModel empleado);
+
+    @Headers("Content-Type: application/json")
+    @POST("delete_empleado")
+    Call<EmpleadoModel> deleteEmpleado(@Body EmpleadoModel empleado);
 
     @GET("get_tipo_servicios")
     Call<ArrayList<TipoServicioModel>> getAllTipoServicios();
 
-
+    @Headers("Content-Type: application/json")
+    @POST("save_tipo_servicio")
+    Call<TipoServicioModel> saveTipoServicio(@Body TipoServicioModel tipoServicio);
 }

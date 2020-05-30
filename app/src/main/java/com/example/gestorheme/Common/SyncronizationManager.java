@@ -56,7 +56,7 @@ public class SyncronizationManager {
                     for (int i = 0; i < response.body().size(); i++) {
                         EmpleadoModel empleado = response.body().get(i);
                         if (Constants.databaseManager.empleadosManager.getEmpleadoForEmpleadoId(empleado.getEmpleadoId()) != null) {
-                            //TODO update empleado in database
+                            Constants.databaseManager.empleadosManager.updateEmpleadoInDatabase(empleado);
                         } else {
                             Constants.databaseManager.empleadosManager.addEmpleadoToDatabase(empleado);
                         }

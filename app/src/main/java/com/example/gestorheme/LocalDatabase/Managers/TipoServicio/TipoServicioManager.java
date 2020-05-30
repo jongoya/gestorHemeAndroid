@@ -62,7 +62,7 @@ public class TipoServicioManager {
         ContentValues cv = new ContentValues();
         cv.put(Constants.databaseServicioId, servicio.getServicioId());
         cv.put(Constants.databaseNombre, servicio.getNombre());
-
+        cv.put(Constants.databaseComercioId, servicio.getComercioId());
         return cv;
     }
 
@@ -70,6 +70,7 @@ public class TipoServicioManager {
         TipoServicioModel servicio = new TipoServicioModel();
         servicio.setServicioId(cursor.getLong(cursor.getColumnIndex(Constants.databaseServicioId)));
         servicio.setNombre(cursor.getString(cursor.getColumnIndex(Constants.databaseNombre)));
+        servicio.setComercioId(cursor.getLong(cursor.getColumnIndex(Constants.databaseComercioId)));
 
         return servicio;
     }

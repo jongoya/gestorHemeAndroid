@@ -51,6 +51,12 @@ public class ClientsManager {
         writableDatabase.update(Constants.databaseClientesTableName, cv, Constants.databaseClientId + "=" + String.valueOf(cliente.getClientId()), null);
     }
 
+    public void updateFechaNotificacionPersonalizada(ClientModel cliente) {
+        ContentValues cv = new ContentValues();
+        cv.put(Constants.databaseFechaNotificacionPersonalizada, cliente.getFechaNotificacionPersonalizada());
+        writableDatabase.update(Constants.databaseClientesTableName, cv, Constants.databaseClientId + "=" + String.valueOf(cliente.getClientId()),null);
+    }
+
     private boolean checkClientInDatabase(long clientId) {
         String Query = "Select * from " + Constants.databaseClientesTableName + " where " + Constants.databaseClientId + " = " + String.valueOf(clientId);
         Cursor cursor = readableDatabase.rawQuery(Query, null);
@@ -74,6 +80,7 @@ public class ClientsManager {
         cv.put(Constants.databaseDireccion, client.getDireccion());
         cv.put(Constants.databaseCadenciaVisita, client.getCadenciaVisita());
         cv.put(Constants.databaseObservaciones, client.getObservaciones());
+        cv.put(Constants.databaseFechaNotificacionPersonalizada, client.getFechaNotificacionPersonalizada());
         cv.put(Constants.databaseImagen, client.getImagen());
 
         return cv;
@@ -90,6 +97,7 @@ public class ClientsManager {
         cliente.setDireccion(cursor.getString(cursor.getColumnIndex(Constants.databaseDireccion)));
         cliente.setCadenciaVisita(cursor.getString(cursor.getColumnIndex(Constants.databaseCadenciaVisita)));
         cliente.setObservaciones(cursor.getString(cursor.getColumnIndex(Constants.databaseObservaciones)));
+        cliente.setFechaNotificacionPersonalizada(cursor.getLong(cursor.getColumnIndex(Constants.databaseFechaNotificacionPersonalizada)));
         cliente.setImagen(cursor.getString(cursor.getColumnIndex(Constants.databaseImagen)));
 
         return cliente;

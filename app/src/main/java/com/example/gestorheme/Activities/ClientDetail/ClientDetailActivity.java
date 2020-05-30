@@ -1,5 +1,6 @@
 package com.example.gestorheme.Activities.ClientDetail;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -8,13 +9,16 @@ import android.provider.MediaStore;
 import android.text.InputType;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import com.example.gestorheme.Activities.ClientDetail.Fragment.DatePickerFragment;
 import com.example.gestorheme.Activities.ClientDetail.Views.ServiceView;
 import com.example.gestorheme.Activities.DatePicker.DatePickerActivity;
 import com.example.gestorheme.Activities.ItemSelector.ItemSelectorActivity;
@@ -27,10 +31,12 @@ import com.example.gestorheme.Common.Views.AddServiceButton;
 import com.example.gestorheme.Common.Views.ServiceAlarmButton;
 import com.example.gestorheme.Common.Views.ServiceHeaderTextView;
 import com.example.gestorheme.Models.Client.ClientModel;
+import com.example.gestorheme.Models.Notification.NotificationModel;
 import com.example.gestorheme.Models.Service.ServiceModel;
 import com.example.gestorheme.Models.WebServicesModels.ClientesMasServiciosModel;
 import com.example.gestorheme.R;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
@@ -62,6 +68,8 @@ public class ClientDetailActivity extends AppCompatActivity {
     private RelativeLayout phoneButton;
     private ConstraintLayout rootLayout;
     private RelativeLayout loadingState;
+    private ServiceAlarmButton alarmButton;
+    private ImageView alarmImage;
 
     private ClientModel cliente;
     public boolean isClientDetail = false;
@@ -307,14 +315,26 @@ public class ClientDetailActivity extends AppCompatActivity {
     }
 
     private void addAlarmButton() {
-        ServiceAlarmButton alarmButton = new ServiceAlarmButton(this);
+        alarmButton = new ServiceAlarmButton(this);
+        alarmImage = alarmButton.findViewById(R.id.image);
         alarmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO notificaciones personalizadas
+                if (cliente.getFechaNotificacionPersonalizada() == 0) {
+                    showDatePickerDialog();
+                } else{
+                    cliente.setFechaNotificacionPersonalizada(0);
+                    updateFechaNotificacionPersonalizada();
+                }
             }
         });
         scrollContentView.addView(alarmButton);
+
+        if (cliente.getFechaNotificacionPersonalizada() == 0) {
+            CommonFunctions.unSelectLayout(getApplicationContext(), alarmButton, alarmImage);
+        } else {
+            CommonFunctions.selectLayout(getApplicationContext(), alarmButton, alarmImage);
+        }
     }
 
     private void addAddServiceButton() {
@@ -423,6 +443,7 @@ public class ClientDetailActivity extends AppCompatActivity {
     private void guardarClienteEnServidor() {
         loadingState = CommonFunctions.createLoadingStateView(getApplicationContext());
         rootLayout.addView(loadingState);
+        cliente.setComercioId(Constants.developmentComercioId);
         ClientesMasServiciosModel model = new ClientesMasServiciosModel(cliente, serviceArray);
         Call<ClientesMasServiciosModel> call = Constants.webServices.saveCliente(model);
         call.enqueue(new Callback<ClientesMasServiciosModel>() {
@@ -472,5 +493,59 @@ public class ClientDetailActivity extends AppCompatActivity {
                 CommonFunctions.showGenericAlertMessage(ClientDetailActivity.this, "Error actualizando cliente");
             }
         });
+    }
+
+    private void showDatePickerDialog(){
+        DatePickerFragment newFragment = DatePickerFragment.newInstance(new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(Calendar.DAY_OF_MONTH, day);
+                calendar.set(Calendar.MONTH, month);
+                calendar.set(Calendar.YEAR, year);
+                cliente.setFechaNotificacionPersonalizada(calendar.getTime().getTime());
+                updateFechaNotificacionPersonalizada();
+            }
+        });
+
+        newFragment.show(getSupportFragmentManager(), "datePicker");
+    }
+
+    private void updateFechaNotificacionPersonalizada() {
+        loadingState = CommonFunctions.createLoadingStateView(getApplicationContext());
+        rootLayout.addView(loadingState);
+        Call<ClientModel> call = Constants.webServices.updateNotificacionPersonalizada(cliente);
+        call.enqueue(new Callback<ClientModel>() {
+            @Override
+            public void onResponse(Call<ClientModel> call, Response<ClientModel> response) {
+                rootLayout.removeView(loadingState);
+                if (response.code() == 200) {
+                    Constants.databaseManager.clientsManager.updateFechaNotificacionPersonalizada(cliente);
+                    if (cliente.getFechaNotificacionPersonalizada() == 0) {
+                        CommonFunctions.unSelectLayout(getApplicationContext(), alarmButton, alarmImage);
+                        deleteNotificacionPersonalizada();
+                    } else {
+                        CommonFunctions.selectLayout(getApplicationContext(), alarmButton, alarmImage);
+                    }
+                } else {
+                    CommonFunctions.showGenericAlertMessage(ClientDetailActivity.this, "Error actualizando el cliente");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ClientModel> call, Throwable t) {
+                rootLayout.removeView(loadingState);
+                CommonFunctions.showGenericAlertMessage(ClientDetailActivity.this, "Error actualizando el cliente");
+            }
+        });
+    }
+
+    private void deleteNotificacionPersonalizada() {
+        ArrayList<NotificationModel> notificaciones = Constants.databaseManager.notificationsManager.getNotificationsForType(Constants.notificationpersonalizadaType);
+        for (int i = 0; i < notificaciones.size(); i++) {
+            if (notificaciones.get(i).getClientId() == cliente.getClientId()) {
+                Constants.databaseManager.notificationsManager.deleteNotificationFromDatabase(notificaciones.get(i).getNotificationId());
+            }
+        }
     }
 }

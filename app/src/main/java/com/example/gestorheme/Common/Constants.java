@@ -45,6 +45,7 @@ public class Constants {
     public static String databaseEfectivo = "efectivo";
     public static String databaseTarjeta = "tarjeta";
     public static String databaseComercioId = "comercioId";
+    public static String databaseFechaNotificacionPersonalizada = "fechaNotificacionPersonalizada";
 
 
     public static final String unaSemana = "cada semana";
@@ -67,6 +68,9 @@ public class Constants {
     public static final String notificationCadenciaType = "cadencia";
     public static final String notificationcajaType = "caja";
     public static final String notificationpersonalizadaType = "personalizada";
+
+    public static final String notificationCellRowType = "row";
+    public static final String notificationCellHeaderType = "header";
 
     public static final int developmentComercioId = 1;
 

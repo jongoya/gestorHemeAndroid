@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.gestorheme">
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
 
     <application
         android:allowBackup="true"
@@ -30,6 +32,22 @@
         <activity android:name=".Activities.ClientListSelector.ClientListSelectorActivity">
         </activity>
         <activity android:name=".Activities.CierreCaja.CierreCajaActivity">
+        </activity>
+        <activity android:name=".Activities.NotificationsDetail.BirthdayDetail">
+        </activity>
+        <activity android:name=".Activities.NotificationsDetail.CadenciaDetail">
+        </activity>
+        <activity android:name=".Activities.Stadisticas.StadisticasActivity">
+        </activity>
+        <activity android:name=".Activities.Settings.SettingsActivity">
+        </activity>
+        <activity android:name=".Activities.Empleados.EmpleadosActivity">
+        </activity>
+        <activity android:name=".Activities.EmpleadoDetail.EmpleadoDetailActivity">
+        </activity>
+        <activity android:name=".Activities.TipoServicios.TipoServiciosActivity">
+        </activity>
+        <activity android:name=".Activities.NuevoTipoServicio.NuevoTipoServicioActivity">
         </activity>
     </application>
 

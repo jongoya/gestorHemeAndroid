@@ -16,6 +16,7 @@ public class ClientModel implements Serializable {
     private String observaciones = "";
     private String imagen = "";
     private long comercioId = 0;
+    private long fechaNotificacionPersonalizada = 0;
 
     public long getClientId() {
         return id;
@@ -103,5 +104,13 @@ public class ClientModel implements Serializable {
 
     public void setComercioId(long comercioId) {
         this.comercioId = comercioId;
+    }
+
+    public long getFechaNotificacionPersonalizada() {
+        return fechaNotificacionPersonalizada;
+    }
+
+    public void setFechaNotificacionPersonalizada(long fechaNotificacionPersonalizada) {
+        this.fechaNotificacionPersonalizada = fechaNotificacionPersonalizada;
     }
 }

@@ -61,6 +61,16 @@ public class ServicesManager {
         return services;
     }
 
+    public ArrayList<ServiceModel> getServicesForEmpleadoId(long empleadoId) {
+        ArrayList<ServiceModel> services = new ArrayList<>();
+        Cursor cursor = readableDatabase.rawQuery("SELECT * FROM " + Constants.databaseServiciosTableName + " WHERE " + Constants.databaseEmpleadoId + " = " + Long.toString(empleadoId), null);
+        while (cursor.moveToNext()) {
+            services.add(parseCursorToServiceModel(cursor));
+        }
+        cursor.close();
+        return services;
+    }
+
     public void updateServiceInDatabase(ServiceModel servicio) {
         ContentValues cv = fillServiceDataToDatabaseObject(servicio);
         writableDatabase.update(Constants.databaseServiciosTableName, cv, Constants.databaseServicioId + "=" + String.valueOf(servicio.getServiceId()), null);

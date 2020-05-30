@@ -67,26 +67,28 @@ public class NotificationsManager {
         writableDatabase.delete(Constants.databaseNotificacionesTableName, Constants.databaseNotificationId + " = " + notificationId, null);
     }
 
-    private ContentValues fillNotificationDataToDatabaseObject(NotificationModel servicio) {
+    private ContentValues fillNotificationDataToDatabaseObject(NotificationModel notification) {
         ContentValues cv = new ContentValues();
-        cv.put(Constants.databaseClientId, servicio.getClientId());
-        cv.put(Constants.databaseNotificationId, servicio.getNotificationId());
-        cv.put(Constants.databaseDescripcion, servicio.getDescripcion());
-        cv.put(Constants.databaseFecha, servicio.getFecha());
-        cv.put(Constants.databaseLeido, servicio.isLeido() ? 1 : 0);
-        cv.put(Constants.databaseType, servicio.getType());
+        cv.put(Constants.databaseClientId, notification.getClientId());
+        cv.put(Constants.databaseNotificationId, notification.getNotificationId());
+        cv.put(Constants.databaseDescripcion, notification.getDescripcion());
+        cv.put(Constants.databaseFecha, notification.getFecha());
+        cv.put(Constants.databaseLeido, notification.isLeido() ? 1 : 0);
+        cv.put(Constants.databaseType, notification.getType());
+        cv.put(Constants.databaseComercioId, notification.getComercioId());
 
         return  cv;
     }
 
     private NotificationModel parseCursorToNotificationModel(Cursor cursor) {
         NotificationModel service = new NotificationModel();
-        service.setClientId(cursor.getColumnIndex(Constants.databaseClientId));
+        service.setClientId(cursor.getLong(cursor.getColumnIndex(Constants.databaseClientId)));
         service.setNotificationId(cursor.getLong(cursor.getColumnIndex(Constants.databaseNotificationId)));
         service.setDescripcion(cursor.getString(cursor.getColumnIndex(Constants.databaseDescripcion)));
         service.setFecha(cursor.getLong(cursor.getColumnIndex(Constants.databaseFecha)));
         service.setLeido(getBooleanFromInt(cursor.getInt(cursor.getColumnIndex(Constants.databaseLeido))));
         service.setType(cursor.getString(cursor.getColumnIndex(Constants.databaseType)));
+        service.setComercioId(cursor.getLong(cursor.getColumnIndex(Constants.databaseComercioId)));
         return service;
     }
 

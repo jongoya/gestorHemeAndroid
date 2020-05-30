@@ -13,7 +13,7 @@ public class EmpleadoModel implements Serializable {
     private float greenColorValue = 0;
     private float blueColorValue = 0;
     private long comercioId = 0;
-    private boolean isEmpleadoJefe = false;
+    private boolean is_empleado_jefe = false;
 
     public EmpleadoModel(String nombre, String apellidos, long fecha, String telefono, String email, long empleadoId, float redColorValue, float greenColorValue, float blueColorValue, long comercioId, boolean isEmpleadoJefe) {
         this.nombre = nombre;
@@ -26,7 +26,7 @@ public class EmpleadoModel implements Serializable {
         this.greenColorValue = greenColorValue;
         this.blueColorValue = blueColorValue;
         this.comercioId = comercioId;
-        this.isEmpleadoJefe = isEmpleadoJefe;
+        this.is_empleado_jefe = isEmpleadoJefe;
     }
 
     public EmpleadoModel() {
@@ -113,10 +113,10 @@ public class EmpleadoModel implements Serializable {
     }
 
     public boolean isEmpleadoJefe() {
-        return isEmpleadoJefe;
+        return is_empleado_jefe;
     }
 
     public void setEmpleadoJefe(boolean empleadoJefe) {
-        isEmpleadoJefe = empleadoJefe;
+        is_empleado_jefe = empleadoJefe;
     }
 }

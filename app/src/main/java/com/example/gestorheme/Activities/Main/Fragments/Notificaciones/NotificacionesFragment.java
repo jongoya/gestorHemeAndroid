@@ -1,5 +1,6 @@
 package com.example.gestorheme.Activities.Main.Fragments.Notificaciones;
 
+import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -15,13 +16,20 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.gestorheme.Activities.CierreCaja.CierreCajaActivity;
 import com.example.gestorheme.Activities.Main.Fragments.Notificaciones.Adapter.NotificationListAdapter;
+import com.example.gestorheme.Activities.Main.Fragments.Notificaciones.Models.NotificationDayModel;
+import com.example.gestorheme.Activities.NotificationsDetail.BirthdayDetail;
+import com.example.gestorheme.Activities.NotificationsDetail.CadenciaDetail;
 import com.example.gestorheme.Common.CommonFunctions;
 import com.example.gestorheme.Common.Constants;
+import com.example.gestorheme.Common.DateFunctions;
 import com.example.gestorheme.Models.Notification.NotificationModel;
 import com.example.gestorheme.R;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 
 public class NotificacionesFragment extends Fragment {
     private RelativeLayout cumpleañosButton;
@@ -102,6 +110,7 @@ public class NotificacionesFragment extends Fragment {
                 unFillButton(cajaButton, cajaText);
                 unFillButton(personalizadaButton, personalizadaText);
                 tabSelected = 0;
+                updateList();
             }
         });
 
@@ -113,6 +122,7 @@ public class NotificacionesFragment extends Fragment {
                 unFillButton(cajaButton, cajaText);
                 unFillButton(personalizadaButton, personalizadaText);
                 tabSelected = 1;
+                updateList();
             }
         });
 
@@ -124,6 +134,7 @@ public class NotificacionesFragment extends Fragment {
                 fillButton(cajaButton, cajaText);
                 unFillButton(personalizadaButton, personalizadaText);
                 tabSelected = 2;
+                updateList();
             }
         });
 
@@ -135,6 +146,7 @@ public class NotificacionesFragment extends Fragment {
                 unFillButton(cajaButton, cajaText);
                 fillButton(personalizadaButton, personalizadaText);
                 tabSelected = 3;
+                updateList();
             }
         });
     }
@@ -150,10 +162,16 @@ public class NotificacionesFragment extends Fragment {
     }
 
     private void initializeList() {
+        notificationsList.setDivider(null);
         notificationsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                NotificationDayModel dayModel = (NotificationDayModel) notificationsList.getItemAtPosition(i);
+                if (dayModel.getDayType() == Constants.notificationCellHeaderType) {
+                    return;
+                }
 
+                openNotificationDetail(dayModel);
             }
         });
     }
@@ -161,8 +179,9 @@ public class NotificacionesFragment extends Fragment {
     private void updateList() {
         ArrayList<NotificationModel> notificaciones = Constants.databaseManager.notificationsManager.getNotificationsForType(getNotificationTypeForTab());
         emptyState.setVisibility(notificaciones.size() == 0 ? View.VISIBLE : View.INVISIBLE);
-        adapter = new NotificationListAdapter(getContext(), notificaciones);
-        //notificationsList.setAdapter(adapter);
+        ArrayList<NotificationDayModel> notificacionesAgrupadas = agruparNotificaciones(notificaciones);
+        adapter = new NotificationListAdapter(getContext(), notificacionesAgrupadas);
+        notificationsList.setAdapter(adapter);
     }
 
     private String getNotificationTypeForTab() {
@@ -176,5 +195,122 @@ public class NotificacionesFragment extends Fragment {
             default:
                 return Constants.notificationpersonalizadaType;
         }
+    }
+
+    private ArrayList<NotificationDayModel> agruparNotificaciones(ArrayList<NotificationModel> notificaciones) {
+        switch (getNotificationTypeForTab()) {
+            case Constants.notificationCumpleañosType:
+                return agruparNotificacionesPorDia(notificaciones);
+            case Constants.notificationCadenciaType:
+                return agruparNotificacionesPorDia(notificaciones);
+            case Constants.notificationcajaType:
+                return crearNotiticacionesIndividuales(notificaciones);
+            default:
+                return crearNotiticacionesIndividuales(notificaciones);
+        }
+    }
+
+    private ArrayList<NotificationDayModel> agruparNotificacionesPorDia(ArrayList<NotificationModel> notificaciones) {
+        ArrayList<Long> fechasInicioDelDiaAgrupadas = new ArrayList<>();
+        ArrayList<NotificationDayModel> notificacionesAgrupadas = new ArrayList<>();
+        for (int i = 0; i < notificaciones.size(); i++) {
+            long beginingOfDay = DateFunctions.getBeginingOfDayFromDate(new Date(notificaciones.get(i).getFecha())).getTime();
+            if (!fechasInicioDelDiaAgrupadas.contains(beginingOfDay)) {
+                fechasInicioDelDiaAgrupadas.add(beginingOfDay);
+                notificacionesAgrupadas.add(new NotificationDayModel(notificaciones.get(i).getFecha(), new ArrayList<>(), Constants.notificationCellRowType, ""));
+            }
+        }
+
+        for (int i = 0; i < notificacionesAgrupadas.size(); i++) {
+            long beginingOfDay = DateFunctions.getBeginingOfDayFromDate(new Date(notificacionesAgrupadas.get(i).getFecha())).getTime();
+            long endOfDay = DateFunctions.getEndOfDayFromDate(new Date(notificacionesAgrupadas.get(i).getFecha())).getTime();
+            for (int j = 0; j < notificaciones.size(); j++) {
+                NotificationModel notificacion = notificaciones.get(j);
+                if (notificacion.getFecha() > beginingOfDay && notificacion.getFecha() < endOfDay) {
+                    notificacionesAgrupadas.get(i).getNotificaciones().add(notificacion);
+                }
+            }
+        }
+
+        return reagruparNotificaciones(notificacionesAgrupadas);
+    }
+
+    private ArrayList<NotificationDayModel> crearNotiticacionesIndividuales(ArrayList<NotificationModel> notificaciones) {
+        ArrayList<NotificationDayModel> notificacionesIndividuales = new ArrayList<>();
+        for (int i = 0; i < notificaciones.size(); i++) {
+            NotificationDayModel model = new NotificationDayModel(notificaciones.get(i).getFecha(), new ArrayList<>(), Constants.notificationCellRowType, "");
+            model.getNotificaciones().add(notificaciones.get(i));
+            notificacionesIndividuales.add(model);
+        }
+
+        return reagruparNotificaciones(notificacionesIndividuales);
+    }
+
+    private ArrayList<NotificationDayModel> reagruparNotificaciones(ArrayList<NotificationDayModel> notificacionesAgrupadas) {
+        ArrayList<NotificationDayModel> notificacionesFinales = new ArrayList<>();
+        ArrayList<NotificationDayModel> notificacionesNuevas = new ArrayList<>();
+        ArrayList<NotificationDayModel> notificacionesAntiguas = new ArrayList<>();
+        long todayBeginingOfDay = DateFunctions.getBeginingOfDayFromDate(new Date()).getTime();
+        for (int i = 0; i < notificacionesAgrupadas.size(); i++) {
+            if (notificacionesAgrupadas.get(i).getFecha() < todayBeginingOfDay) {
+                notificacionesAntiguas.add(notificacionesAgrupadas.get(i));
+            } else {
+                notificacionesNuevas.add(notificacionesAgrupadas.get(i));
+            }
+        }
+
+        if (notificacionesNuevas.size() > 0) {
+            notificacionesFinales.add(new NotificationDayModel(0, new ArrayList<>(), Constants.notificationCellHeaderType, "Hoy"));
+            notificacionesFinales.addAll(notificacionesNuevas);
+        }
+
+        if (notificacionesAntiguas.size() > 0) {
+            notificacionesFinales.add(new NotificationDayModel(0, new ArrayList<>(), Constants.notificationCellHeaderType, "Antiguas"));
+            notificacionesFinales.addAll(notificacionesAntiguas);
+        }
+
+        return notificacionesFinales;
+    }
+
+    private void openNotificationDetail(NotificationDayModel model) {
+        switch (tabSelected) {
+            case 0:
+                openBirthdayActivity(model);
+                break;
+            case 1:
+                openCadenciaActivity(model);
+                break;
+            case 2:
+                openCierreCajaActivity(model.getNotificaciones().get(0));
+                break;
+            default:
+                openNotificacionPersonalizadaActivity(model.getNotificaciones().get(0));
+                break;
+        }
+    }
+
+    private void openBirthdayActivity(NotificationDayModel model) {
+        Intent intent = new Intent(getContext(), BirthdayDetail.class);
+        intent.putExtra("notificaciones", model.getNotificaciones());
+        getContext().startActivity(intent);
+    }
+
+    private void openCadenciaActivity(NotificationDayModel model) {
+        Intent intent = new Intent(getContext(), CadenciaDetail.class);
+        intent.putExtra("notificaciones", model.getNotificaciones());
+        getContext().startActivity(intent);
+    }
+
+    private void openCierreCajaActivity(NotificationModel model) {
+        Intent intent = new Intent(getContext(), CierreCajaActivity.class);
+        intent.putExtra("fecha", model.getFecha());
+        intent.putExtra("notification",model);
+        getContext().startActivity(intent);
+    }
+
+    private void openNotificacionPersonalizadaActivity(NotificationModel model) {
+        Intent intent = new Intent(getContext(), BirthdayDetail.class);
+        intent.putExtra("notificaciones", new ArrayList<>(Arrays.asList(model)));
+        getContext().startActivity(intent);
     }
 }

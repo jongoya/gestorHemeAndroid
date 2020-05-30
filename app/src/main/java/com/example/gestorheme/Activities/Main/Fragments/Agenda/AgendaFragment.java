@@ -170,7 +170,9 @@ public class AgendaFragment extends Fragment implements ServiceItemViewInterface
         horizontalCalendar.setCalendarListener(new HorizontalCalendarListener() {
             @Override
             public void onDateSelected(Calendar date, int position) {
-                presentDate = date.getTime();
+                Calendar calendar = date;
+                calendar.set(Calendar.HOUR, 14);
+                presentDate = calendar.getTime();
                 if (clientesVisible) {
                     buildClientesDay();
                 } else {
@@ -206,7 +208,7 @@ public class AgendaFragment extends Fragment implements ServiceItemViewInterface
             fecha = DateFunctions.add15MinsToDate(fecha);
         }
 
-        if (!Constants.databaseManager.cierreCajaManager.cierreCajaRealizadoEnFecha(presentDate)) {
+        if (!Constants.databaseManager.cierreCajaManager.cierreCajaRealizadoEnFecha(presentDate) && servicios.size() > 0) {
             addCierreDeCajaButton();
         }
     }

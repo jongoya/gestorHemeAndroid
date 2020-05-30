@@ -46,6 +46,15 @@ public class EmpleadosManager {
         return clientes;
     }
 
+    public void updateEmpleadoInDatabase(EmpleadoModel empleado) {
+        ContentValues cv = fillEmpleadoDataToDatabaseObject(empleado);
+        writableDatabase.update(Constants.databaseEmpleadosTableName, cv, Constants.databaseEmpleadoId + "=" + String.valueOf(empleado.getEmpleadoId()), null);
+    }
+
+    public void deleteEmpleadoFromDatabase(long empleadoId) {
+        writableDatabase.delete(Constants.databaseEmpleadosTableName, Constants.databaseEmpleadoId + " = " + empleadoId, null);
+    }
+
     private boolean checkEmpleadoInDatabase(long empleadoId) {
         String Query = "Select * from " + Constants.databaseEmpleadosTableName + " where " + Constants.databaseEmpleadoId + " = " + String.valueOf(empleadoId);
         Cursor cursor = readableDatabase.rawQuery(Query, null);
@@ -69,21 +78,28 @@ public class EmpleadosManager {
         cv.put(Constants.databaseRedColorValue, empleado.getRedColorValue());
         cv.put(Constants.databaseBlueColorValue, empleado.getBlueColorValue());
         cv.put(Constants.databaseGreenColorValue, empleado.getGreenColorValue());
+        cv.put(Constants.databaseIsEmpleadoJefe, empleado.isEmpleadoJefe() ? 1 : 0);
 
         return  cv;
     }
 
     private EmpleadoModel parseCursorToEmpleadoModel(Cursor cursor) {
-        EmpleadoModel service = new EmpleadoModel();
-        service.setEmpleadoId(cursor.getLong(cursor.getColumnIndex(Constants.databaseEmpleadoId)));
-        service.setNombre(cursor.getString(cursor.getColumnIndex(Constants.databaseNombre)));
-        service.setApellidos(cursor.getString(cursor.getColumnIndex(Constants.databaseApellidos)));
-        service.setFecha(cursor.getLong(cursor.getColumnIndex(Constants.databaseFecha)));
-        service.setTelefono(cursor.getString(cursor.getColumnIndex(Constants.databaseTelefono)));
-        service.setEmail(cursor.getString(cursor.getColumnIndex(Constants.databaseEmail)));
-        service.setRedColorValue(cursor.getFloat(cursor.getColumnIndex(Constants.databaseRedColorValue)));
-        service.setGreenColorValue(cursor.getFloat(cursor.getColumnIndex(Constants.databaseGreenColorValue)));
-        service.setBlueColorValue(cursor.getFloat(cursor.getColumnIndex(Constants.databaseBlueColorValue)));
-        return service;
+        EmpleadoModel empleado = new EmpleadoModel();
+        empleado.setEmpleadoId(cursor.getLong(cursor.getColumnIndex(Constants.databaseEmpleadoId)));
+        empleado.setNombre(cursor.getString(cursor.getColumnIndex(Constants.databaseNombre)));
+        empleado.setApellidos(cursor.getString(cursor.getColumnIndex(Constants.databaseApellidos)));
+        empleado.setFecha(cursor.getLong(cursor.getColumnIndex(Constants.databaseFecha)));
+        empleado.setTelefono(cursor.getString(cursor.getColumnIndex(Constants.databaseTelefono)));
+        empleado.setEmail(cursor.getString(cursor.getColumnIndex(Constants.databaseEmail)));
+        empleado.setRedColorValue(cursor.getFloat(cursor.getColumnIndex(Constants.databaseRedColorValue)));
+        empleado.setGreenColorValue(cursor.getFloat(cursor.getColumnIndex(Constants.databaseGreenColorValue)));
+        empleado.setBlueColorValue(cursor.getFloat(cursor.getColumnIndex(Constants.databaseBlueColorValue)));
+        empleado.setEmpleadoJefe(getBooleanFromInt(cursor.getInt(cursor.getColumnIndex(Constants.databaseIsEmpleadoJefe))));
+
+        return empleado;
+    }
+
+    private boolean getBooleanFromInt(int valor) {
+        return valor == 1 ? true : false;
     }
 }

@@ -16,6 +16,7 @@ import com.example.gestorheme.Activities.TextInputField.TextInputFieldActivity;
 import com.example.gestorheme.Common.CommonFunctions;
 import com.example.gestorheme.Common.Constants;
 import com.example.gestorheme.Models.CierreCaja.CierreCajaModel;
+import com.example.gestorheme.Models.Notification.NotificationModel;
 import com.example.gestorheme.Models.Service.ServiceModel;
 import com.example.gestorheme.R;
 
@@ -43,6 +44,7 @@ public class CierreCajaActivity extends AppCompatActivity {
 
     private long fecha;
     private CierreCajaModel cierreCaja = new CierreCajaModel();
+    private NotificationModel notification;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,6 +63,7 @@ public class CierreCajaActivity extends AppCompatActivity {
 
     private void getCierreCajaIntent() {
         fecha = getIntent().getLongExtra("fecha", 0);
+        notification = (NotificationModel) getIntent().getSerializableExtra("notification");
     }
 
     private void getFields() {
@@ -199,11 +202,16 @@ public class CierreCajaActivity extends AppCompatActivity {
         call.enqueue(new Callback<CierreCajaModel>() {
             @Override
             public void onResponse(Call<CierreCajaModel> call, Response<CierreCajaModel> response) {
-                rootLayout.removeView(loadingView);
                 if (response.code() == 201) {
                     Constants.databaseManager.cierreCajaManager.addCierreCajaToDatabase(response.body());
-                    CierreCajaActivity.super.onBackPressed();
+                    if (notification != null) {
+                        deleteNotificacion();
+                    }else {
+                        rootLayout.removeView(loadingView);
+                        CierreCajaActivity.super.onBackPressed();
+                    }
                 } else {
+                    rootLayout.removeView(loadingView);
                     CommonFunctions.showGenericAlertMessage(CierreCajaActivity.this, "Error guardando el cierre de caja");
                 }
             }
@@ -212,6 +220,28 @@ public class CierreCajaActivity extends AppCompatActivity {
             public void onFailure(Call<CierreCajaModel> call, Throwable t) {
                 rootLayout.removeView(loadingView);
                 CommonFunctions.showGenericAlertMessage(CierreCajaActivity.this, "Error guardando el cierre de caja");
+            }
+        });
+    }
+
+    private void deleteNotificacion() {
+        Call<Void> call = Constants.webServices.deleteNotificacion(notification);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                rootLayout.removeView(loadingView);
+                if (response.code() == 200) {
+                    Constants.databaseManager.notificationsManager.deleteNotificationFromDatabase(notification.getNotificationId());
+                    CierreCajaActivity.super.onBackPressed();
+                } else {
+                    CommonFunctions.showGenericAlertMessage(CierreCajaActivity.this, "Error eliminando la notificación");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                rootLayout.removeView(loadingView);
+                CommonFunctions.showGenericAlertMessage(CierreCajaActivity.this, "Error eliminando la notificación");
             }
         });
     }
