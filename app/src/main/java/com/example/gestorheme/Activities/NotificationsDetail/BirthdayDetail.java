@@ -227,7 +227,7 @@ public class BirthdayDetail extends AppCompatActivity implements ClientSelectorA
         for (int i = 0; i < notifications.size(); i++) {
             notifications.get(i).setLeido(true);
         }
-        loadingStateView = CommonFunctions.createLoadingStateView(getApplicationContext());
+        loadingStateView = CommonFunctions.createLoadingStateView(getApplicationContext(), "Actualizando notificación");
         rootLayout.addView(loadingStateView);
         Call<ArrayList<NotificationModel>> call = Constants.webServices.updateNotificaciones(notifications);
         call.enqueue(new Callback<ArrayList<NotificationModel>>() {
@@ -253,7 +253,7 @@ public class BirthdayDetail extends AppCompatActivity implements ClientSelectorA
 
     private void markNotificationAsRead(NotificationModel notificacion) {
         notificacion.setLeido(true);
-        loadingStateView = CommonFunctions.createLoadingStateView(getApplicationContext());
+        loadingStateView = CommonFunctions.createLoadingStateView(getApplicationContext(), "Actualizando notificación");
         rootLayout.addView(loadingStateView);
         Call<NotificationModel> call = Constants.webServices.updateNotificacion(notificacion);
         call.enqueue(new Callback<NotificationModel>() {

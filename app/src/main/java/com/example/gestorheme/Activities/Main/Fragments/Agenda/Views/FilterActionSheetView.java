@@ -31,7 +31,7 @@ public class FilterActionSheetView extends LinearLayout {
     }
 
     private void setOnClickListeners() {
-        findViewById(R.id.cancelarButton).setOnClickListener(new OnClickListener() {
+        findViewById(R.id.mensualButton).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 delegate.cancelarClicked();

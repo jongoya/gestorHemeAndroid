@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/clear">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/rounded_view">
+
+        <TextView
+            android:id="@+id/titulo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="5dp"
+            android:gravity="center_horizontal"
+            android:text="Seleccione una fecha"
+            android:textColor="@android:color/black" />
+
+        <RelativeLayout
+            android:id="@+id/divisory1"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/titulo"
+            android:background="@color/dividerColor">
+
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/totalButton"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_below="@id/divisory1"
+            android:background="@color/clear"
+            android:text="Total"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textColor="@android:color/black" />
+
+        <RelativeLayout
+            android:id="@+id/divisory2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/totalButton"
+            android:background="@color/dividerColor">
+
+        </RelativeLayout>
+
+        <DatePicker
+            android:id="@+id/datePicker"
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
+            android:layout_below="@id/divisory2"
+            android:calendarViewShown="false"
+            android:datePickerMode="spinner" />
+
+        <RelativeLayout
+            android:id="@+id/divisory3"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/datePicker"
+            android:background="@color/dividerColor">
+
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/mensualButton"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_below="@id/divisory3"
+            android:layout_toLeftOf="@id/divisory4"
+            android:background="@color/clear"
+            android:text="Mensual"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textColor="@android:color/black" />
+
+        <RelativeLayout
+            android:id="@+id/divisory4"
+            android:layout_width="1dp"
+            android:layout_height="50dp"
+            android:layout_below="@id/divisory3"
+            android:layout_centerHorizontal="true"
+            android:background="@color/dividerColor">
+
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/anualButton"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_below="@id/divisory3"
+            android:layout_toRightOf="@id/divisory4"
+            android:background="@color/clear"
+            android:text="Anual"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textColor="@android:color/black" />
+
+    </RelativeLayout>
+
+</LinearLayout>

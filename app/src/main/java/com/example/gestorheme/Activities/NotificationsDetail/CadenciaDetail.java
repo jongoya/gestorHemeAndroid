@@ -84,7 +84,7 @@ public class CadenciaDetail extends AppCompatActivity {
             notifications.get(i).setLeido(true);
         }
 
-        loadingState = CommonFunctions.createLoadingStateView(getApplicationContext());
+        loadingState = CommonFunctions.createLoadingStateView(getApplicationContext(), "Actualizando notificación");
         rootLayout.addView(loadingState);
         Call<ArrayList<NotificationModel>> call = Constants.webServices.updateNotificaciones(notifications);
         call.enqueue(new Callback<ArrayList<NotificationModel>>() {

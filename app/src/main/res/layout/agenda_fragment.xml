@@ -38,14 +38,12 @@
         android:weekDayTextAppearance="@style/TextAppearance.AppCompat.Body1"
         android:weekNumberColor="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/scrollView3"
+        app:layout_constraintStart_toStartOf="@+id/refreshLayout"
         app:layout_constraintTop_toBottomOf="@+id/relativeLayout" />
-
-    <ScrollView
-        android:id="@+id/scrollView3"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/refreshLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@color/backgroundColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -53,14 +51,20 @@
         app:layout_constraintTop_toBottomOf="@+id/relativeLayout"
         app:layout_constraintVertical_bias="1.0">
 
-        <LinearLayout
-            android:id="@+id/scrollContentView"
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/scrollView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/backgroundColor"
-            android:orientation="vertical" />
-    </ScrollView>
+            android:background="@color/white">
 
+            <LinearLayout
+                android:id="@+id/agendaContentView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/backgroundColor"
+                android:orientation="vertical" />
+        </androidx.core.widget.NestedScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     <RelativeLayout
         android:id="@+id/calendarButton"
         android:layout_width="50dp"

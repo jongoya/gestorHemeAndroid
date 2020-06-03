@@ -158,7 +158,7 @@ public class ServiceItemView extends RelativeLayout {
     }
 
     private void deleteService(ServiceModel servicio) {
-        delegate.showLoadingState();
+        delegate.showLoadingState("Eliminando servicio");
         Call<Void> call = Constants.webServices.deleteService(servicio);
         call.enqueue(new Callback<Void>() {
             @Override

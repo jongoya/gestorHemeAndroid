@@ -84,7 +84,7 @@ public class NuevoTipoServicioActivity extends AppCompatActivity {
     }
 
     private void saveServicio() {
-        loadingState = CommonFunctions.createLoadingStateView(getApplicationContext());
+        loadingState = CommonFunctions.createLoadingStateView(getApplicationContext(), "Guardando servicio");
         rootLayout.addView(loadingState);
         servicio.setComercioId(Constants.developmentComercioId);
         Call<TipoServicioModel> call = Constants.webServices.saveTipoServicio(servicio);

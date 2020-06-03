@@ -2,6 +2,8 @@ package com.example.gestorheme.Activities.Empleados.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.content.res.AppCompatResources;
+
+import com.example.gestorheme.Activities.ColorPicker.ColorPickerActivity;
 import com.example.gestorheme.Activities.EmpleadoDetail.EmpleadoDetailActivity;
 import com.example.gestorheme.Activities.Empleados.Interfaces.EmpleadosListInterface;
 import com.example.gestorheme.Common.CommonFunctions;
@@ -20,6 +25,7 @@ import com.example.gestorheme.Common.OnSwipeTouchListener;
 import com.example.gestorheme.Models.Empleados.EmpleadoModel;
 import com.example.gestorheme.Models.Service.ServiceModel;
 import com.example.gestorheme.R;
+import com.makeramen.roundedimageview.RoundedImageView;
 
 import java.util.ArrayList;
 
@@ -72,11 +78,15 @@ public class EmpleadosListAdapter extends BaseAdapter {
 
         EmpleadoModel empleado = empleados.get(i);
 
+
+        GradientDrawable unwrappedDrawable = (GradientDrawable) AppCompatResources.getDrawable(contexto, R.drawable.color_rounded_view);
         if (showColorLayout) {
-            customizeColorLayout(holder.colorLayout, empleado);
+            int empleadoColor = Color.rgb(empleado.getRedColorValue(), empleado.getGreenColorValue(), empleado.getBlueColorValue());
+            unwrappedDrawable.setColor(empleadoColor);
         } else {
-            holder.colorLayout.setBackgroundColor(contexto.getResources().getColor(R.color.clear));
+            unwrappedDrawable.setColor(contexto.getResources().getColor(R.color.white));
         }
+        holder.colorLayout.setBackground(unwrappedDrawable);
 
         holder.nombre.setText(empleado.getNombre() + " " + empleado.getApellidos());
 
@@ -100,16 +110,12 @@ public class EmpleadosListAdapter extends BaseAdapter {
         private RelativeLayout crossButton;
     }
 
-    private void customizeColorLayout(RelativeLayout colorLayout, EmpleadoModel empleado){
-        //TODO
-    }
-
     private void setTouchListener(RelativeLayout backgroundLayout, EmpleadoModel empleado) {
         backgroundLayout.setOnTouchListener(new OnSwipeTouchListener(contexto) {
             @Override
             public void onSwipeLeft() {
                 super.onSwipeLeft();
-                if (xDelta == 0) {
+                if (xDelta == 0 && !showColorLayout) {
                     leftSwipeAnimation(contexto, backgroundLayout);
                 }
             }
@@ -117,7 +123,7 @@ public class EmpleadosListAdapter extends BaseAdapter {
             @Override
             public void onSwipeRight() {
                 super.onSwipeRight();
-                if (xDelta == 1) {
+                if (xDelta == 1 && !showColorLayout) {
                     rightSwipeAnimation(contexto, backgroundLayout);
                 }
             }
@@ -125,9 +131,15 @@ public class EmpleadosListAdapter extends BaseAdapter {
             @Override
             public void onClick() {
                 super.onClick();
-                Intent intent = new Intent(contexto, EmpleadoDetailActivity.class);
-                intent.putExtra("empleado", empleado);
-                contexto.startActivity(intent);
+                if (showColorLayout) {
+                    Intent intent = new Intent(contexto, ColorPickerActivity.class);
+                    intent.putExtra("empleado", empleado);
+                    contexto.startActivity(intent);
+                } else {
+                    Intent intent = new Intent(contexto, EmpleadoDetailActivity.class);
+                    intent.putExtra("empleado", empleado);
+                    contexto.startActivity(intent);
+                }
             }
         });
     }
@@ -190,7 +202,7 @@ public class EmpleadosListAdapter extends BaseAdapter {
             return;
         }
 
-        delegate.showLoadingState();
+        delegate.showLoadingState("Eliminando servicio");
         Call<EmpleadoModel> call = Constants.webServices.deleteEmpleado(empleado);
         call.enqueue(new Callback<EmpleadoModel>() {
             @Override

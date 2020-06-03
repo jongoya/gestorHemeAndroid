@@ -137,7 +137,7 @@ public class ServiceDetailActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), TextInputFieldActivity.class);
                 intent.putExtra("contenido", String.valueOf(servicio.getPrecio()));
-                intent.putExtra("keyboard", InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                intent.putExtra("keyboard", InputType.TYPE_CLASS_PHONE);
                 startActivityForResult(intent, PRECIO_FIELD_REF);
             }
         });
@@ -146,7 +146,7 @@ public class ServiceDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), TextInputFieldActivity.class);
-                intent.putExtra("contenido", observacionesLabel.getText().toString());
+                intent.putExtra("contenido", servicio.getObservaciones());
                 intent.putExtra("keyboard", InputType.TYPE_CLASS_TEXT);
                 startActivityForResult(intent, OBSERVACION_FIELD_REF);
             }
@@ -269,7 +269,7 @@ public class ServiceDetailActivity extends AppCompatActivity {
     }
 
     private void guardarServicioEnServidor() {
-        loadingLayout = CommonFunctions.createLoadingStateView(getApplicationContext());
+        loadingLayout = CommonFunctions.createLoadingStateView(getApplicationContext(), "Guardando servicio");
         rootLayout.addView(loadingLayout);
         Call<ServiceModel> call = Constants.webServices.saveService(servicio);
         call.enqueue(new Callback<ServiceModel>() {
@@ -294,7 +294,7 @@ public class ServiceDetailActivity extends AppCompatActivity {
     }
 
     private void actualizarServicioEnServidor() {
-        loadingLayout = CommonFunctions.createLoadingStateView(getApplicationContext());
+        loadingLayout = CommonFunctions.createLoadingStateView(getApplicationContext(), "Actualizando servicio");
         rootLayout.addView(loadingLayout);
         Call<ServiceModel> call = Constants.webServices.updateService(servicio);
         call.enqueue(new Callback<ServiceModel>() {

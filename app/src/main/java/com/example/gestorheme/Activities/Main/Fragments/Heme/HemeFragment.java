@@ -64,8 +64,8 @@ public class HemeFragment extends Fragment {
         comercioList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //Intent intent = new Intent(getActivity(), StadisticasActivity.class);
-                //getActivity().startActivity(intent);
+                Intent intent = new Intent(getActivity(), StadisticasActivity.class);
+                getActivity().startActivity(intent);
             }
         });
     }

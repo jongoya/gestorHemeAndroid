@@ -18,6 +18,7 @@ import android.widget.RelativeLayout;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.content.ContextCompat;
 
+import com.example.gestorheme.Common.Views.LoadingStateView;
 import com.example.gestorheme.Models.Cadencia.CadenciaModel;
 import com.example.gestorheme.Models.TipoServicio.TipoServicioModel;
 import com.example.gestorheme.R;
@@ -40,7 +41,7 @@ public class CommonFunctions {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
         byte[] byteArray = byteArrayOutputStream.toByteArray();
-        return Base64.encodeToString(byteArray, Base64.DEFAULT);
+        return Base64.encodeToString(byteArray, Base64.NO_WRAP);
     }
 
     public static Bitmap convertBase64StringToBitmap(String base64String) {
@@ -77,40 +78,27 @@ public class CommonFunctions {
         return (int) (dp * scale + 0.5f);
     }
 
-    public static RelativeLayout createLoadingStateView(Context context) {
-        RelativeLayout loadingStateView = new RelativeLayout(context);
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        loadingStateView.setLayoutParams(params);
+    public static RelativeLayout createLoadingStateView(Context context, String descripcion) {
+        LoadingStateView loadingState = new LoadingStateView(context, descripcion);
 
-        RelativeLayout backgroundGradient = new RelativeLayout(context);
-        RelativeLayout.LayoutParams gradientParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        backgroundGradient.setLayoutParams(gradientParams);
-        backgroundGradient.setBackgroundColor(Color.BLACK);
-        backgroundGradient.setAlpha(0.5f);
-
-        loadingStateView.addView(backgroundGradient);
-
-        ProgressBar progressBar = new ProgressBar(context);
-        RelativeLayout.LayoutParams progressParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        progressParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-        progressBar.setLayoutParams(progressParams);
-        progressBar.getIndeterminateDrawable().setColorFilter(Color.WHITE, android.graphics.PorterDuff.Mode.SRC_IN);
-        loadingStateView.addView(progressBar);
-
-        return loadingStateView;
+        return loadingState;
     }
 
     public static void selectLayout(Context contexto, View layout, ImageView imagen) {
         GradientDrawable unwrappedDrawable = (GradientDrawable) AppCompatResources.getDrawable(contexto, R.drawable.rounded_view);
         unwrappedDrawable.setStroke(CommonFunctions.convertToPx(1, contexto), contexto.getResources().getColor(R.color.colorPrimary));
         layout.setBackground(unwrappedDrawable);
-        imagen.setColorFilter(ContextCompat.getColor(contexto, R.color.colorPrimary), android.graphics.PorterDuff.Mode.MULTIPLY);
+        if (imagen != null) {
+            imagen.setColorFilter(ContextCompat.getColor(contexto, R.color.colorPrimary), android.graphics.PorterDuff.Mode.MULTIPLY);
+        }
     }
 
     public static void unSelectLayout(Context contexto, View layout, ImageView imagen) {
         GradientDrawable unwrappedDrawable = (GradientDrawable)AppCompatResources.getDrawable(contexto, R.drawable.rounded_view);
         unwrappedDrawable.setStroke(CommonFunctions.convertToPx(1, contexto), contexto.getResources().getColor(R.color.dividerColor));
         layout.setBackground(unwrappedDrawable);
-        imagen.setColorFilter(ContextCompat.getColor(contexto, R.color.dividerColor), android.graphics.PorterDuff.Mode.MULTIPLY);
+        if (imagen != null) {
+            imagen.setColorFilter(ContextCompat.getColor(contexto, R.color.dividerColor), android.graphics.PorterDuff.Mode.MULTIPLY);
+        }
     }
 }

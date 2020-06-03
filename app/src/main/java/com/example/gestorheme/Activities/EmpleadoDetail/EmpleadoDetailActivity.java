@@ -65,6 +65,7 @@ public class EmpleadoDetailActivity extends AppCompatActivity {
             setContent();
         } else {
             empleado = new EmpleadoModel();
+            callButton.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -204,7 +205,7 @@ public class EmpleadoDetailActivity extends AppCompatActivity {
     }
 
     private void saveEmpleado(EmpleadoModel empleado) {
-        loadingState = CommonFunctions.createLoadingStateView(getApplicationContext());
+        loadingState = CommonFunctions.createLoadingStateView(getApplicationContext(), "Guardando empleado");
         rootLayout.addView(loadingState);
         empleado.setEmpleadoJefe(false);
         empleado.setComercioId(Constants.developmentComercioId);
@@ -230,7 +231,7 @@ public class EmpleadoDetailActivity extends AppCompatActivity {
     }
 
     private void updateEmpleado(EmpleadoModel empleado) {
-        loadingState = CommonFunctions.createLoadingStateView(getApplicationContext());
+        loadingState = CommonFunctions.createLoadingStateView(getApplicationContext(), "Actualizando empleado");
         rootLayout.addView(loadingState);
         Call<EmpleadoModel> call = Constants.webServices.updateEmpleado(empleado);
         call.enqueue(new Callback<EmpleadoModel>() {

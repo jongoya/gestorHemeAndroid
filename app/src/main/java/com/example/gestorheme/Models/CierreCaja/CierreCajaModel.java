@@ -1,6 +1,8 @@
 package com.example.gestorheme.Models.CierreCaja;
 
-public class CierreCajaModel {
+import java.io.Serializable;
+
+public class CierreCajaModel implements Serializable {
     private long cajaId = 0;
     private long fecha = 0;
     private int numeroServicios = 0;

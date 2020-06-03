@@ -31,6 +31,17 @@ public class CierreCajaManager {
         return cierreCajas;
     }
 
+    public ArrayList<CierreCajaModel> getCierreCajasForRange(long fechaInicio, long fechaFin) {
+        ArrayList<CierreCajaModel> cierreCajas = new ArrayList<>();
+        Cursor cursor = readableDatabase.rawQuery("select * from " + Constants.databaseCierreCajaTableName + " WHERE " + Constants.databaseFecha + " >= " + fechaInicio + " AND " + Constants.databaseFecha + " < " + fechaFin, null);
+        while (cursor.moveToNext()) {
+            cierreCajas.add(parseCursorToCierreCajaModel(cursor));
+        }
+
+        cursor.close();
+        return cierreCajas;
+    }
+
     public boolean cierreCajaRealizadoEnFecha(Date fecha) {
         long begginingOfDay = DateFunctions.getBeginingOfDayFromDate(fecha).getTime();
         long endOfDay = DateFunctions.getEndOfDayFromDate(fecha).getTime();

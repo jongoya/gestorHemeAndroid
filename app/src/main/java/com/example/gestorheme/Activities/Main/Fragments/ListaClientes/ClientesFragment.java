@@ -14,11 +14,15 @@ import android.widget.ListView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.example.gestorheme.Activities.ClientDetail.ClientDetailActivity;
 import com.example.gestorheme.Activities.Main.Fragments.ListaClientes.Adapter.ClientListAdapter;
 import com.example.gestorheme.Activities.Main.Fragments.ListaClientes.Models.ListaClienteCellModel;
+import com.example.gestorheme.Activities.Main.MainActivity;
 import com.example.gestorheme.Common.CommonFunctions;
 import com.example.gestorheme.Common.Constants;
+import com.example.gestorheme.Common.SyncronizationManager;
 import com.example.gestorheme.Models.Client.ClientModel;
 import com.example.gestorheme.R;
 
@@ -28,6 +32,7 @@ public class ClientesFragment extends Fragment {
     private EditText clientFilterField;
     private ListView clientList;
     private ClientListAdapter clientListAdapter;
+    public SwipeRefreshLayout refreshLayout;
 
     private static final int TYPE_CLIENT = 0;
     private static final int TYPE_HEADER = 1;
@@ -47,6 +52,7 @@ public class ClientesFragment extends Fragment {
         setClientsTextListener();
         setListProperties();
         setCLientsFieldCleanClick();
+        setRefreshLayoutListener();
     }
 
     @Override
@@ -58,6 +64,7 @@ public class ClientesFragment extends Fragment {
     private void setViews() {
         clientFilterField = getView().findViewById(R.id.client_filter_field);
         clientList = getView().findViewById(R.id.client_list);
+        refreshLayout = getView().findViewById(R.id.refreshLayout);
     }
 
     private void addClickListeners() {
@@ -66,6 +73,15 @@ public class ClientesFragment extends Fragment {
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), ClientDetailActivity.class);
                 getActivity().startActivity(intent);
+            }
+        });
+    }
+
+    private void setRefreshLayoutListener() {
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                SyncronizationManager.getAllClients((MainActivity) getActivity());
             }
         });
     }
@@ -108,7 +124,7 @@ public class ClientesFragment extends Fragment {
         });
     }
 
-    private void setClientList() {
+    public void setClientList() {
         clientListAdapter = new ClientListAdapter(getContext());
         ArrayList<ClientModel> clientes = Constants.databaseManager.clientsManager.getClientsFromDatabase();
         if (clientFilterField.getText().length() > 0) {

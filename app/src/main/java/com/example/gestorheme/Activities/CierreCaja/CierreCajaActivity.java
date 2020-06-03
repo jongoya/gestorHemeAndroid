@@ -98,7 +98,7 @@ public class CierreCajaActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), TextInputFieldActivity.class);
-                intent.putExtra("keyboard", InputType.TYPE_CLASS_NUMBER);
+                intent.putExtra("keyboard", InputType.TYPE_CLASS_PHONE);
                 startActivityForResult(intent, NUMSERVICIOS_FIELD_REF);
 
             }
@@ -108,7 +108,7 @@ public class CierreCajaActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), TextInputFieldActivity.class);
-                intent.putExtra("keyboard", InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                intent.putExtra("keyboard", InputType.TYPE_CLASS_PHONE);
                 startActivityForResult(intent, TOTALCAJA_FIELD_REF);
 
             }
@@ -118,7 +118,7 @@ public class CierreCajaActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), TextInputFieldActivity.class);
-                intent.putExtra("keyboard", InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                intent.putExtra("keyboard", InputType.TYPE_CLASS_PHONE);
                 startActivityForResult(intent, TOTALPRODUCTOS_FIELD_REF);
 
             }
@@ -128,7 +128,7 @@ public class CierreCajaActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), TextInputFieldActivity.class);
-                intent.putExtra("keyboard", InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                intent.putExtra("keyboard", InputType.TYPE_CLASS_PHONE);
                 startActivityForResult(intent, EFECTIVO_FIELD_REF);
 
             }
@@ -138,7 +138,7 @@ public class CierreCajaActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), TextInputFieldActivity.class);
-                intent.putExtra("keyboard", InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                intent.putExtra("keyboard", InputType.TYPE_CLASS_PHONE);
                 startActivityForResult(intent, TARJETA_FIELD_REF);
 
             }
@@ -195,7 +195,7 @@ public class CierreCajaActivity extends AppCompatActivity {
     }
 
     private void saveCierreCajaInServer(CierreCajaModel cierreCaja) {
-        loadingView = CommonFunctions.createLoadingStateView(getApplicationContext());
+        loadingView = CommonFunctions.createLoadingStateView(getApplicationContext(), "Guardando cierre de caja");
         rootLayout.addView(loadingView);
         cierreCaja.setComercioId(Constants.developmentComercioId);
         Call<CierreCajaModel> call = Constants.webServices.saveCierreCaja(cierreCaja);

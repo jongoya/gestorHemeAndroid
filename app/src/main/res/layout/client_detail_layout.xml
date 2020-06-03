@@ -1,378 +1,387 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <ScrollView
-        android:id="@+id/scrollView2"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/refreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/backgroundColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
-            android:id="@+id/scrollContentView"
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/scrollView2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/clear"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:background="@color/backgroundColor">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/client_image"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="10dp"
-                android:src="@drawable/add_image"
-                android:tint="@android:color/black"
-                app:civ_border_color="#FF000000"
-                app:civ_border_width="0dp" />
-
-            <RelativeLayout
-                android:id="@+id/nombreLayout"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:background="@color/white">
-
-                <TextView
-                    android:id="@+id/nombreField"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="10dp"
-                    android:text="Nombre"
-                    android:textColor="@android:color/black" />
-
-                <TextView
-                    android:id="@+id/nombreLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_toLeftOf="@id/nombreArrow"
-                    android:layout_toRightOf="@id/nombreField"
-                    android:gravity="right" />
-
-                <ImageView
-                    android:id="@+id/nombreArrow"
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="10dp"
-                    android:tint="@color/dividerColor"
-                    app:srcCompat="@drawable/right_arrow_image" />
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginLeft="10dp"
-                    android:background="@color/dividerColor">
-
-                </RelativeLayout>
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/apellidosLayout"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:background="@color/white">
-
-                <TextView
-                    android:id="@+id/apellidosField"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="10dp"
-                    android:text="Apellidos"
-                    android:textColor="@android:color/black" />
-
-                <TextView
-                    android:id="@+id/apellidosLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_toLeftOf="@id/apellidosArrow"
-                    android:layout_toRightOf="@id/apellidosField"
-                    android:gravity="right" />
-
-                <ImageView
-                    android:id="@+id/apellidosArrow"
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="10dp"
-                    android:tint="@color/dividerColor"
-                    app:srcCompat="@drawable/right_arrow_image" />
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginLeft="10dp"
-                    android:background="@color/dividerColor">
-
-                </RelativeLayout>
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/fechaLayout"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:background="@color/white">
-
-                <TextView
-                    android:id="@+id/fechaField"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="10dp"
-                    android:text="Fecha"
-                    android:textColor="@android:color/black" />
-
-                <TextView
-                    android:id="@+id/fechaLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_toLeftOf="@id/fechaArrow"
-                    android:layout_toRightOf="@id/fechaField"
-                    android:gravity="right" />
-
-                <ImageView
-                    android:id="@+id/fechaArrow"
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="10dp"
-                    android:tint="@color/dividerColor"
-                    app:srcCompat="@drawable/right_arrow_image" />
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginLeft="10dp"
-                    android:background="@color/dividerColor">
-
-                </RelativeLayout>
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/telefonoLayout"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:background="@color/white">
-
-                <TextView
-                    android:id="@+id/telefonoField"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="10dp"
-                    android:text="Telefono"
-                    android:textColor="@android:color/black" />
-
-                <TextView
-                    android:id="@+id/telefonoLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_toLeftOf="@id/telefonoArrow"
-                    android:layout_toRightOf="@id/telefonoField"
-                    android:gravity="right" />
-
-                <ImageView
-                    android:id="@+id/telefonoArrow"
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="10dp"
-                    android:tint="@color/dividerColor"
-                    app:srcCompat="@drawable/right_arrow_image" />
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginLeft="10dp"
-                    android:background="@color/dividerColor">
-
-                </RelativeLayout>
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/emailLayout"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:background="@color/white">
-
-                <TextView
-                    android:id="@+id/emailField"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="10dp"
-                    android:text="Email"
-                    android:textColor="@android:color/black" />
-
-                <TextView
-                    android:id="@+id/emailLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_toLeftOf="@id/emailArrow"
-                    android:layout_toRightOf="@id/emailField"
-                    android:gravity="right" />
-
-                <ImageView
-                    android:id="@+id/emailArrow"
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="10dp"
-                    android:tint="@color/dividerColor"
-                    app:srcCompat="@drawable/right_arrow_image" />
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginLeft="10dp"
-                    android:background="@color/dividerColor">
-
-                </RelativeLayout>
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/direccionLayout"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:background="@color/white">
-
-                <TextView
-                    android:id="@+id/direccionField"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="10dp"
-                    android:text="Direccion"
-                    android:textColor="@android:color/black" />
-
-                <TextView
-                    android:id="@+id/direccionLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_toLeftOf="@id/direccionArrow"
-                    android:layout_toRightOf="@id/direccionField"
-                    android:gravity="right" />
-
-                <ImageView
-                    android:id="@+id/direccionArrow"
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="10dp"
-                    android:tint="@color/dividerColor"
-                    app:srcCompat="@drawable/right_arrow_image" />
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginLeft="10dp"
-                    android:background="@color/dividerColor">
-
-                </RelativeLayout>
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/cadenciaLayout"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:background="@color/white">
-
-                <TextView
-                    android:id="@+id/cadenciaField"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="10dp"
-                    android:text="Cada cuanto viene"
-                    android:textColor="@android:color/black" />
-
-                <TextView
-                    android:id="@+id/cadenciaLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_toLeftOf="@id/cadenciaArrow"
-                    android:layout_toRightOf="@id/cadenciaField"
-                    android:gravity="right" />
-
-                <ImageView
-                    android:id="@+id/cadenciaArrow"
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="10dp"
-                    android:tint="@color/dividerColor"
-                    app:srcCompat="@drawable/right_arrow_image" />
-
-            </RelativeLayout>
-
-            <EditText
-                android:id="@+id/observacionesLabel"
+            <LinearLayout
+                android:id="@+id/scrollContentView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:background="@color/white"
-                android:clickable="false"
-                android:cursorVisible="false"
-                android:editable="false"
-                android:ems="10"
-                android:enabled="false"
-                android:gravity="start|top"
-                android:inputType="textMultiLine"
-                android:paddingLeft="10dp"
-                android:paddingTop="15dp"
-                android:paddingRight="10dp"
-                android:paddingBottom="15dp"
-                android:shadowColor="@android:color/black"
-                android:text="Hola"
-                android:textColor="@android:color/black"
-                android:textColorHint="@android:color/black"
-                android:textSize="14sp" />
+                android:background="@color/clear"
+                android:orientation="vertical">
 
-        </LinearLayout>
-    </ScrollView>
+                <com.makeramen.roundedimageview.RoundedImageView
+                    android:id="@+id/client_image"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/client_detail_user"
+                    app:riv_border_color="#FF000000"
+                    app:riv_border_width="0dp"
+                    app:riv_corner_radius="0dp"
+                    app:riv_mutate_background="true"
+                    app:riv_oval="false" />
+
+                <RelativeLayout
+                    android:id="@+id/nombreLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:background="@color/white">
+
+                    <TextView
+                        android:id="@+id/nombreField"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="10dp"
+                        android:text="Nombre"
+                        android:textColor="@android:color/black" />
+
+                    <TextView
+                        android:id="@+id/nombreLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_toLeftOf="@id/nombreArrow"
+                        android:layout_toRightOf="@id/nombreField"
+                        android:gravity="right" />
+
+                    <ImageView
+                        android:id="@+id/nombreArrow"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="10dp"
+                        android:tint="@color/dividerColor"
+                        app:srcCompat="@drawable/right_arrow_image" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginLeft="10dp"
+                        android:background="@color/dividerColor">
+
+                    </RelativeLayout>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/apellidosLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:background="@color/white">
+
+                    <TextView
+                        android:id="@+id/apellidosField"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="10dp"
+                        android:text="Apellidos"
+                        android:textColor="@android:color/black" />
+
+                    <TextView
+                        android:id="@+id/apellidosLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_toLeftOf="@id/apellidosArrow"
+                        android:layout_toRightOf="@id/apellidosField"
+                        android:gravity="right" />
+
+                    <ImageView
+                        android:id="@+id/apellidosArrow"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="10dp"
+                        android:tint="@color/dividerColor"
+                        app:srcCompat="@drawable/right_arrow_image" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginLeft="10dp"
+                        android:background="@color/dividerColor">
+
+                    </RelativeLayout>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/fechaLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:background="@color/white">
+
+                    <TextView
+                        android:id="@+id/fechaField"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="10dp"
+                        android:text="Fecha"
+                        android:textColor="@android:color/black" />
+
+                    <TextView
+                        android:id="@+id/fechaLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_toLeftOf="@id/fechaArrow"
+                        android:layout_toRightOf="@id/fechaField"
+                        android:gravity="right" />
+
+                    <ImageView
+                        android:id="@+id/fechaArrow"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="10dp"
+                        android:tint="@color/dividerColor"
+                        app:srcCompat="@drawable/right_arrow_image" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginLeft="10dp"
+                        android:background="@color/dividerColor">
+
+                    </RelativeLayout>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/telefonoLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:background="@color/white">
+
+                    <TextView
+                        android:id="@+id/telefonoField"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="10dp"
+                        android:text="Telefono"
+                        android:textColor="@android:color/black" />
+
+                    <TextView
+                        android:id="@+id/telefonoLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_toLeftOf="@id/telefonoArrow"
+                        android:layout_toRightOf="@id/telefonoField"
+                        android:gravity="right" />
+
+                    <ImageView
+                        android:id="@+id/telefonoArrow"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="10dp"
+                        android:tint="@color/dividerColor"
+                        app:srcCompat="@drawable/right_arrow_image" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginLeft="10dp"
+                        android:background="@color/dividerColor">
+
+                    </RelativeLayout>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/emailLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:background="@color/white">
+
+                    <TextView
+                        android:id="@+id/emailField"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="10dp"
+                        android:text="Email"
+                        android:textColor="@android:color/black" />
+
+                    <TextView
+                        android:id="@+id/emailLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_toLeftOf="@id/emailArrow"
+                        android:layout_toRightOf="@id/emailField"
+                        android:gravity="right" />
+
+                    <ImageView
+                        android:id="@+id/emailArrow"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="10dp"
+                        android:tint="@color/dividerColor"
+                        app:srcCompat="@drawable/right_arrow_image" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginLeft="10dp"
+                        android:background="@color/dividerColor">
+
+                    </RelativeLayout>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/direccionLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:background="@color/white">
+
+                    <TextView
+                        android:id="@+id/direccionField"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="10dp"
+                        android:text="Direccion"
+                        android:textColor="@android:color/black" />
+
+                    <TextView
+                        android:id="@+id/direccionLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_toLeftOf="@id/direccionArrow"
+                        android:layout_toRightOf="@id/direccionField"
+                        android:gravity="right" />
+
+                    <ImageView
+                        android:id="@+id/direccionArrow"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="10dp"
+                        android:tint="@color/dividerColor"
+                        app:srcCompat="@drawable/right_arrow_image" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginLeft="10dp"
+                        android:background="@color/dividerColor">
+
+                    </RelativeLayout>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/cadenciaLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:background="@color/white">
+
+                    <TextView
+                        android:id="@+id/cadenciaField"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="10dp"
+                        android:text="Cada cuanto viene"
+                        android:textColor="@android:color/black" />
+
+                    <TextView
+                        android:id="@+id/cadenciaLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_toLeftOf="@id/cadenciaArrow"
+                        android:layout_toRightOf="@id/cadenciaField"
+                        android:gravity="right" />
+
+                    <ImageView
+                        android:id="@+id/cadenciaArrow"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="10dp"
+                        android:tint="@color/dividerColor"
+                        app:srcCompat="@drawable/right_arrow_image" />
+
+                </RelativeLayout>
+
+                <EditText
+                    android:id="@+id/observacionesLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="@color/white"
+                    android:clickable="true"
+                    android:cursorVisible="false"
+                    android:editable="false"
+                    android:ems="10"
+                    android:enabled="true"
+                    android:gravity="start|top"
+                    android:inputType="textMultiLine"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="15dp"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="15dp"
+                    android:shadowColor="@android:color/black"
+                    android:text="Añadir observación"
+                    android:textColor="@android:color/black"
+                    android:textColorHint="@android:color/black"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <RelativeLayout
         android:id="@+id/save_button"
@@ -382,7 +391,7 @@
         android:layout_marginRight="15dp"
         android:layout_marginBottom="15dp"
         android:background="@drawable/rounded_view"
-        app:layout_constraintBottom_toBottomOf="@+id/scrollView2"
+        app:layout_constraintBottom_toBottomOf="@+id/refreshLayout"
         app:layout_constraintEnd_toEndOf="parent">
 
         <ImageView
@@ -403,7 +412,7 @@
         android:layout_marginRight="15dp"
         android:layout_marginBottom="15dp"
         android:background="@drawable/rounded_view"
-        app:layout_constraintBottom_toBottomOf="@+id/scrollView2"
+        app:layout_constraintBottom_toBottomOf="@+id/refreshLayout"
         app:layout_constraintEnd_toStartOf="@+id/save_button">
 
         <ImageView

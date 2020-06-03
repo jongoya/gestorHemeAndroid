@@ -15,15 +15,18 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.gestorheme.Activities.CierreCaja.CierreCajaActivity;
 import com.example.gestorheme.Activities.Main.Fragments.Notificaciones.Adapter.NotificationListAdapter;
+import com.example.gestorheme.Activities.Main.Fragments.Notificaciones.Interfaces.NotificationsRefreshInterface;
 import com.example.gestorheme.Activities.Main.Fragments.Notificaciones.Models.NotificationDayModel;
 import com.example.gestorheme.Activities.NotificationsDetail.BirthdayDetail;
 import com.example.gestorheme.Activities.NotificationsDetail.CadenciaDetail;
 import com.example.gestorheme.Common.CommonFunctions;
 import com.example.gestorheme.Common.Constants;
 import com.example.gestorheme.Common.DateFunctions;
+import com.example.gestorheme.Common.SyncronizationManager;
 import com.example.gestorheme.Models.Notification.NotificationModel;
 import com.example.gestorheme.R;
 
@@ -31,7 +34,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 
-public class NotificacionesFragment extends Fragment {
+public class NotificacionesFragment extends Fragment implements NotificationsRefreshInterface {
     private RelativeLayout cumpleañosButton;
     private RelativeLayout cadenciaButton;
     private RelativeLayout cajaButton;
@@ -42,6 +45,7 @@ public class NotificacionesFragment extends Fragment {
     private TextView personalizadaText;
     private ListView notificationsList;
     private TextView emptyState;
+    private SwipeRefreshLayout refreshLayout;
     private NotificationListAdapter adapter;
     private int tabSelected = 0;
 
@@ -58,6 +62,7 @@ public class NotificacionesFragment extends Fragment {
         setButtonsWidth();
         setOnClickListeners();
         initializeList();
+        setRefreshListener();
     }
 
     @Override
@@ -77,6 +82,7 @@ public class NotificacionesFragment extends Fragment {
         personalizadaText = getView().findViewById(R.id.personalizadaText);
         notificationsList = getView().findViewById(R.id.notificationsList);
         emptyState = getView().findViewById(R.id.emptyState);
+        refreshLayout = getView().findViewById(R.id.refreshLayout);
     }
 
     private void setButtonsWidth() {
@@ -159,6 +165,15 @@ public class NotificacionesFragment extends Fragment {
     private void unFillButton(RelativeLayout view, TextView textView) {
         view.setBackgroundTintMode(PorterDuff.Mode.ADD);
         textView.setTextColor(getResources().getColor(R.color.colorPrimary, null));
+    }
+
+    private void setRefreshListener() {
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                SyncronizationManager.getAllNotifications(NotificacionesFragment.this);
+            }
+        });
     }
 
     private void initializeList() {
@@ -312,5 +327,16 @@ public class NotificacionesFragment extends Fragment {
         Intent intent = new Intent(getContext(), BirthdayDetail.class);
         intent.putExtra("notificaciones", new ArrayList<>(Arrays.asList(model)));
         getContext().startActivity(intent);
+    }
+
+    @Override
+    public void notificationsLoaded() {
+        refreshLayout.setRefreshing(false);
+        updateList();
+    }
+
+    @Override
+    public void errorLoadingNotifications() {
+        refreshLayout.setRefreshing(false);
     }
 }

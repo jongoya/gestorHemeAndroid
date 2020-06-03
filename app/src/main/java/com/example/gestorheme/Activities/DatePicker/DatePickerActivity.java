@@ -58,6 +58,7 @@ public class DatePickerActivity extends AppCompatActivity {
         if (showTimePicker) {
             timePicker.setHour(calendar.get(Calendar.HOUR));
             timePicker.setMinute(calendar.get(Calendar.MINUTE));
+            timePicker.setIs24HourView(true);
         }
     }
 

@@ -42,6 +42,7 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(SettingsActivity.this, EmpleadosActivity.class);
+                intent.putExtra("showColorLayout", false);
                 startActivity(intent);
             }
         });
@@ -57,7 +58,8 @@ public class SettingsActivity extends AppCompatActivity {
         agendaLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(SettingsActivity.this, AgendaSettingsActivity.class);
+                startActivity(intent);
             }
         });
     }

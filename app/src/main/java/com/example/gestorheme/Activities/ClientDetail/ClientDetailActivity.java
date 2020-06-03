@@ -3,6 +3,7 @@ package com.example.gestorheme.Activities.ClientDetail;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -18,15 +19,19 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.example.gestorheme.Activities.ClientDetail.Fragment.DatePickerFragment;
 import com.example.gestorheme.Activities.ClientDetail.Views.ServiceView;
 import com.example.gestorheme.Activities.DatePicker.DatePickerActivity;
 import com.example.gestorheme.Activities.ItemSelector.ItemSelectorActivity;
+import com.example.gestorheme.Activities.Main.Fragments.Agenda.Interfaces.ServicesRefreshInterface;
 import com.example.gestorheme.Activities.ServiceDetail.ServiceDetailActivity;
 import com.example.gestorheme.Activities.TextInputField.TextInputFieldActivity;
 import com.example.gestorheme.Common.CommonFunctions;
 import com.example.gestorheme.Common.Constants;
 import com.example.gestorheme.Common.DateFunctions;
+import com.example.gestorheme.Common.SyncronizationManager;
 import com.example.gestorheme.Common.Views.AddServiceButton;
 import com.example.gestorheme.Common.Views.ServiceAlarmButton;
 import com.example.gestorheme.Common.Views.ServiceHeaderTextView;
@@ -35,15 +40,16 @@ import com.example.gestorheme.Models.Notification.NotificationModel;
 import com.example.gestorheme.Models.Service.ServiceModel;
 import com.example.gestorheme.Models.WebServicesModels.ClientesMasServiciosModel;
 import com.example.gestorheme.R;
+import com.makeramen.roundedimageview.RoundedImageView;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ClientDetailActivity extends AppCompatActivity {
+public class ClientDetailActivity extends AppCompatActivity implements ServicesRefreshInterface {
     private static final int NOMBRE_FIELD_REF = 0;
     private static final int APELLIDOS_FIELD_REF = 1;
     private static final int TELEFONO_FIELD_REF = 2;
@@ -63,13 +69,14 @@ public class ClientDetailActivity extends AppCompatActivity {
     private TextView direccionLabel;
     private TextView cadenciaLabel;
     private EditText observacionLabel;
-    private CircleImageView clientImage;
+    private RoundedImageView clientImage;
     private LinearLayout scrollContentView;
     private RelativeLayout phoneButton;
     private ConstraintLayout rootLayout;
     private RelativeLayout loadingState;
     private ServiceAlarmButton alarmButton;
     private ImageView alarmImage;
+    private SwipeRefreshLayout refreshLayout;
 
     private ClientModel cliente;
     public boolean isClientDetail = false;
@@ -102,6 +109,13 @@ public class ClientDetailActivity extends AppCompatActivity {
 
         addAddServiceButton();
         setOnClickListeners();
+        setRefreshLayoutListener();
+
+        if (isClientDetail) {
+            refreshLayout.setEnabled(true);
+        } else {
+            refreshLayout.setEnabled(false);
+        }
     }
 
     private void getClientIntent() {
@@ -177,6 +191,7 @@ public class ClientDetailActivity extends AppCompatActivity {
         scrollContentView = findViewById(R.id.scrollContentView);
         phoneButton = findViewById(R.id.phone_button);
         rootLayout = findViewById(R.id.root);
+        refreshLayout = findViewById(R.id.refreshLayout);
 
         if (cliente.getClientId() == 0) {
             phoneButton.setVisibility(View.INVISIBLE);
@@ -256,7 +271,7 @@ public class ClientDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), TextInputFieldActivity.class);
-                intent.putExtra("contenido", observacionLabel.getText().toString());
+                intent.putExtra("contenido", cliente.getObservaciones());
                 intent.putExtra("keyboard", InputType.TYPE_CLASS_TEXT);
                 startActivityForResult(intent, OBSERVACIONES_FIELD_REF);
             }
@@ -289,6 +304,15 @@ public class ClientDetailActivity extends AppCompatActivity {
         });
     }
 
+    private void setRefreshLayoutListener() {
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                SyncronizationManager.getServiciosFromServer(ClientDetailActivity.this);
+            }
+        });
+    }
+
     private void setClientDetails() {
         nombreLabel.setText(cliente.getNombre());
         apellidosLabel.setText(cliente.getApellidos());
@@ -299,9 +323,11 @@ public class ClientDetailActivity extends AppCompatActivity {
         cadenciaLabel.setText(cliente.getCadenciaVisita());
         observacionLabel.setText(cliente.getObservaciones().length() > 0 ? cliente.getObservaciones() : "Añade una observación");
         if (cliente.getImagen().length() == 0) {
-            clientImage.setImageResource(R.drawable.user_placeholder);
+            clientImage.setImageResource(R.drawable.add_image);
+            clientImage.setCornerRadius(0);
         } else {
             clientImage.setImageBitmap(CommonFunctions.convertBase64StringToBitmap(cliente.getImagen()));
+            clientImage.setCornerRadius(CommonFunctions.convertToPx(75, getApplicationContext()));
         }
     }
 
@@ -429,6 +455,7 @@ public class ClientDetailActivity extends AppCompatActivity {
                 Bundle extras = data.getExtras();
                 Bitmap imageBitmap = (Bitmap) extras.get("data");
                 clientImage.setImageBitmap(imageBitmap);
+                clientImage.setCornerRadius(CommonFunctions.convertToPx(75, getApplicationContext()));
                 cliente.setImagen(CommonFunctions.convertBitmapToBase64String(imageBitmap));
                 break;
             case SERVICE_DETAIL_REF:
@@ -441,7 +468,7 @@ public class ClientDetailActivity extends AppCompatActivity {
     }
 
     private void guardarClienteEnServidor() {
-        loadingState = CommonFunctions.createLoadingStateView(getApplicationContext());
+        loadingState = CommonFunctions.createLoadingStateView(getApplicationContext(), "Guardando cliente");
         rootLayout.addView(loadingState);
         cliente.setComercioId(Constants.developmentComercioId);
         ClientesMasServiciosModel model = new ClientesMasServiciosModel(cliente, serviceArray);
@@ -472,7 +499,7 @@ public class ClientDetailActivity extends AppCompatActivity {
     }
 
     private void actualizarClienteEnServidor() {
-        loadingState = CommonFunctions.createLoadingStateView(getApplicationContext());
+        loadingState = CommonFunctions.createLoadingStateView(getApplicationContext(), "Actualizando cliente");
         rootLayout.addView(loadingState);
         Call<ClientesMasServiciosModel> call = Constants.webServices.updateCliente(cliente);
         call.enqueue(new Callback<ClientesMasServiciosModel>() {
@@ -512,7 +539,7 @@ public class ClientDetailActivity extends AppCompatActivity {
     }
 
     private void updateFechaNotificacionPersonalizada() {
-        loadingState = CommonFunctions.createLoadingStateView(getApplicationContext());
+        loadingState = CommonFunctions.createLoadingStateView(getApplicationContext(), "Actualizando cliente");
         rootLayout.addView(loadingState);
         Call<ClientModel> call = Constants.webServices.updateNotificacionPersonalizada(cliente);
         call.enqueue(new Callback<ClientModel>() {
@@ -547,5 +574,16 @@ public class ClientDetailActivity extends AppCompatActivity {
                 Constants.databaseManager.notificationsManager.deleteNotificationFromDatabase(notificaciones.get(i).getNotificationId());
             }
         }
+    }
+
+    @Override
+    public void servicesLoaded() {
+        refreshLayout.setRefreshing(false);
+        onResume();
+    }
+
+    @Override
+    public void errorLoadingServices() {
+        refreshLayout.setRefreshing(false);
     }
 }

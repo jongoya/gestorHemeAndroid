@@ -1,5 +1,11 @@
 package com.example.gestorheme.Common;
 
+import com.example.gestorheme.Activities.Empleados.Interfaces.EmpleadosRefreshInterface;
+import com.example.gestorheme.Activities.Main.Fragments.Agenda.Interfaces.ServicesRefreshInterface;
+import com.example.gestorheme.Activities.Main.Fragments.ListaClientes.ClientesFragment;
+import com.example.gestorheme.Activities.Main.Fragments.Notificaciones.Interfaces.NotificationsRefreshInterface;
+import com.example.gestorheme.Activities.Main.MainActivity;
+import com.example.gestorheme.Activities.TipoServicios.Interfaces.TipoServiciosRefreshInterface;
 import com.example.gestorheme.Models.CierreCaja.CierreCajaModel;
 import com.example.gestorheme.Models.Client.ClientModel;
 import com.example.gestorheme.Models.Empleados.EmpleadoModel;
@@ -14,16 +20,16 @@ import retrofit2.Response;
 
 public class SyncronizationManager {
 
-    public static void syncAllDataFromServer() {
-        getAllClients();
-        getAllEmpleados();
-        getTipoServiciosFromServer();
-        getServiciosFromServer();
+    public static void syncAllDataFromServer(MainActivity activity) {
+        getAllClients(activity);
+        getAllEmpleados(null);
+        getTipoServiciosFromServer(null);
+        getServiciosFromServer(null);
         getAllCierreCajas();
-        getAllNotifications();
+        getAllNotifications(null);
     }
 
-    private static void getAllClients() {
+    public static void getAllClients(MainActivity activity) {
         Call<ArrayList<ClientModel>> call = Constants.webServices.getAllClientes();
         call.enqueue(new Callback<ArrayList<ClientModel>>() {
             @Override
@@ -37,6 +43,12 @@ public class SyncronizationManager {
                             Constants.databaseManager.clientsManager.addClientToDatabase(response.body().get(i));
                         }
                     }
+
+                    ClientesFragment fragment = (ClientesFragment)activity.getSupportFragmentManager().findFragmentByTag("listaClientes");
+                    if (fragment != null && fragment.isVisible()) {
+                        fragment.refreshLayout.setRefreshing(false);
+                        fragment.setClientList();
+                    }
                 }
             }
 
@@ -47,7 +59,7 @@ public class SyncronizationManager {
         });
     }
 
-    private static void getAllEmpleados() {
+    public static void getAllEmpleados(EmpleadosRefreshInterface delegate) {
         Call<ArrayList<EmpleadoModel>> call = Constants.webServices.getAllEmpleados();
         call.enqueue(new Callback<ArrayList<EmpleadoModel>>() {
             @Override
@@ -63,12 +75,23 @@ public class SyncronizationManager {
                     }
 
                     deleteLocalEmpleadosIfNeeded(response.body());
+
+                    if (delegate != null) {
+                        delegate.empleadosLoaded();
+                    }
+                } else {
+                    if (delegate != null) {
+                        delegate.errorLoadingEmpleados();
+                    }
                 }
             }
 
             @Override
             public void onFailure(Call<ArrayList<EmpleadoModel>> call, Throwable t) {
                 System.out.println("Error getting empleados");
+                if (delegate != null) {
+                    delegate.errorLoadingEmpleados();
+                }
             }
         });
     }
@@ -89,7 +112,7 @@ public class SyncronizationManager {
         }
     }
 
-    private static void getTipoServiciosFromServer() {
+    public static void getTipoServiciosFromServer(TipoServiciosRefreshInterface delegate) {
         Call <ArrayList<TipoServicioModel>> call = Constants.webServices.getAllTipoServicios();
         call.enqueue(new Callback<ArrayList<TipoServicioModel>>() {
             @Override
@@ -101,17 +124,27 @@ public class SyncronizationManager {
                             Constants.databaseManager.tipoServiciosManager.addTipoServicioToDatabase(tipoServicio);
                         }
                     }
+                    if (delegate != null) {
+                        delegate.serviciosLoaded();
+                    }
+                } else {
+                    if (delegate != null) {
+                        delegate.errorLoadingServicios();
+                    }
                 }
             }
 
             @Override
             public void onFailure(Call<ArrayList<TipoServicioModel>> call, Throwable t) {
                 System.out.println("Error recogiendo los tipo de servicios");
+                if (delegate != null) {
+                    delegate.errorLoadingServicios();
+                }
             }
         });
     }
 
-    private static void getServiciosFromServer() {
+    public static void getServiciosFromServer(ServicesRefreshInterface delegate) {
         Call <ArrayList<ServiceModel>> call = Constants.webServices.getAllServicios();
         call.enqueue(new Callback<ArrayList<ServiceModel>>() {
             @Override
@@ -127,12 +160,23 @@ public class SyncronizationManager {
                     }
 
                     deleteLocalServicesIfNeeded(response.body());
+
+                    if (delegate != null) {
+                        delegate.servicesLoaded();
+                    }
+                } else {
+                    if (delegate != null) {
+                        delegate.errorLoadingServices();
+                    }
                 }
             }
 
             @Override
             public void onFailure(Call<ArrayList<ServiceModel>> call, Throwable t) {
                 System.out.println("Error guardando los servicios");
+                if (delegate != null) {
+                    delegate.errorLoadingServices();
+                }
             }
         });
     }
@@ -175,7 +219,7 @@ public class SyncronizationManager {
         });
     }
 
-    private static void getAllNotifications() {
+    public static void getAllNotifications(NotificationsRefreshInterface delegate) {
         Call <ArrayList<NotificationModel>> call = Constants.webServices.getAllNotifications();
         call.enqueue(new Callback<ArrayList<NotificationModel>>() {
             @Override
@@ -191,12 +235,23 @@ public class SyncronizationManager {
                     }
 
                     deleteLocalNotificationsIfNeeded(response.body());
+
+                    if (delegate != null) {
+                        delegate.notificationsLoaded();
+                    }
+                } else {
+                    if (delegate != null) {
+                        delegate.errorLoadingNotifications();
+                    }
                 }
             }
 
             @Override
             public void onFailure(Call<ArrayList<NotificationModel>> call, Throwable t) {
                 System.out.println("Error recogiendo las notificaciones");
+                if (delegate != null) {
+                    delegate.errorLoadingNotifications();
+                }
             }
         });
     }

@@ -12,14 +12,17 @@ import android.widget.CalendarView;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.example.gestorheme.Activities.Main.Fragments.Agenda.Interfaces.FilterActionSheetInterface;
 import com.example.gestorheme.Activities.Main.Fragments.Agenda.Interfaces.ServiceItemViewInterface;
+import com.example.gestorheme.Activities.Main.Fragments.Agenda.Interfaces.ServicesRefreshInterface;
 import com.example.gestorheme.Activities.Main.Fragments.Agenda.Views.AgendaItemView;
 import com.example.gestorheme.Activities.Main.Fragments.Agenda.Views.CerrarCajaButton;
 import com.example.gestorheme.Activities.Main.Fragments.Agenda.Views.ClientItemView;
@@ -27,6 +30,7 @@ import com.example.gestorheme.Activities.Main.Fragments.Agenda.Views.FilterActio
 import com.example.gestorheme.Common.CommonFunctions;
 import com.example.gestorheme.Common.Constants;
 import com.example.gestorheme.Common.DateFunctions;
+import com.example.gestorheme.Common.SyncronizationManager;
 import com.example.gestorheme.Models.Client.ClientModel;
 import com.example.gestorheme.Models.Empleados.EmpleadoModel;
 import com.example.gestorheme.Models.Service.ServiceModel;
@@ -39,10 +43,10 @@ import java.util.Date;
 import devs.mulham.horizontalcalendar.HorizontalCalendar;
 import devs.mulham.horizontalcalendar.utils.HorizontalCalendarListener;
 
-public class AgendaFragment extends Fragment implements ServiceItemViewInterface, FilterActionSheetInterface {
+public class AgendaFragment extends Fragment implements ServiceItemViewInterface, FilterActionSheetInterface, ServicesRefreshInterface {
     private LinearLayout scrollContentView;
     private CalendarView calendarView;
-    private ScrollView scrollView;
+    private SwipeRefreshLayout refreshLayout;
     private Date presentDate;
     private ConstraintLayout root;
     private RelativeLayout calendarButton;
@@ -66,6 +70,7 @@ public class AgendaFragment extends Fragment implements ServiceItemViewInterface
         getFields();
         setOnClickListeners();
         setHorizontalCalendarView();
+        setRefreshListener();
     }
 
     @Override
@@ -79,12 +84,12 @@ public class AgendaFragment extends Fragment implements ServiceItemViewInterface
     }
 
     private void getFields() {
-        scrollContentView = getView().findViewById(R.id.scrollContentView);
+        scrollContentView = getView().findViewById(R.id.agendaContentView);
         calendarView = getView().findViewById(R.id.calendarView);
-        scrollView = getView().findViewById(R.id.scrollView3);
         root = getView().findViewById(R.id.root);
         calendarButton = getView().findViewById(R.id.calendarButton);
         filterText = getView().findViewById(R.id.filterText);
+        refreshLayout = getView().findViewById(R.id.refreshLayout);
     }
 
     private void setOnClickListeners() {
@@ -113,14 +118,14 @@ public class AgendaFragment extends Fragment implements ServiceItemViewInterface
                 });
 
                 TransitionManager.go(new Scene(root), transition);
-                ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) scrollView.getLayoutParams();
+                ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) refreshLayout.getLayoutParams();
                 if (params.topMargin != 0) {
                     params.topMargin = 0;
                 } else {
                     params.topMargin = CommonFunctions.convertToPx(350, getContext());
                 }
 
-                scrollView.setLayoutParams(params);
+                refreshLayout.setLayoutParams(params);
             }
         });
 
@@ -156,6 +161,15 @@ public class AgendaFragment extends Fragment implements ServiceItemViewInterface
             @Override
             public void onClick(View view) {
                 showFilterDialog();
+            }
+        });
+    }
+
+    private void setRefreshListener() {
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                SyncronizationManager.getServiciosFromServer(AgendaFragment.this);
             }
         });
     }
@@ -278,8 +292,8 @@ public class AgendaFragment extends Fragment implements ServiceItemViewInterface
     }
 
     @Override
-    public void showLoadingState() {
-        loadingStateView = CommonFunctions.createLoadingStateView(getContext());
+    public void showLoadingState(String description) {
+        loadingStateView = CommonFunctions.createLoadingStateView(getContext(), description);
         root.addView(loadingStateView);
     }
 
@@ -312,5 +326,20 @@ public class AgendaFragment extends Fragment implements ServiceItemViewInterface
         filterText.setText("Todos");
         filterDialog.dismiss();
         buildAgendaDay();
+    }
+
+    @Override
+    public void servicesLoaded() {
+        refreshLayout.setRefreshing(false);
+        if (clientesVisible) {
+            buildClientesDay();
+        } else {
+            buildAgendaDay();
+        }
+    }
+
+    @Override
+    public void errorLoadingServices() {
+        refreshLayout.setRefreshing(false);
     }
 }

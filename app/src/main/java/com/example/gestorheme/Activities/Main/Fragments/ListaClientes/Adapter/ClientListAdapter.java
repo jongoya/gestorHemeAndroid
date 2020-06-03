@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.example.gestorheme.Activities.Main.Fragments.ListaClientes.Models.ListaClienteCellModel;
 import com.example.gestorheme.Common.CommonFunctions;
 import com.example.gestorheme.R;
+import com.makeramen.roundedimageview.RoundedImageView;
 
 import java.util.ArrayList;
 
@@ -67,6 +68,13 @@ public class ClientListAdapter extends BaseAdapter {
                 holder.imagen = view.findViewById(R.id.imagen);
                 holder.nombre.setText(clientes.get(i).getCliente().getNombre() + " " + clientes.get(i).getCliente().getApellidos());
                 holder.telefono.setText("Telefono: " + clientes.get(i).getCliente().getTelefono());
+                if (clientes.get(i).getCliente().getImagen().length() == 0) {
+                    holder.imagen.setImageResource(R.drawable.user_image);
+                    holder.imagen.setCornerRadius(0);
+                } else {
+                    holder.imagen.setImageBitmap(CommonFunctions.convertBase64StringToBitmap(clientes.get(i).getCliente().getImagen()));
+                    holder.imagen.setCornerRadius(CommonFunctions.convertToPx(75, context));
+                }
                 break;
             case TYPE_HEADER:
                 view = mInflater.inflate(R.layout.clientes_header_layout, null);
@@ -83,6 +91,6 @@ public class ClientListAdapter extends BaseAdapter {
         private TextView letra;
         private TextView nombre;
         private TextView telefono;
-        private ImageView imagen;
+        private RoundedImageView imagen;
     }
 }
