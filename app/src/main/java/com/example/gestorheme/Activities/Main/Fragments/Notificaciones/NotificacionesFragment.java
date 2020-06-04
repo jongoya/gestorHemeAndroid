@@ -171,7 +171,7 @@ public class NotificacionesFragment extends Fragment implements NotificationsRef
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                SyncronizationManager.getAllNotifications(NotificacionesFragment.this);
+                SyncronizationManager.getAllNotifications(NotificacionesFragment.this, getActivity().getApplicationContext());
             }
         });
     }

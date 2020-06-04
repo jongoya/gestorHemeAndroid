@@ -13,8 +13,6 @@ public class Constants {
     public static String databaseEmpleadosTableName = "Empleados";
     public static String databaseTipoServiciosTableName = "TipoServicios";
     public static String databaseCierreCajaTableName = "CierreCaja";
-
-
     public static String databaseClientId = "clientId";
     public static String databaseNombre = "nombre";
     public static String databaseApellidos = "apellidos";
@@ -72,7 +70,11 @@ public class Constants {
     public static final String notificationCellRowType = "row";
     public static final String notificationCellHeaderType = "header";
 
-    public static final int developmentComercioId = 1;
-
     public static WebServices webServices = RetrofitClientInstance.getRetrofitInstance().create(WebServices.class);
+
+    //Shared preferences Constants
+
+    public static final String preferencesPasswordKey = "password";
+    public static final String preferencesTokenKey = "token";
+    public static final String preferencesComercioIdKey = "comercioId";
 }

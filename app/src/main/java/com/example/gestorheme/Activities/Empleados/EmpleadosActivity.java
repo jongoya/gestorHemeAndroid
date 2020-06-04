@@ -51,6 +51,9 @@ public class EmpleadosActivity extends AppCompatActivity implements EmpleadosLis
     protected void onResume() {
         super.onResume();
         setList();
+        if (showColorLayout) {
+            plusButton.setVisibility(View.INVISIBLE);
+        }
     }
 
     private void getEmpleadosIntent() {

@@ -1,12 +1,18 @@
 package com.example.gestorheme.Activities.Main.Fragments.Heme;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
@@ -18,6 +24,7 @@ import com.example.gestorheme.Activities.Main.Fragments.Heme.Adapter.ComercioLis
 import com.example.gestorheme.Activities.Settings.SettingsActivity;
 import com.example.gestorheme.Activities.Stadisticas.StadisticasActivity;
 import com.example.gestorheme.Common.CommonFunctions;
+import com.example.gestorheme.Common.Preferencias;
 import com.example.gestorheme.Models.Comercio.ComercioModel;
 import com.example.gestorheme.R;
 
@@ -64,8 +71,7 @@ public class HemeFragment extends Fragment {
         comercioList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(getActivity(), StadisticasActivity.class);
-                getActivity().startActivity(intent);
+                showPasswordDialog();
             }
         });
     }
@@ -78,5 +84,47 @@ public class HemeFragment extends Fragment {
                 getActivity().startActivity(intent);
             }
         });
+    }
+
+    private void showPasswordDialog() {
+        final AlertDialog dialogBuilder = new AlertDialog.Builder(getActivity()).create();
+        dialogBuilder.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.password_dialog_layout, null);
+
+        EditText passwordInput = dialogView.findViewById(R.id.passwordInput);
+        RelativeLayout aceptarButton = dialogView.findViewById(R.id.aceptarButton);
+        RelativeLayout cancelarButton = dialogView.findViewById(R.id.cancelarButton);
+        CommonFunctions.selectLayout(getContext(), aceptarButton, null);
+        CommonFunctions.selectLayout(getContext(), cancelarButton, null);
+
+        aceptarButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (passwordInput.getText().length() == 0) {
+                    CommonFunctions.showGenericAlertMessage(getActivity(), "Debe incluir una contraseña válida");
+                    return;
+                }
+
+                if (passwordInput.getText().toString().compareTo(Preferencias.getPasswordFromSharedPreferences(getActivity().getApplicationContext())) != 0) {
+                    CommonFunctions.showGenericAlertMessage(getActivity(), "La contraseña es erronea, inténtelo de nuevo");
+                    return;
+                }
+
+                dialogBuilder.dismiss();
+                Intent intent = new Intent(getActivity(), StadisticasActivity.class);
+                getActivity().startActivity(intent);
+            }
+        });
+
+        cancelarButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialogBuilder.dismiss();
+            }
+        });
+
+        dialogBuilder.setView(dialogView);
+        dialogBuilder.show();
     }
 }

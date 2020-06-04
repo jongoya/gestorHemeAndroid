@@ -1,6 +1,8 @@
 package com.example.gestorheme.Activities.EmpleadoDetail;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
@@ -12,12 +14,14 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
 
 import com.example.gestorheme.Activities.DatePicker.DatePickerActivity;
 import com.example.gestorheme.Activities.TextInputField.TextInputFieldActivity;
 import com.example.gestorheme.Common.CommonFunctions;
 import com.example.gestorheme.Common.Constants;
 import com.example.gestorheme.Common.DateFunctions;
+import com.example.gestorheme.Common.Preferencias;
 import com.example.gestorheme.Models.Empleados.EmpleadoModel;
 import com.example.gestorheme.R;
 
@@ -156,9 +160,14 @@ public class EmpleadoDetailActivity extends AppCompatActivity {
         callButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent callIntent = new Intent(Intent.ACTION_CALL);
-                callIntent.setData(Uri.parse("tel:"+ empleado.getTelefono()));
-                startActivity(callIntent);
+                Intent phoneIntent = new Intent(Intent.ACTION_CALL);
+                phoneIntent.setData(Uri.parse("tel:" + empleado.getTelefono()));
+                if (ActivityCompat.checkSelfPermission(EmpleadoDetailActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                    CommonFunctions.showGenericAlertMessage(EmpleadoDetailActivity.this, "No dispone de permisos para realizar llamadas");
+                    return;
+                }
+
+                startActivity(phoneIntent);
             }
         });
     }
@@ -208,7 +217,7 @@ public class EmpleadoDetailActivity extends AppCompatActivity {
         loadingState = CommonFunctions.createLoadingStateView(getApplicationContext(), "Guardando empleado");
         rootLayout.addView(loadingState);
         empleado.setEmpleadoJefe(false);
-        empleado.setComercioId(Constants.developmentComercioId);
+        empleado.setComercioId(Preferencias.getComercioIdFromSharedPreferences(getApplicationContext()));
         Call<EmpleadoModel> call = Constants.webServices.saveEmpleado(empleado);
         call.enqueue(new Callback<EmpleadoModel>() {
             @Override

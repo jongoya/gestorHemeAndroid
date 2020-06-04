@@ -1,6 +1,9 @@
 package com.example.gestorheme.Activities.Main.Fragments.Notificaciones.Functions;
+import android.content.Context;
+
 import com.example.gestorheme.Common.Constants;
 import com.example.gestorheme.Common.DateFunctions;
+import com.example.gestorheme.Common.Preferencias;
 import com.example.gestorheme.Models.Cadencia.CadenciaModel;
 import com.example.gestorheme.Models.CierreCaja.CierreCajaModel;
 import com.example.gestorheme.Models.Client.ClientModel;
@@ -18,7 +21,7 @@ import retrofit2.Response;
 
 public class NotificationFunctions {
 
-    private static ArrayList<NotificationModel> checkBirthdays() {
+    private static ArrayList<NotificationModel> checkBirthdays(Context context) {
         ArrayList<ClientModel> birthdayClients = getTodayBirthdayClients();
         ArrayList<NotificationModel> todayNotifications = getTodayNotifications();
         ArrayList<ClientModel> todayBirthdayClients = new ArrayList<>();
@@ -45,7 +48,7 @@ public class NotificationFunctions {
 
         if (todayBirthdayClients.size() > 0) {
             for (int i = 0; i < todayBirthdayClients.size(); i++) {
-                birthdayNotifications.add(createBirthdayNotification(todayBirthdayClients.get(i)));
+                birthdayNotifications.add(createBirthdayNotification(todayBirthdayClients.get(i), context));
             }
         }
 
@@ -91,9 +94,9 @@ public class NotificationFunctions {
         return todayNotifications;
     }
 
-    private static NotificationModel createBirthdayNotification(ClientModel cliente) {
+    private static NotificationModel createBirthdayNotification(ClientModel cliente, Context context) {
         NotificationModel notification = new NotificationModel();
-        notification.setComercioId(Constants.developmentComercioId);
+        notification.setComercioId(Preferencias.getComercioIdFromSharedPreferences(context));
         notification.setFecha(new Date().getTime());
         notification.setClientId(cliente.getClientId());
         notification.setLeido(false);
@@ -102,7 +105,7 @@ public class NotificationFunctions {
         return notification;
     }
 
-    private static ArrayList<NotificationModel> checkCadencias() {
+    private static ArrayList<NotificationModel> checkCadencias(Context contexto) {
         ArrayList<ClientModel> clientesConCadenciaSuperada = new ArrayList<>();
         ArrayList<NotificationModel> notificacionesCadencia = new ArrayList<>();
         ArrayList<ClientModel> clientes = Constants.databaseManager.clientsManager.getClientsFromDatabase();
@@ -124,7 +127,7 @@ public class NotificationFunctions {
             for (int i = 0; i < clientesConCadenciaSuperada.size(); i++) {
                 NotificationModel notification = new NotificationModel();
                 notification.setFecha(new Date().getTime());
-                notification.setComercioId(Constants.developmentComercioId);
+                notification.setComercioId(Preferencias.getComercioIdFromSharedPreferences(contexto));
                 notification.setClientId(clientesConCadenciaSuperada.get(i).getClientId());
                 notification.setLeido(false);
                 notification.setType(Constants.notificationCadenciaType);
@@ -163,7 +166,7 @@ public class NotificationFunctions {
         return notificationExists;
     }
 
-    private static ArrayList<NotificationModel> checkCierreCajas() {
+    private static ArrayList<NotificationModel> checkCierreCajas(Context contexto) {
         ArrayList<NotificationModel> cierreCajas = new ArrayList<>();
         Date yesterday = DateFunctions.remove1DayToDate(new Date());
         long begginingOfDay = DateFunctions.getBeginingOfDayFromDate(yesterday).getTime();
@@ -179,7 +182,7 @@ public class NotificationFunctions {
 
         if (!cierreCajaExiste && serviciosExist) {
             NotificationModel notification = new NotificationModel();
-            notification.setComercioId(Constants.developmentComercioId);
+            notification.setComercioId(Preferencias.getComercioIdFromSharedPreferences(contexto));
             notification.setFecha(yesterday.getTime());
             notification.setLeido(false);
             notification.setType(Constants.notificationcajaType);
@@ -212,7 +215,7 @@ public class NotificationFunctions {
         return false;
     }
 
-    private static ArrayList<NotificationModel> checkNotificacionesPersonalizadas() {
+    private static ArrayList<NotificationModel> checkNotificacionesPersonalizadas(Context contexto) {
         ArrayList<ClientModel> clientes = Constants.databaseManager.clientsManager.getClientsFromDatabase();
         long begginingOfDay = DateFunctions.getBeginingOfDayFromDate(new Date()).getTime();
         long endOfDay = DateFunctions.getEndOfDayFromDate(new Date()).getTime();
@@ -224,7 +227,7 @@ public class NotificationFunctions {
                 notificacion.setFecha(cliente.getFechaNotificacionPersonalizada());
                 notificacion.setClientId(cliente.getClientId());
                 notificacion.setLeido(false);
-                notificacion.setComercioId(Constants.developmentComercioId);
+                notificacion.setComercioId(Preferencias.getComercioIdFromSharedPreferences(contexto));
                 notificacion.setDescripcion(cliente.getObservaciones());
                 notificacion.setType(Constants.notificationpersonalizadaType);
 
@@ -246,12 +249,12 @@ public class NotificationFunctions {
         return false;
     }
 
-    public static void checkNotificaciones() {
+    public static void checkNotificaciones(Context context) {
         ArrayList<NotificationModel> notificaciones = new ArrayList<>();
-        notificaciones.addAll(checkBirthdays());
-        notificaciones.addAll(checkCierreCajas());
-        notificaciones.addAll(checkCadencias());
-        notificaciones.addAll(checkNotificacionesPersonalizadas());
+        notificaciones.addAll(checkBirthdays(context));
+        notificaciones.addAll(checkCierreCajas(context));
+        notificaciones.addAll(checkCadencias(context));
+        notificaciones.addAll(checkNotificacionesPersonalizadas(context));
         saveNotifications(notificaciones);
     }
 

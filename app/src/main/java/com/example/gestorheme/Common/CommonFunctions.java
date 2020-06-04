@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
 import android.util.Base64;
 import android.view.View;
 import android.view.ViewGroup;
@@ -100,5 +101,11 @@ public class CommonFunctions {
         if (imagen != null) {
             imagen.setColorFilter(ContextCompat.getColor(contexto, R.color.dividerColor), android.graphics.PorterDuff.Mode.MULTIPLY);
         }
+    }
+
+    public static String getDeviceModel() {
+        String fabricante = Build.MANUFACTURER;
+        String modelo = Build.MODEL;
+        return modelo + " " + fabricante;
     }
 }

@@ -15,6 +15,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.example.gestorheme.Activities.TextInputField.TextInputFieldActivity;
 import com.example.gestorheme.Common.CommonFunctions;
 import com.example.gestorheme.Common.Constants;
+import com.example.gestorheme.Common.Preferencias;
 import com.example.gestorheme.Models.CierreCaja.CierreCajaModel;
 import com.example.gestorheme.Models.Notification.NotificationModel;
 import com.example.gestorheme.Models.Service.ServiceModel;
@@ -197,7 +198,7 @@ public class CierreCajaActivity extends AppCompatActivity {
     private void saveCierreCajaInServer(CierreCajaModel cierreCaja) {
         loadingView = CommonFunctions.createLoadingStateView(getApplicationContext(), "Guardando cierre de caja");
         rootLayout.addView(loadingView);
-        cierreCaja.setComercioId(Constants.developmentComercioId);
+        cierreCaja.setComercioId(Preferencias.getComercioIdFromSharedPreferences(getApplicationContext()));
         Call<CierreCajaModel> call = Constants.webServices.saveCierreCaja(cierreCaja);
         call.enqueue(new Callback<CierreCajaModel>() {
             @Override

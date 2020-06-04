@@ -1,8 +1,11 @@
 package com.example.gestorheme.Common;
 
+import android.content.Context;
+
 import com.example.gestorheme.Activities.Empleados.Interfaces.EmpleadosRefreshInterface;
 import com.example.gestorheme.Activities.Main.Fragments.Agenda.Interfaces.ServicesRefreshInterface;
 import com.example.gestorheme.Activities.Main.Fragments.ListaClientes.ClientesFragment;
+import com.example.gestorheme.Activities.Main.Fragments.Notificaciones.Functions.NotificationFunctions;
 import com.example.gestorheme.Activities.Main.Fragments.Notificaciones.Interfaces.NotificationsRefreshInterface;
 import com.example.gestorheme.Activities.Main.MainActivity;
 import com.example.gestorheme.Activities.TipoServicios.Interfaces.TipoServiciosRefreshInterface;
@@ -14,19 +17,22 @@ import com.example.gestorheme.Models.Service.ServiceModel;
 import com.example.gestorheme.Models.TipoServicio.TipoServicioModel;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class SyncronizationManager {
 
-    public static void syncAllDataFromServer(MainActivity activity) {
+    public static void syncAllDataFromServer(MainActivity activity, Context context) {
         getAllClients(activity);
         getAllEmpleados(null);
         getTipoServiciosFromServer(null);
         getServiciosFromServer(null);
         getAllCierreCajas();
-        getAllNotifications(null);
+        getAllNotifications(null, context);
     }
 
     public static void getAllClients(MainActivity activity) {
@@ -219,7 +225,7 @@ public class SyncronizationManager {
         });
     }
 
-    public static void getAllNotifications(NotificationsRefreshInterface delegate) {
+    public static void getAllNotifications(NotificationsRefreshInterface delegate, Context context) {
         Call <ArrayList<NotificationModel>> call = Constants.webServices.getAllNotifications();
         call.enqueue(new Callback<ArrayList<NotificationModel>>() {
             @Override
@@ -236,12 +242,18 @@ public class SyncronizationManager {
 
                     deleteLocalNotificationsIfNeeded(response.body());
 
+                    removeOldNotifications();
+
                     if (delegate != null) {
                         delegate.notificationsLoaded();
+                    } else {
+                        NotificationFunctions.checkNotificaciones(context);
                     }
                 } else {
                     if (delegate != null) {
                         delegate.errorLoadingNotifications();
+                    } else {
+                        NotificationFunctions.checkNotificaciones(context);
                     }
                 }
             }
@@ -249,6 +261,7 @@ public class SyncronizationManager {
             @Override
             public void onFailure(Call<ArrayList<NotificationModel>> call, Throwable t) {
                 System.out.println("Error recogiendo las notificaciones");
+                NotificationFunctions.checkNotificaciones(context);
                 if (delegate != null) {
                     delegate.errorLoadingNotifications();
                 }
@@ -270,5 +283,34 @@ public class SyncronizationManager {
                 Constants.databaseManager.notificationsManager.deleteNotificationFromDatabase(localnotifications.get(i).getNotificationId());
             }
         }
+    }
+
+    private static void removeOldNotifications() {
+        ArrayList<NotificationModel> notificacionesPorEliminar  = new ArrayList<>();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        cal.add(Calendar.DATE, -7);
+        Date nuevaFecha = cal.getTime();
+        ArrayList<NotificationModel> notificaciones = Constants.databaseManager.notificationsManager.getNotificationsFromDatabase();
+        for (int i = 0; i < notificaciones.size(); i++) {
+            if (notificaciones.get(i).getFecha() < nuevaFecha.getTime()) {
+                notificacionesPorEliminar.add(notificaciones.get(i));
+            }
+        }
+
+        Call<Void> call = Constants.webServices.deleteNotificacions(notificacionesPorEliminar);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.code() != 200) {
+                    System.out.println("Error eliminando notificaciones");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                System.out.println("Error eliminando notificaciones");
+            }
+        });
     }
 }

@@ -1,7 +1,9 @@
 package com.example.gestorheme.Activities.ClientDetail;
 
+import android.Manifest;
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
@@ -19,6 +21,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.gestorheme.Activities.ClientDetail.Fragment.DatePickerFragment;
@@ -31,6 +34,7 @@ import com.example.gestorheme.Activities.TextInputField.TextInputFieldActivity;
 import com.example.gestorheme.Common.CommonFunctions;
 import com.example.gestorheme.Common.Constants;
 import com.example.gestorheme.Common.DateFunctions;
+import com.example.gestorheme.Common.Preferencias;
 import com.example.gestorheme.Common.SyncronizationManager;
 import com.example.gestorheme.Common.Views.AddServiceButton;
 import com.example.gestorheme.Common.Views.ServiceAlarmButton;
@@ -297,9 +301,14 @@ public class ClientDetailActivity extends AppCompatActivity implements ServicesR
         findViewById(R.id.phone_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent callIntent = new Intent(Intent.ACTION_CALL);
-                callIntent.setData(Uri.parse("tel:"+ cliente.getTelefono()));
-                startActivity(callIntent);
+                Intent phoneIntent = new Intent(Intent.ACTION_CALL);
+                phoneIntent.setData(Uri.parse("tel:" + cliente.getTelefono()));
+                if (ActivityCompat.checkSelfPermission(ClientDetailActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                    CommonFunctions.showGenericAlertMessage(ClientDetailActivity.this, "No dispone de permisos para realizar llamadas");
+                    return;
+                }
+
+                startActivity(phoneIntent);
             }
         });
     }
@@ -470,8 +479,8 @@ public class ClientDetailActivity extends AppCompatActivity implements ServicesR
     private void guardarClienteEnServidor() {
         loadingState = CommonFunctions.createLoadingStateView(getApplicationContext(), "Guardando cliente");
         rootLayout.addView(loadingState);
-        cliente.setComercioId(Constants.developmentComercioId);
-        ClientesMasServiciosModel model = new ClientesMasServiciosModel(cliente, serviceArray);
+        cliente.setComercioId(Preferencias.getComercioIdFromSharedPreferences(getApplicationContext()));
+        ClientesMasServiciosModel model = new ClientesMasServiciosModel(cliente, serviceArray, Preferencias.getComercioIdFromSharedPreferences(getApplicationContext()));
         Call<ClientesMasServiciosModel> call = Constants.webServices.saveCliente(model);
         call.enqueue(new Callback<ClientesMasServiciosModel>() {
             @Override

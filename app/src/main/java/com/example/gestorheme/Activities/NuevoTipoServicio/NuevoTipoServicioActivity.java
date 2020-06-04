@@ -15,6 +15,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.example.gestorheme.Activities.TextInputField.TextInputFieldActivity;
 import com.example.gestorheme.Common.CommonFunctions;
 import com.example.gestorheme.Common.Constants;
+import com.example.gestorheme.Common.Preferencias;
 import com.example.gestorheme.Models.TipoServicio.TipoServicioModel;
 import com.example.gestorheme.R;
 
@@ -86,7 +87,7 @@ public class NuevoTipoServicioActivity extends AppCompatActivity {
     private void saveServicio() {
         loadingState = CommonFunctions.createLoadingStateView(getApplicationContext(), "Guardando servicio");
         rootLayout.addView(loadingState);
-        servicio.setComercioId(Constants.developmentComercioId);
+        servicio.setComercioId(Preferencias.getComercioIdFromSharedPreferences(getApplicationContext()));
         Call<TipoServicioModel> call = Constants.webServices.saveTipoServicio(servicio);
         call.enqueue(new Callback<TipoServicioModel>() {
             @Override

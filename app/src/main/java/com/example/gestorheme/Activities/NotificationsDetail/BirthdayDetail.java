@@ -120,7 +120,7 @@ public class BirthdayDetail extends AppCompatActivity implements ClientSelectorA
             @Override
             public void onClick(View view) {
                 if (notificaciones.size() == 1) {
-                    makeCall(0);
+                    makeCall(Constants.databaseManager.clientsManager.getClientForClientId(notificaciones.get(0).getClientId()));
                 } else {
                     comunicationOptionSelected = 1;
                     showFilterDialog();
@@ -132,7 +132,7 @@ public class BirthdayDetail extends AppCompatActivity implements ClientSelectorA
             @Override
             public void onClick(View view) {
                 if (notificaciones.size() == 1) {
-                    openWassap(0);
+                    openWassap(Constants.databaseManager.clientsManager.getClientForClientId(notificaciones.get(0).getClientId()));
                 } else {
                     comunicationOptionSelected = 2;
                     showFilterDialog();
@@ -144,7 +144,7 @@ public class BirthdayDetail extends AppCompatActivity implements ClientSelectorA
             @Override
             public void onClick(View view) {
                 if (notificaciones.size() == 1) {
-                    sendMessage(0);
+                    sendMessage(Constants.databaseManager.clientsManager.getClientForClientId(notificaciones.get(0).getClientId()));
                 } else {
                     comunicationOptionSelected = 3;
                     showFilterDialog();
@@ -176,28 +176,27 @@ public class BirthdayDetail extends AppCompatActivity implements ClientSelectorA
         return clientes;
     }
 
-    private void makeCall(int position) {
+    private void makeCall(ClientModel cliente) {
         Intent phoneIntent = new Intent(Intent.ACTION_CALL);
-        ClientModel cliente = Constants.databaseManager.clientsManager.getClientForClientId(notificaciones.get(position).getClientId());
         phoneIntent.setData(Uri.parse("tel:" + cliente.getTelefono()));
         if (ActivityCompat.checkSelfPermission(BirthdayDetail.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            CommonFunctions.showGenericAlertMessage(BirthdayDetail.this, "No dispone de permisos para realizar llamadas");
             return;
         }
 
         startActivity(phoneIntent);
     }
 
-    private void openWassap(int position) {
-        ClientModel cliente = Constants.databaseManager.clientsManager.getClientForClientId(notificaciones.get(position).getClientId());
-        String url = "https://api.whatsapp.com/send?phone="+cliente.getTelefono();
+    private void openWassap(ClientModel cliente) {
+        String url = "https://api.whatsapp.com/send?phone="+ cliente.getTelefono();
         Intent i = new Intent(Intent.ACTION_VIEW);
         i.setData(Uri.parse(url));
         startActivity(i);
     }
 
-    private void sendMessage(int position) {
-        ClientModel cliente = Constants.databaseManager.clientsManager.getClientForClientId(notificaciones.get(position).getClientId());
+    private void sendMessage(ClientModel cliente) {
         if (ActivityCompat.checkSelfPermission(BirthdayDetail.this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
+            CommonFunctions.showGenericAlertMessage(BirthdayDetail.this, "No dispone de permisos para enviar mensajes");
             return;
         }
 
@@ -210,10 +209,13 @@ public class BirthdayDetail extends AppCompatActivity implements ClientSelectorA
         filterDialog.dismiss();
         switch (comunicationOptionSelected) {
             case 1:
+                makeCall(cliente);
                 break;
             case 2:
+                openWassap(cliente);
                 break;
             default:
+                sendMessage(cliente);
                 break;
         }
     }

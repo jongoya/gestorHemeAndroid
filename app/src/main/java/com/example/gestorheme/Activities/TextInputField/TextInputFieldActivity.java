@@ -17,6 +17,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.gestorheme.R;
 
+import java.util.List;
+
 public class TextInputFieldActivity extends AppCompatActivity {
     private TextView textInput;
     private ImageView microImage;
@@ -68,7 +70,10 @@ public class TextInputFieldActivity extends AppCompatActivity {
         findViewById(R.id.microphone_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO reconocimiento por voz
+                Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                        RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+                startActivityForResult(intent, 0);
             }
         });
     }
@@ -81,5 +86,16 @@ public class TextInputFieldActivity extends AppCompatActivity {
     private void hideKeyboard() {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(textInput.getWindowToken(), 0);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 0 && resultCode == RESULT_OK) {
+            List<String> results = data.getStringArrayListExtra(
+                    RecognizerIntent.EXTRA_RESULTS);
+            String spokenText = results.get(0);
+            textInput.setText(spokenText);
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

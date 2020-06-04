@@ -19,6 +19,7 @@ import com.example.gestorheme.Activities.TextInputField.TextInputFieldActivity;
 import com.example.gestorheme.Common.CommonFunctions;
 import com.example.gestorheme.Common.Constants;
 import com.example.gestorheme.Common.DateFunctions;
+import com.example.gestorheme.Common.Preferencias;
 import com.example.gestorheme.Models.Client.ClientModel;
 import com.example.gestorheme.Models.Service.ServiceModel;
 import com.example.gestorheme.Models.TipoServicio.TipoServicioModel;
@@ -223,7 +224,7 @@ public class ServiceDetailActivity extends AppCompatActivity {
                 ServiceDetailActivity.super.onBackPressed();
             } else {
                 servicio.setClientId(cliente.getClientId());
-                servicio.setComercioId(Constants.developmentComercioId);
+                servicio.setComercioId(Preferencias.getComercioIdFromSharedPreferences(getApplicationContext()));
                 guardarServicioEnServidor();
             }
         }

@@ -1,6 +1,7 @@
 package com.example.gestorheme.Models.WebServicesModels;
 
 import com.example.gestorheme.Common.Constants;
+import com.example.gestorheme.Common.Preferencias;
 import com.example.gestorheme.Models.Client.ClientModel;
 import com.example.gestorheme.Models.Service.ServiceModel;
 
@@ -16,12 +17,11 @@ public class ClientesMasServiciosModel implements Serializable {
 
     }
 
-    public ClientesMasServiciosModel(ClientModel cliente, ArrayList<ServiceModel> servicios) {
-        cliente.setComercioId(Constants.developmentComercioId);
+    public ClientesMasServiciosModel(ClientModel cliente, ArrayList<ServiceModel> servicios, long comercioId) {
         this.cliente = cliente;
 
         for (int i = 0; i < servicios.size(); i++) {
-            servicios.get(i).setComercioId(Constants.developmentComercioId);
+            servicios.get(i).setComercioId(comercioId);
         }
         this.servicios = servicios;
     }

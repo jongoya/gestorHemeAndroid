@@ -3,6 +3,7 @@ package com.example.gestorheme.ApiServices;
 import com.example.gestorheme.Models.CierreCaja.CierreCajaModel;
 import com.example.gestorheme.Models.Client.ClientModel;
 import com.example.gestorheme.Models.Empleados.EmpleadoModel;
+import com.example.gestorheme.Models.Login.LoginModel;
 import com.example.gestorheme.Models.Notification.NotificationModel;
 import com.example.gestorheme.Models.Service.ServiceModel;
 import com.example.gestorheme.Models.TipoServicio.TipoServicioModel;
@@ -73,6 +74,10 @@ public interface WebServices {
     @POST("delete_notification")
     Call<Void> deleteNotificacion(@Body NotificationModel notification);
 
+    @Headers("Content-Type: application/json")
+    @POST("delete_notifications")
+    Call<Void> deleteNotificacions(@Body ArrayList<NotificationModel> notifications);
+
     @GET("get_empleados")
     Call<ArrayList<EmpleadoModel>> getAllEmpleados();
 
@@ -94,4 +99,8 @@ public interface WebServices {
     @Headers("Content-Type: application/json")
     @POST("save_tipo_servicio")
     Call<TipoServicioModel> saveTipoServicio(@Body TipoServicioModel tipoServicio);
+
+    @Headers("Content-Type: application/json")
+    @POST("login_comercio")
+    Call<LoginModel> login(@Body LoginModel login);
 }

@@ -13,6 +13,7 @@ import com.example.gestorheme.Activities.Main.Fragments.Notificaciones.Functions
 import com.example.gestorheme.Activities.Main.Fragments.Notificaciones.NotificacionesFragment;
 import com.example.gestorheme.Common.CommonFunctions;
 import com.example.gestorheme.Common.Constants;
+import com.example.gestorheme.Common.Preferencias;
 import com.example.gestorheme.Common.SyncronizationManager;
 import com.example.gestorheme.Common.Views.LoadingStateView;
 import com.example.gestorheme.LocalDatabase.DatabaseManager;
@@ -33,8 +34,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setViews();
         setNavigationTabClick();
-        NotificationFunctions.checkNotificaciones();
-        SyncronizationManager.syncAllDataFromServer(this);
+        SyncronizationManager.syncAllDataFromServer(this, getApplicationContext());
         changeFragment(new ClientesFragment(), listaClientesTag);
     }
 

@@ -81,7 +81,7 @@ public class EmpleadosListAdapter extends BaseAdapter {
 
         GradientDrawable unwrappedDrawable = (GradientDrawable) AppCompatResources.getDrawable(contexto, R.drawable.color_rounded_view);
         if (showColorLayout) {
-            int empleadoColor = Color.rgb(empleado.getRedColorValue(), empleado.getGreenColorValue(), empleado.getBlueColorValue());
+            int empleadoColor = Color.rgb((int)empleado.getRedColorValue(), (int)empleado.getGreenColorValue(), (int)empleado.getBlueColorValue());
             unwrappedDrawable.setColor(empleadoColor);
         } else {
             unwrappedDrawable.setColor(contexto.getResources().getColor(R.color.white));
