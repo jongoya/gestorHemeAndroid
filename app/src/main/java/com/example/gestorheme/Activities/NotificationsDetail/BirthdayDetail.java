@@ -240,6 +240,8 @@ public class BirthdayDetail extends AppCompatActivity implements ClientSelectorA
                     for (int i = 0; i < notifications.size(); i++) {
                         Constants.databaseManager.notificationsManager.updateNotificationInDatabase(response.body().get(i));
                     }
+                }  else if (response.code() == Constants.logoutResponseValue) {
+                    CommonFunctions.logout(BirthdayDetail.this);
                 } else {
                     CommonFunctions.showGenericAlertMessage(BirthdayDetail.this, "Error actualizando la notificación");
                 }
@@ -264,6 +266,8 @@ public class BirthdayDetail extends AppCompatActivity implements ClientSelectorA
                 rootLayout.removeView(loadingStateView);
                 if (response.code() == 200) {
                     Constants.databaseManager.notificationsManager.updateNotificationInDatabase(response.body());
+                }  else if (response.code() == Constants.logoutResponseValue) {
+                    CommonFunctions.logout(BirthdayDetail.this);
                 } else {
                     CommonFunctions.showGenericAlertMessage(BirthdayDetail.this, "Error actualizando la notificación");
                 }

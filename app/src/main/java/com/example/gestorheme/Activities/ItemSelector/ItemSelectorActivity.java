@@ -52,7 +52,7 @@ public class ItemSelectorActivity extends AppCompatActivity {
 
     private void getListIntent() {
         elements = (ArrayList<Object>) getIntent().getSerializableExtra("array");
-        if (elements.get(0) instanceof TipoServicioModel) {
+        if (elements.size() > 0 && elements.get(0) instanceof TipoServicioModel) {
             listSelector.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
             isMultiSelectionList = true;
         }

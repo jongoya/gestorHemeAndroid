@@ -114,6 +114,7 @@ public class ServicesManager {
         cv.put(Constants.databaseServicios, TextUtils.join(",", servicio.getServicios()));
         cv.put(Constants.databaseObservacion, servicio.getObservaciones());
         cv.put(Constants.databasePrecio, servicio.getPrecio());
+        cv.put(Constants.databaseComercioId, servicio.getComercioId());
 
         return  cv;
     }
@@ -128,6 +129,8 @@ public class ServicesManager {
         service.setServicios(getServiciosFromString(text));
         service.setObservaciones(cursor.getString(cursor.getColumnIndex(Constants.databaseObservacion)));
         service.setPrecio(cursor.getDouble(cursor.getColumnIndex(Constants.databasePrecio)));
+        service.setComercioId(cursor.getLong(cursor.getColumnIndex(Constants.databaseComercioId)));
+
         return service;
     }
 
@@ -144,5 +147,9 @@ public class ServicesManager {
         }
 
         return services;
+    }
+
+    public void cleanDatabase() {
+        writableDatabase.delete(Constants.databaseServiciosTableName, null, null);
     }
 }

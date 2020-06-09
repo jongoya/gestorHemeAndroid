@@ -83,6 +83,8 @@ public class ColorPickerActivity extends AppCompatActivity {
                 if (response.code() == 200) {
                     Constants.databaseManager.empleadosManager.updateEmpleadoInDatabase(response.body());
                     ColorPickerActivity.super.onBackPressed();
+                } else if (response.code() == Constants.logoutResponseValue) {
+                    CommonFunctions.logout(ColorPickerActivity.this);
                 } else {
                     CommonFunctions.showGenericAlertMessage(ColorPickerActivity.this, "Error actualizando el empleado");
                 }

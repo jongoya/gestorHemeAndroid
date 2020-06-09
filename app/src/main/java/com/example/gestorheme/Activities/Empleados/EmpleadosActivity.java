@@ -72,7 +72,7 @@ public class EmpleadosActivity extends AppCompatActivity implements EmpleadosLis
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                SyncronizationManager.getAllEmpleados(EmpleadosActivity.this);
+                SyncronizationManager.getAllEmpleados(EmpleadosActivity.this, getApplicationContext());
             }
         });
     }
@@ -117,6 +117,11 @@ public class EmpleadosActivity extends AppCompatActivity implements EmpleadosLis
     @Override
     public void reloadList() {
         setList();
+    }
+
+    @Override
+    public void logout() {
+        CommonFunctions.logout(EmpleadosActivity.this);
     }
 
     @Override

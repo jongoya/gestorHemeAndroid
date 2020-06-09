@@ -169,7 +169,7 @@ public class AgendaFragment extends Fragment implements ServiceItemViewInterface
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                SyncronizationManager.getServiciosFromServer(AgendaFragment.this);
+                SyncronizationManager.getServiciosFromServer(AgendaFragment.this, getActivity().getApplicationContext());
             }
         });
     }
@@ -305,6 +305,11 @@ public class AgendaFragment extends Fragment implements ServiceItemViewInterface
     @Override
     public void showErrorMessage(String message) {
         CommonFunctions.showGenericAlertMessage(getActivity(), message);
+    }
+
+    @Override
+    public void logout() {
+        CommonFunctions.logout(getActivity());
     }
 
     @Override

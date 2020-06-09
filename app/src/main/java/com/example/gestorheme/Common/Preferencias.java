@@ -57,4 +57,9 @@ public class Preferencias {
         return pref.contains(Constants.preferencesComercioIdKey);
     }
 
+    public static void eliminarTodasLasPreferencias(Context contexto) {
+        SharedPreferences settings = contexto.getSharedPreferences(myPreferencesName, 0);
+        settings.edit().clear().commit();
+    }
+
 }

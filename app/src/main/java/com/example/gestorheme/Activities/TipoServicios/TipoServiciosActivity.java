@@ -61,7 +61,7 @@ public class TipoServiciosActivity extends AppCompatActivity implements TipoServ
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                SyncronizationManager.getTipoServiciosFromServer(TipoServiciosActivity.this);
+                SyncronizationManager.getTipoServiciosFromServer(TipoServiciosActivity.this, getApplicationContext());
             }
         });
     }

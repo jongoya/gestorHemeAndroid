@@ -82,6 +82,7 @@ public class ClientsManager {
         cv.put(Constants.databaseObservaciones, client.getObservaciones());
         cv.put(Constants.databaseFechaNotificacionPersonalizada, client.getFechaNotificacionPersonalizada());
         cv.put(Constants.databaseImagen, client.getImagen());
+        cv.put(Constants.databaseComercioId, client.getComercioId());
 
         return cv;
     }
@@ -99,7 +100,12 @@ public class ClientsManager {
         cliente.setObservaciones(cursor.getString(cursor.getColumnIndex(Constants.databaseObservaciones)));
         cliente.setFechaNotificacionPersonalizada(cursor.getLong(cursor.getColumnIndex(Constants.databaseFechaNotificacionPersonalizada)));
         cliente.setImagen(cursor.getString(cursor.getColumnIndex(Constants.databaseImagen)));
+        cliente.setComercioId(cursor.getLong(cursor.getColumnIndex(Constants.databaseComercioId)));
 
         return cliente;
+    }
+
+    public void cleanDatabase() {
+        writableDatabase.delete(Constants.databaseClientesTableName, null, null);
     }
 }

@@ -4,6 +4,7 @@ import com.example.gestorheme.Models.CierreCaja.CierreCajaModel;
 import com.example.gestorheme.Models.Client.ClientModel;
 import com.example.gestorheme.Models.Empleados.EmpleadoModel;
 import com.example.gestorheme.Models.Login.LoginModel;
+import com.example.gestorheme.Models.LoginMasDispositivos.LoginMasDispositivosModel;
 import com.example.gestorheme.Models.Notification.NotificationModel;
 import com.example.gestorheme.Models.Service.ServiceModel;
 import com.example.gestorheme.Models.TipoServicio.TipoServicioModel;
@@ -15,11 +16,12 @@ import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Path;
 
 public interface WebServices {
 
-    @GET("get_clientes")
-    Call<ArrayList<ClientModel>> getAllClientes();
+    @GET("get_clientes/{comercioId}")
+    Call<ArrayList<ClientModel>> getAllClientes(@Path("comercioId") long comercioId);
 
     @Headers("Content-Type: application/json")
     @POST("save_cliente")
@@ -29,8 +31,8 @@ public interface WebServices {
     @PUT("update_cliente")
     Call<ClientesMasServiciosModel> updateCliente(@Body ClientModel cliente);
 
-    @GET("get_servicios")
-    Call<ArrayList<ServiceModel>> getAllServicios();
+    @GET("get_servicios/{comercioId}")
+    Call<ArrayList<ServiceModel>> getAllServicios(@Path("comercioId") long comercioId);
 
     @Headers("Content-Type: application/json")
     @POST("save_servicio")
@@ -48,11 +50,11 @@ public interface WebServices {
     @POST("save_cierre_caja")
     Call<CierreCajaModel> saveCierreCaja(@Body CierreCajaModel cierreCaja);
 
-    @GET("get_cierre_cajas")
-    Call<ArrayList<CierreCajaModel>> getAllCierreCajas();
+    @GET("get_cierre_cajas/{comercioId}")
+    Call<ArrayList<CierreCajaModel>> getAllCierreCajas(@Path("comercioId") long comercioId);
 
-    @GET("get_notifications")
-    Call<ArrayList<NotificationModel>> getAllNotifications();
+    @GET("get_notifications/{comercioId}")
+    Call<ArrayList<NotificationModel>> getAllNotifications(@Path("comercioId") long comercioId);
 
     @Headers("Content-Type: application/json")
     @POST("save_notifications")
@@ -78,8 +80,8 @@ public interface WebServices {
     @POST("delete_notifications")
     Call<Void> deleteNotificacions(@Body ArrayList<NotificationModel> notifications);
 
-    @GET("get_empleados")
-    Call<ArrayList<EmpleadoModel>> getAllEmpleados();
+    @GET("get_empleados/{comercioId}")
+    Call<ArrayList<EmpleadoModel>> getAllEmpleados(@Path("comercioId") long comercioId);
 
     @Headers("Content-Type: application/json")
     @POST("save_empleado")
@@ -93,8 +95,8 @@ public interface WebServices {
     @POST("delete_empleado")
     Call<EmpleadoModel> deleteEmpleado(@Body EmpleadoModel empleado);
 
-    @GET("get_tipo_servicios")
-    Call<ArrayList<TipoServicioModel>> getAllTipoServicios();
+    @GET("get_tipo_servicios/{comercioId}")
+    Call<ArrayList<TipoServicioModel>> getAllTipoServicios(@Path("comercioId") long comercioId);
 
     @Headers("Content-Type: application/json")
     @POST("save_tipo_servicio")
@@ -102,5 +104,9 @@ public interface WebServices {
 
     @Headers("Content-Type: application/json")
     @POST("login_comercio")
-    Call<LoginModel> login(@Body LoginModel login);
+    Call<LoginMasDispositivosModel> login(@Body LoginModel login);
+
+    @Headers("Content-Type: application/json")
+    @POST("login_swap_devices")
+    Call<LoginMasDispositivosModel> swapDevicesAndLogin(@Body LoginMasDispositivosModel login);
 }

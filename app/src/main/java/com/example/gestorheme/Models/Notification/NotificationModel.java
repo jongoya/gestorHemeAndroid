@@ -11,6 +11,7 @@ public class NotificationModel implements Serializable {
     private boolean leido = false;
     private String type = "";
     private long comercioId = 0;
+    private String unique_deviceId;
 
     public long getClientId() {
         return clientId;
@@ -66,5 +67,13 @@ public class NotificationModel implements Serializable {
 
     public void setComercioId(long comercioId) {
         this.comercioId = comercioId;
+    }
+
+    public String getUnique_deviceId() {
+        return unique_deviceId;
+    }
+
+    public void setUnique_deviceId(String unique_deviceId) {
+        this.unique_deviceId = unique_deviceId;
     }
 }

@@ -70,11 +70,12 @@ public class Constants {
     public static final String notificationCellRowType = "row";
     public static final String notificationCellHeaderType = "header";
 
-    public static WebServices webServices = RetrofitClientInstance.getRetrofitInstance().create(WebServices.class);
+    public static WebServices webServices;
 
     //Shared preferences Constants
 
     public static final String preferencesPasswordKey = "password";
     public static final String preferencesTokenKey = "token";
     public static final String preferencesComercioIdKey = "comercioId";
+    public static final int logoutResponseValue = 420;
 }

@@ -81,19 +81,23 @@ public class NotificationsManager {
     }
 
     private NotificationModel parseCursorToNotificationModel(Cursor cursor) {
-        NotificationModel service = new NotificationModel();
-        service.setClientId(cursor.getLong(cursor.getColumnIndex(Constants.databaseClientId)));
-        service.setNotificationId(cursor.getLong(cursor.getColumnIndex(Constants.databaseNotificationId)));
-        service.setDescripcion(cursor.getString(cursor.getColumnIndex(Constants.databaseDescripcion)));
-        service.setFecha(cursor.getLong(cursor.getColumnIndex(Constants.databaseFecha)));
-        service.setLeido(getBooleanFromInt(cursor.getInt(cursor.getColumnIndex(Constants.databaseLeido))));
-        service.setType(cursor.getString(cursor.getColumnIndex(Constants.databaseType)));
-        service.setComercioId(cursor.getLong(cursor.getColumnIndex(Constants.databaseComercioId)));
-        return service;
+        NotificationModel notification = new NotificationModel();
+        notification.setClientId(cursor.getLong(cursor.getColumnIndex(Constants.databaseClientId)));
+        notification.setNotificationId(cursor.getLong(cursor.getColumnIndex(Constants.databaseNotificationId)));
+        notification.setDescripcion(cursor.getString(cursor.getColumnIndex(Constants.databaseDescripcion)));
+        notification.setFecha(cursor.getLong(cursor.getColumnIndex(Constants.databaseFecha)));
+        notification.setLeido(getBooleanFromInt(cursor.getInt(cursor.getColumnIndex(Constants.databaseLeido))));
+        notification.setType(cursor.getString(cursor.getColumnIndex(Constants.databaseType)));
+        notification.setComercioId(cursor.getLong(cursor.getColumnIndex(Constants.databaseComercioId)));
+
+        return notification;
     }
 
     private boolean getBooleanFromInt(int valor) {
         return valor == 1 ? true : false;
     }
 
+    public void cleanDatabase() {
+        writableDatabase.delete(Constants.databaseNotificacionesTableName, null, null);
+    }
 }

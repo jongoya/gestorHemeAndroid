@@ -81,6 +81,7 @@ public class CierreCajaManager {
         cv.put(Constants.databaseTotalProductos, cierreCaja.getTotalProductos());
         cv.put(Constants.databaseEfectivo, cierreCaja.getEfectivo());
         cv.put(Constants.databaseTarjeta, cierreCaja.getTarjeta());
+        cv.put(Constants.databaseComercioId, cierreCaja.getComercioId());
 
         return cv;
     }
@@ -94,6 +95,12 @@ public class CierreCajaManager {
         cierreCaja.setTotalProductos(cursor.getDouble(cursor.getColumnIndex(Constants.databaseTotalProductos)));
         cierreCaja.setEfectivo(cursor.getDouble(cursor.getColumnIndex(Constants.databaseEfectivo)));
         cierreCaja.setTarjeta(cursor.getDouble(cursor.getColumnIndex(Constants.databaseTarjeta)));
+        cierreCaja.setComercioId(cursor.getLong(cursor.getColumnIndex(Constants.databaseComercioId)));
+
         return cierreCaja;
+    }
+
+    public void cleanDatabase() {
+        writableDatabase.delete(Constants.databaseCierreCajaTableName, null, null);
     }
 }

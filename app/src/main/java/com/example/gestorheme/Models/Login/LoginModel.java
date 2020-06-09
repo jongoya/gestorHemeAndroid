@@ -9,12 +9,14 @@ public class LoginModel implements Serializable {
     private String token = "";
     private String nombre = "";
     private String nombre_dispositivo = "";
+    private String unique_deviceId = "";
 
-    public LoginModel(String usuario, String password, String nombre, String nombreDispositivo) {
+    public LoginModel(String usuario, String password, String nombre, String nombreDispositivo, String uniqueDeviceId) {
         this.usuario = usuario;
         this.password = password;
         this.nombre = nombre;
         this.nombre_dispositivo = nombreDispositivo;
+        this.unique_deviceId = uniqueDeviceId;
     }
 
     public LoginModel() {
@@ -67,5 +69,13 @@ public class LoginModel implements Serializable {
 
     public void setNombreDispositivo(String nombreDispositivo) {
         this.nombre_dispositivo = nombreDispositivo;
+    }
+
+    public String getUnique_deviceId() {
+        return unique_deviceId;
+    }
+
+    public void setUnique_deviceId(String unique_deviceId) {
+        this.unique_deviceId = unique_deviceId;
     }
 }

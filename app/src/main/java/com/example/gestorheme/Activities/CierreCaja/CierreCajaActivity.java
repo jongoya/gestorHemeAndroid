@@ -160,7 +160,7 @@ public class CierreCajaActivity extends AppCompatActivity {
         if (resultCode == RESULT_CANCELED) {
             return;
         }
-        String texto = data.getStringExtra("TEXTO").replace(",", ".");
+        String texto = data.getStringExtra("TEXTO").replace(",", ".").replaceAll("[^\\d.]", "");
         if (texto.length() == 0) {
             return;
         }
@@ -207,10 +207,13 @@ public class CierreCajaActivity extends AppCompatActivity {
                     Constants.databaseManager.cierreCajaManager.addCierreCajaToDatabase(response.body());
                     if (notification != null) {
                         deleteNotificacion();
-                    }else {
+                    } else {
                         rootLayout.removeView(loadingView);
                         CierreCajaActivity.super.onBackPressed();
                     }
+                }  else if (response.code() == Constants.logoutResponseValue) {
+                    rootLayout.removeView(loadingView);
+                    CommonFunctions.logout(CierreCajaActivity.this);
                 } else {
                     rootLayout.removeView(loadingView);
                     CommonFunctions.showGenericAlertMessage(CierreCajaActivity.this, "Error guardando el cierre de caja");
@@ -234,6 +237,8 @@ public class CierreCajaActivity extends AppCompatActivity {
                 if (response.code() == 200) {
                     Constants.databaseManager.notificationsManager.deleteNotificationFromDatabase(notification.getNotificationId());
                     CierreCajaActivity.super.onBackPressed();
+                }  else if (response.code() == Constants.logoutResponseValue) {
+                    CommonFunctions.logout(CierreCajaActivity.this);
                 } else {
                     CommonFunctions.showGenericAlertMessage(CierreCajaActivity.this, "Error eliminando la notificación");
                 }

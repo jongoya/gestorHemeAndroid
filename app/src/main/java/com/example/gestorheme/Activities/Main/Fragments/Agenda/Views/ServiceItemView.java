@@ -167,6 +167,8 @@ public class ServiceItemView extends RelativeLayout {
                 if (response.code() == 200) {
                     Constants.databaseManager.servicesManager.deleteServiceFromDatabase(servicio.getServiceId());
                     delegate.serviceRemoved();
+                }  else if (response.code() == Constants.logoutResponseValue) {
+                    delegate.logout();
                 } else {
                     delegate.showErrorMessage("Error eliminando servicio");
                 }

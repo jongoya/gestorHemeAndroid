@@ -226,6 +226,8 @@ public class EmpleadoDetailActivity extends AppCompatActivity {
                 if (response.code() == 201) {
                     Constants.databaseManager.empleadosManager.addEmpleadoToDatabase(response.body());
                     EmpleadoDetailActivity.super.onBackPressed();
+                }  else if (response.code() == Constants.logoutResponseValue) {
+                    CommonFunctions.logout(EmpleadoDetailActivity.this);
                 } else {
                     CommonFunctions.showGenericAlertMessage(EmpleadoDetailActivity.this, "Error guardando el empleado");
                 }
@@ -250,6 +252,8 @@ public class EmpleadoDetailActivity extends AppCompatActivity {
                 if (response.code() == 200) {
                     Constants.databaseManager.empleadosManager.updateEmpleadoInDatabase(response.body());
                     EmpleadoDetailActivity.super.onBackPressed();
+                } else if (response.code() == Constants.logoutResponseValue) {
+                    CommonFunctions.logout(EmpleadoDetailActivity.this);
                 } else {
                     CommonFunctions.showGenericAlertMessage(EmpleadoDetailActivity.this, "Error actualizando el empleado");
                 }

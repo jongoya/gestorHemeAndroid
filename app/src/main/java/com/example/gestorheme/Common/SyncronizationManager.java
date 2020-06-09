@@ -27,16 +27,16 @@ import retrofit2.Response;
 public class SyncronizationManager {
 
     public static void syncAllDataFromServer(MainActivity activity, Context context) {
-        getAllClients(activity);
-        getAllEmpleados(null);
-        getTipoServiciosFromServer(null);
-        getServiciosFromServer(null);
-        getAllCierreCajas();
+        getAllClients(activity, context);
+        getAllEmpleados(null,context);
+        getTipoServiciosFromServer(null, context);
+        getServiciosFromServer(null, context);
+        getAllCierreCajas(context);
         getAllNotifications(null, context);
     }
 
-    public static void getAllClients(MainActivity activity) {
-        Call<ArrayList<ClientModel>> call = Constants.webServices.getAllClientes();
+    public static void getAllClients(MainActivity activity, Context contexto) {
+        Call<ArrayList<ClientModel>> call = Constants.webServices.getAllClientes(Preferencias.getComercioIdFromSharedPreferences(contexto));
         call.enqueue(new Callback<ArrayList<ClientModel>>() {
             @Override
             public void onResponse(Call<ArrayList<ClientModel>> call, Response<ArrayList<ClientModel>> response) {
@@ -65,8 +65,8 @@ public class SyncronizationManager {
         });
     }
 
-    public static void getAllEmpleados(EmpleadosRefreshInterface delegate) {
-        Call<ArrayList<EmpleadoModel>> call = Constants.webServices.getAllEmpleados();
+    public static void getAllEmpleados(EmpleadosRefreshInterface delegate, Context contexto) {
+        Call<ArrayList<EmpleadoModel>> call = Constants.webServices.getAllEmpleados(Preferencias.getComercioIdFromSharedPreferences(contexto));
         call.enqueue(new Callback<ArrayList<EmpleadoModel>>() {
             @Override
             public void onResponse(Call<ArrayList<EmpleadoModel>> call, Response<ArrayList<EmpleadoModel>> response) {
@@ -113,13 +113,13 @@ public class SyncronizationManager {
             }
 
             if (!estaEnServer) {
-                //TODO eliminar empleado
+                Constants.databaseManager.empleadosManager.deleteEmpleadoFromDatabase(localEmpleados.get(i).getEmpleadoId());
             }
         }
     }
 
-    public static void getTipoServiciosFromServer(TipoServiciosRefreshInterface delegate) {
-        Call <ArrayList<TipoServicioModel>> call = Constants.webServices.getAllTipoServicios();
+    public static void getTipoServiciosFromServer(TipoServiciosRefreshInterface delegate, Context context) {
+        Call <ArrayList<TipoServicioModel>> call = Constants.webServices.getAllTipoServicios(Preferencias.getComercioIdFromSharedPreferences(context));
         call.enqueue(new Callback<ArrayList<TipoServicioModel>>() {
             @Override
             public void onResponse(Call<ArrayList<TipoServicioModel>> call, Response<ArrayList<TipoServicioModel>> response) {
@@ -150,8 +150,8 @@ public class SyncronizationManager {
         });
     }
 
-    public static void getServiciosFromServer(ServicesRefreshInterface delegate) {
-        Call <ArrayList<ServiceModel>> call = Constants.webServices.getAllServicios();
+    public static void getServiciosFromServer(ServicesRefreshInterface delegate, Context context) {
+        Call <ArrayList<ServiceModel>> call = Constants.webServices.getAllServicios(Preferencias.getComercioIdFromSharedPreferences(context));
         call.enqueue(new Callback<ArrayList<ServiceModel>>() {
             @Override
             public void onResponse(Call<ArrayList<ServiceModel>> call, Response<ArrayList<ServiceModel>> response) {
@@ -203,8 +203,8 @@ public class SyncronizationManager {
         }
     }
 
-    private static void getAllCierreCajas() {
-        Call <ArrayList<CierreCajaModel>> call = Constants.webServices.getAllCierreCajas();
+    private static void getAllCierreCajas(Context context) {
+        Call <ArrayList<CierreCajaModel>> call = Constants.webServices.getAllCierreCajas(Preferencias.getComercioIdFromSharedPreferences(context));
         call.enqueue(new Callback<ArrayList<CierreCajaModel>>() {
             @Override
             public void onResponse(Call<ArrayList<CierreCajaModel>> call, Response<ArrayList<CierreCajaModel>> response) {
@@ -226,7 +226,7 @@ public class SyncronizationManager {
     }
 
     public static void getAllNotifications(NotificationsRefreshInterface delegate, Context context) {
-        Call <ArrayList<NotificationModel>> call = Constants.webServices.getAllNotifications();
+        Call <ArrayList<NotificationModel>> call = Constants.webServices.getAllNotifications(Preferencias.getComercioIdFromSharedPreferences(context));
         call.enqueue(new Callback<ArrayList<NotificationModel>>() {
             @Override
             public void onResponse(Call<ArrayList<NotificationModel>> call, Response<ArrayList<NotificationModel>> response) {

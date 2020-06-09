@@ -13,6 +13,7 @@ public class ServiceModel implements Serializable {
     private String observaciones = "";
     private double precio = 0.0;
     private long comercioId = 0;
+    private String unique_deviceId;
 
     public long getClientId() {
         return clientId;
@@ -76,5 +77,13 @@ public class ServiceModel implements Serializable {
 
     public void setComercioId(long comercioId) {
         this.comercioId = comercioId;
+    }
+
+    public String getUnique_deviceId() {
+        return unique_deviceId;
+    }
+
+    public void setUnique_deviceId(String unique_deviceId) {
+        this.unique_deviceId = unique_deviceId;
     }
 }

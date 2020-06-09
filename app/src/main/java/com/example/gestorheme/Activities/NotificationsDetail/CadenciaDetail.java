@@ -95,6 +95,8 @@ public class CadenciaDetail extends AppCompatActivity {
                     for (int i = 0; i < notifications.size(); i++) {
                         Constants.databaseManager.notificationsManager.updateNotificationInDatabase(response.body().get(i));
                     }
+                }  else if (response.code() == Constants.logoutResponseValue) {
+                    CommonFunctions.logout(CadenciaDetail.this);
                 } else {
                     CommonFunctions.showGenericAlertMessage(CadenciaDetail.this, "Error actualizando la notificación");
                 }

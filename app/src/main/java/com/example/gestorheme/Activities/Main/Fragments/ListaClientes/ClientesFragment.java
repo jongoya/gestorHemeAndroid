@@ -81,7 +81,7 @@ public class ClientesFragment extends Fragment {
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                SyncronizationManager.getAllClients((MainActivity) getActivity());
+                SyncronizationManager.getAllClients((MainActivity) getActivity(), getActivity().getApplicationContext());
             }
         });
     }

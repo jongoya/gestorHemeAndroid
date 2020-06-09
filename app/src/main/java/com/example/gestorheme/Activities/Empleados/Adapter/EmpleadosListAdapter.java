@@ -219,6 +219,8 @@ public class EmpleadosListAdapter extends BaseAdapter {
                     }
 
                     delegate.reloadList();
+                } else if (response.code() == Constants.logoutResponseValue) {
+                    delegate.logout();
                 } else {
                     delegate.showErrorMessage("Error eliminando el empleado");
                 }

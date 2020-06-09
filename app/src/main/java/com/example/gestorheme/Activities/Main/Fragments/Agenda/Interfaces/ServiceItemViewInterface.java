@@ -5,4 +5,5 @@ public interface ServiceItemViewInterface {
     void showLoadingState(String description);
     void hideLoadingState();
     void showErrorMessage(String message);
+    void logout();
 }

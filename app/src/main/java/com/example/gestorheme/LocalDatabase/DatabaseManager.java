@@ -29,4 +29,13 @@ public class DatabaseManager {
         cierreCajaManager = new CierreCajaManager(writableDatabase, readableDatabase);
         notificationsManager = new NotificationsManager(writableDatabase, readableDatabase);
     }
+
+    public void deleteAllRecordsFromDatabase() {
+        clientsManager.cleanDatabase();
+        servicesManager.cleanDatabase();
+        tipoServiciosManager.cleanDatabase();
+        empleadosManager.cleanDatabase();
+        cierreCajaManager.cleanDatabase();
+        notificationsManager.cleanDatabase();
+    }
 }

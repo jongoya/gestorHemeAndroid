@@ -14,6 +14,7 @@ public class EmpleadoModel implements Serializable {
     private float blueColorValue = 0;
     private long comercioId = 0;
     private boolean is_empleado_jefe = false;
+    private String unique_deviceId;
 
     public EmpleadoModel(String nombre, String apellidos, long fecha, String telefono, String email, long empleadoId, float redColorValue, float greenColorValue, float blueColorValue, long comercioId, boolean isEmpleadoJefe) {
         this.nombre = nombre;
@@ -118,5 +119,13 @@ public class EmpleadoModel implements Serializable {
 
     public void setEmpleadoJefe(boolean empleadoJefe) {
         is_empleado_jefe = empleadoJefe;
+    }
+
+    public String getUnique_deviceId() {
+        return unique_deviceId;
+    }
+
+    public void setUnique_deviceId(String unique_deviceId) {
+        this.unique_deviceId = unique_deviceId;
     }
 }

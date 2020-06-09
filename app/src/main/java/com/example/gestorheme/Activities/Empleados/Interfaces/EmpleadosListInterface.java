@@ -5,4 +5,5 @@ public interface EmpleadosListInterface {
     void showLoadingState(String description);
     void hideLoadingState();
     void reloadList();
+    void logout();
 }

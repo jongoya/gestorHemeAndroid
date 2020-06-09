@@ -1,5 +1,6 @@
 package com.example.gestorheme.Activities.ServiceDetail;
 
+import android.app.Notification;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
@@ -21,6 +22,7 @@ import com.example.gestorheme.Common.Constants;
 import com.example.gestorheme.Common.DateFunctions;
 import com.example.gestorheme.Common.Preferencias;
 import com.example.gestorheme.Models.Client.ClientModel;
+import com.example.gestorheme.Models.Notification.NotificationModel;
 import com.example.gestorheme.Models.Service.ServiceModel;
 import com.example.gestorheme.Models.TipoServicio.TipoServicioModel;
 import com.example.gestorheme.R;
@@ -137,7 +139,7 @@ public class ServiceDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), TextInputFieldActivity.class);
-                intent.putExtra("contenido", String.valueOf(servicio.getPrecio()));
+                intent.putExtra("contenido", String.valueOf( servicio.getPrecio() > 0 ? servicio.getPrecio() : ""));
                 intent.putExtra("keyboard", InputType.TYPE_CLASS_PHONE);
                 startActivityForResult(intent, PRECIO_FIELD_REF);
             }
@@ -253,8 +255,9 @@ public class ServiceDetailActivity extends AppCompatActivity {
                 servicio.setServicios(getServiciosIdFromServicios((ArrayList<TipoServicioModel>) data.getSerializableExtra("ITEM")));
                 break;
             case PRECIO_FIELD_REF:
-                servicio.setPrecio(Double.valueOf(data.getStringExtra("TEXTO")));
-                precioLabel.setText(data.getStringExtra("TEXTO") + " €");
+                String texto = data.getStringExtra("TEXTO").replaceAll("[^\\d.]", "");
+                servicio.setPrecio(Double.valueOf(texto));
+                precioLabel.setText(texto + " €");
                 break;
             case OBSERVACION_FIELD_REF:
                 observacionesLabel.setText(data.getStringExtra("TEXTO"));
@@ -279,9 +282,16 @@ public class ServiceDetailActivity extends AppCompatActivity {
                 rootLayout.removeView(loadingLayout);
                 if (response.code() == 201) {
                     Constants.databaseManager.servicesManager.addServiceToDatabase(response.body());
-                    //TODO revisar notificaciones cadencia del cliente
+                    ArrayList<NotificationModel> notificaciones = Constants.databaseManager.notificationsManager.getNotificationsForType(Constants.notificationCadenciaType);
+                    for (int i = 0; i < notificaciones.size(); i++) {
+                        if (notificaciones.get(i).getClientId() == response.body().getClientId()) {
+                            Constants.databaseManager.notificationsManager.deleteNotificationFromDatabase(notificaciones.get(i).getNotificationId());
+                        }
+                    }
                     ServiceDetailActivity.super.onBackPressed();
-                } else {
+                }  else if (response.code() == Constants.logoutResponseValue) {
+                    CommonFunctions.logout(ServiceDetailActivity.this);
+                }  else {
                     CommonFunctions.showGenericAlertMessage(ServiceDetailActivity.this, "Error guardando servicio");
                 }
             }
@@ -305,7 +315,9 @@ public class ServiceDetailActivity extends AppCompatActivity {
                     rootLayout.removeView(loadingLayout);
                     Constants.databaseManager.servicesManager.updateServiceInDatabase(response.body());
                     ServiceDetailActivity.super.onBackPressed();
-                } else {
+                }  else if (response.code() == Constants.logoutResponseValue) {
+                    CommonFunctions.logout(ServiceDetailActivity.this);
+                }  else {
                     CommonFunctions.showGenericAlertMessage(ServiceDetailActivity.this, "Error actualizando el servicio");
                 }
             }

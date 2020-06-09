@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
+import android.provider.Settings;
 import android.util.Base64;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +21,7 @@ import android.widget.RelativeLayout;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.content.ContextCompat;
 
+import com.example.gestorheme.Activities.Login.LoginActivity;
 import com.example.gestorheme.Common.Views.LoadingStateView;
 import com.example.gestorheme.Models.Cadencia.CadenciaModel;
 import com.example.gestorheme.Models.TipoServicio.TipoServicioModel;
@@ -107,5 +110,28 @@ public class CommonFunctions {
         String fabricante = Build.MANUFACTURER;
         String modelo = Build.MODEL;
         return modelo + " " + fabricante;
+    }
+
+    public static String getDeviceId(Context context) {
+        return Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+    }
+
+    public static void logout(Activity activity) {
+        AlertDialog alertDialog = new AlertDialog.Builder(activity).create();
+        alertDialog.setTitle("Alerta");
+        alertDialog.setMessage("Has sido deslogueado de la aplicación, inicie sesió de nuevo");
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Aceptar",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        Constants.databaseManager.deleteAllRecordsFromDatabase();
+                        Preferencias.eliminarTodasLasPreferencias(activity.getApplicationContext());
+                        Intent intent = new Intent(activity, LoginActivity.class);
+                        activity.startActivity(intent);
+                        activity.finish();
+                    }
+                });
+        alertDialog.show();
+
     }
 }

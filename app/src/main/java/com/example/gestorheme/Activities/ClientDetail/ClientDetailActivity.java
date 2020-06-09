@@ -317,7 +317,7 @@ public class ClientDetailActivity extends AppCompatActivity implements ServicesR
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                SyncronizationManager.getServiciosFromServer(ClientDetailActivity.this);
+                SyncronizationManager.getServiciosFromServer(ClientDetailActivity.this, getApplicationContext());
             }
         });
     }
@@ -494,6 +494,8 @@ public class ClientDetailActivity extends AppCompatActivity implements ServicesR
                     }
 
                     ClientDetailActivity.super.onBackPressed();
+                }  else if (response.code() == Constants.logoutResponseValue) {
+                    CommonFunctions.logout(ClientDetailActivity.this);
                 } else {
                     CommonFunctions.showGenericAlertMessage(ClientDetailActivity.this, "Error guardando el cliente, inténtelo de nuevo");
                 }
@@ -518,6 +520,8 @@ public class ClientDetailActivity extends AppCompatActivity implements ServicesR
                 if (response.code() == 200) {
                     Constants.databaseManager.clientsManager.updateClientInDatabase(cliente);
                     ClientDetailActivity.super.onBackPressed();
+                }  else if (response.code() == Constants.logoutResponseValue) {
+                    CommonFunctions.logout(ClientDetailActivity.this);
                 } else {
                     CommonFunctions.showGenericAlertMessage(ClientDetailActivity.this, "Error actualizando cliente");
                 }
@@ -563,6 +567,8 @@ public class ClientDetailActivity extends AppCompatActivity implements ServicesR
                     } else {
                         CommonFunctions.selectLayout(getApplicationContext(), alarmButton, alarmImage);
                     }
+                }  else if (response.code() == Constants.logoutResponseValue) {
+                    CommonFunctions.logout(ClientDetailActivity.this);
                 } else {
                     CommonFunctions.showGenericAlertMessage(ClientDetailActivity.this, "Error actualizando el cliente");
                 }

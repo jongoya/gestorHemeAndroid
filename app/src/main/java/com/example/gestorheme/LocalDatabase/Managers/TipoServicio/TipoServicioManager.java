@@ -74,4 +74,8 @@ public class TipoServicioManager {
 
         return servicio;
     }
+
+    public void cleanDatabase() {
+        writableDatabase.delete(Constants.databaseTipoServiciosTableName, null, null);
+    }
 }

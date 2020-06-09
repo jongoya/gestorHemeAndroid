@@ -79,6 +79,7 @@ public class EmpleadosManager {
         cv.put(Constants.databaseBlueColorValue, empleado.getBlueColorValue());
         cv.put(Constants.databaseGreenColorValue, empleado.getGreenColorValue());
         cv.put(Constants.databaseIsEmpleadoJefe, empleado.isEmpleadoJefe() ? 1 : 0);
+        cv.put(Constants.databaseComercioId, empleado.getComercioId());
 
         return  cv;
     }
@@ -95,11 +96,16 @@ public class EmpleadosManager {
         empleado.setGreenColorValue(cursor.getFloat(cursor.getColumnIndex(Constants.databaseGreenColorValue)));
         empleado.setBlueColorValue(cursor.getFloat(cursor.getColumnIndex(Constants.databaseBlueColorValue)));
         empleado.setEmpleadoJefe(getBooleanFromInt(cursor.getInt(cursor.getColumnIndex(Constants.databaseIsEmpleadoJefe))));
+        empleado.setComercioId(cursor.getLong(cursor.getColumnIndex(Constants.databaseComercioId)));
 
         return empleado;
     }
 
     private boolean getBooleanFromInt(int valor) {
         return valor == 1 ? true : false;
+    }
+
+    public void cleanDatabase() {
+        writableDatabase.delete(Constants.databaseEmpleadosTableName, null, null);
     }
 }

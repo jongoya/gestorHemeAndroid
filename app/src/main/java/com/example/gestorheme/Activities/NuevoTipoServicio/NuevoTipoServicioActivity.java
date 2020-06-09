@@ -96,6 +96,8 @@ public class NuevoTipoServicioActivity extends AppCompatActivity {
                 if (response.code() == 201) {
                     Constants.databaseManager.tipoServiciosManager.addTipoServicioToDatabase(response.body());
                     NuevoTipoServicioActivity.super.onBackPressed();
+                } else if (response.code() == Constants.logoutResponseValue) {
+                    CommonFunctions.logout(NuevoTipoServicioActivity.this);
                 } else {
                     CommonFunctions.showGenericAlertMessage(NuevoTipoServicioActivity.this, "Error guardando el servicio");
                 }
