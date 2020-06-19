@@ -99,9 +99,9 @@ public class BirthdayDetail extends AppCompatActivity implements ClientSelectorA
             nombresField.setText(notificaciones.get(0).getDescripcion());
         }
 
-        CommonFunctions.unSelectLayout(getApplicationContext(), callButton, callImage);
-        CommonFunctions.unSelectLayout(getApplicationContext(), wassapButton, wassapImage);
-        CommonFunctions.unSelectLayout(getApplicationContext(), messageButton, messageImage);
+        CommonFunctions.customizeViewWithImage(getApplicationContext(), callButton, callImage, R.color.dividerColor, R.color.dividerColor);
+        CommonFunctions.customizeViewWithImage(getApplicationContext(), wassapButton, wassapImage, R.color.dividerColor, R.color.dividerColor);
+        CommonFunctions.customizeViewWithImage(getApplicationContext(), messageButton, messageImage, R.color.dividerColor, R.color.dividerColor);
     }
 
     private void setNames() {

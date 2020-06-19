@@ -2,13 +2,20 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/root"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <ImageView
+        android:id="@+id/backgroundImage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
     <RelativeLayout
         android:id="@+id/backgroundColor"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorPrimary">
+        android:alpha="0.5"
+        android:background="@color/black">
 
     </RelativeLayout>
 
@@ -18,10 +25,18 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true">
 
+        <ImageView
+            android:id="@+id/iconoApp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_centerHorizontal="true" />
+
         <EditText
             android:id="@+id/usuarioField"
             android:layout_width="match_parent"
             android:layout_height="40dp"
+            android:layout_below="@id/iconoApp"
+            android:layout_marginTop="20dp"
             android:background="@drawable/agenda_rounded_view"
             android:ems="10"
             android:hint="Usuario"

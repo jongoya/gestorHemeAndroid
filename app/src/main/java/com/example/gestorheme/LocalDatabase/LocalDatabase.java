@@ -19,6 +19,10 @@ public class LocalDatabase extends SQLiteOpenHelper {
     private static final String TIPOSERVICIOS_TABLE_CREATE = "CREATE TABLE " + Constants.databaseTipoServiciosTableName + "(" + Constants.databaseServicioId + " INTEGER, " + Constants.databaseNombre + " TEXT," + Constants.databaseComercioId + " TEXT)";
     private static final String CIERRECAJA_TABLE_CREATE = "CREATE TABLE " + Constants.databaseCierreCajaTableName + "(" + Constants.databaseCajaId + " INTEGER, " + Constants.databaseFecha + " INTEGER, " + Constants.databaseNumeroServicios + " INTEGER, " +
             Constants.databaseTotalCaja + " REAL, " + Constants.databaseTotalProductos + " REAL, " + Constants.databaseEfectivo + " REAL, " + Constants.databaseTarjeta + " REAL," + Constants.databaseComercioId + " TEXT)";
+    private static final String ESTILOAPP_TABLE_CREATE = "CREATE TABLE " + Constants.databaseEstiloAppTableName + "(" + Constants.databaseEstiloId + " INTEGER, " + Constants.databasePrimaryTextColor + " TEXT, " +
+            Constants.databaseSecondaryTextColor + " TEXT, " + Constants.databasePrimaryColor + " TEXT, " + Constants.databaseSecondaryColor + " TEXT, " +
+            Constants.databaseBackgroundColor + " TEXT, " + Constants.databaseNavigationColor + " TEXT, " + Constants.databaseAppSmallIcon + " TEXT, " + Constants.databaseAppName + " TEXT," + Constants.databaseComercioId + " TEXT)";
+
     private static final String DB_NAME = Constants.databaseName;
     private static final int DB_VERSION = 1;
 
@@ -34,6 +38,7 @@ public class LocalDatabase extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(EMPLEADOS_TABLE_CREATE);
         sqLiteDatabase.execSQL(TIPOSERVICIOS_TABLE_CREATE);
         sqLiteDatabase.execSQL(CIERRECAJA_TABLE_CREATE);
+        sqLiteDatabase.execSQL(ESTILOAPP_TABLE_CREATE);
     }
 
     @Override

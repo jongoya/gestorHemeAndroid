@@ -11,12 +11,14 @@ import com.example.gestorheme.ApiServices.RetrofitClientInstance;
 import com.example.gestorheme.ApiServices.WebServices;
 import com.example.gestorheme.Common.Constants;
 import com.example.gestorheme.Common.Preferencias;
+import com.example.gestorheme.LocalDatabase.DatabaseManager;
 
 public class SplashActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Constants.databaseManager = new DatabaseManager(getApplicationContext());
         initializeWebServicesApi();
         checkTokenInSharedPreferences();
         if (Preferencias.checkComercioIdInSharedPreferences(getApplicationContext())) {

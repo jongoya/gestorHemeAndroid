@@ -61,7 +61,7 @@ public class StadisticasActivity extends AppCompatActivity  implements IStadisti
     }
 
     private void customizeButton() {
-        CommonFunctions.unSelectLayout(getApplicationContext(), filterButton, null);
+        CommonFunctions.customizeView(getApplicationContext(), filterButton, R.color.dividerColor);
     }
 
     private void setOnClickListeners() {

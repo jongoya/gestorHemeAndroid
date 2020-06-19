@@ -54,7 +54,7 @@ public class TipoServiciosActivity extends AppCompatActivity implements TipoServ
     }
 
     private void customizeButton() {
-        CommonFunctions.selectLayout(getApplicationContext(), addButton, addImage);
+        CommonFunctions.customizeViewWithImage(getApplicationContext(), addButton, addImage, R.color.colorPrimary, R.color.colorPrimary);
     }
 
     private void setRefreshLayoutListener() {

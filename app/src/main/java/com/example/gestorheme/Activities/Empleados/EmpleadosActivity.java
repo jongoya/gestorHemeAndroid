@@ -78,7 +78,7 @@ public class EmpleadosActivity extends AppCompatActivity implements EmpleadosLis
     }
 
     private void customizeButtons() {
-        CommonFunctions.selectLayout(getApplicationContext(), plusButton, plusImage);
+        CommonFunctions.customizeViewWithImage(getApplicationContext(), plusButton, plusImage, R.color.colorPrimary, R.color.colorPrimary);
     }
 
     private void setOnClickListeners() {

@@ -17,11 +17,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.content.ContextCompat;
 
 import com.example.gestorheme.Activities.Login.LoginActivity;
+import com.example.gestorheme.BuildConfig;
 import com.example.gestorheme.Common.Views.LoadingStateView;
 import com.example.gestorheme.Models.Cadencia.CadenciaModel;
 import com.example.gestorheme.Models.TipoServicio.TipoServicioModel;
@@ -88,7 +90,29 @@ public class CommonFunctions {
         return loadingState;
     }
 
-    public static void selectLayout(Context contexto, View layout, ImageView imagen) {
+    public static void customizeTextField(Context contexto, TextView layout, int viewColor, int primaryColor, int secondaryColor) {
+        GradientDrawable unwrappedDrawable = (GradientDrawable) AppCompatResources.getDrawable(contexto, R.drawable.heme_cell_rounded_view);
+        unwrappedDrawable.setStroke(CommonFunctions.convertToPx(1, contexto), viewColor);
+        layout.setBackground(unwrappedDrawable);
+
+        layout.setTextColor(primaryColor);
+        layout.setHintTextColor(secondaryColor);
+    }
+
+    public static void customizeView(Context contexto, View layout, int viewColor) {
+        GradientDrawable unwrappedDrawable = (GradientDrawable) AppCompatResources.getDrawable(contexto, R.drawable.heme_cell_rounded_view);
+        unwrappedDrawable.setStroke(CommonFunctions.convertToPx(1, contexto), viewColor);
+        layout.setBackground(unwrappedDrawable);
+    }
+
+    public static void customizeViewWithImage(Context contexto, View layout, ImageView imagen, int viewColor, int imageColor) {
+        GradientDrawable unwrappedDrawable = (GradientDrawable) AppCompatResources.getDrawable(contexto, R.drawable.rounded_view);
+        unwrappedDrawable.setStroke(CommonFunctions.convertToPx(1, contexto), viewColor);
+        layout.setBackground(unwrappedDrawable);
+        imagen.setColorFilter(imageColor, android.graphics.PorterDuff.Mode.MULTIPLY);
+    }
+
+    /*public static void selectLayout(Context contexto, View layout, ImageView imagen) {
         GradientDrawable unwrappedDrawable = (GradientDrawable) AppCompatResources.getDrawable(contexto, R.drawable.rounded_view);
         unwrappedDrawable.setStroke(CommonFunctions.convertToPx(1, contexto), contexto.getResources().getColor(R.color.colorPrimary));
         layout.setBackground(unwrappedDrawable);
@@ -104,7 +128,7 @@ public class CommonFunctions {
         if (imagen != null) {
             imagen.setColorFilter(ContextCompat.getColor(contexto, R.color.dividerColor), android.graphics.PorterDuff.Mode.MULTIPLY);
         }
-    }
+    }*/
 
     public static String getDeviceModel() {
         String fabricante = Build.MANUFACTURER;
@@ -114,6 +138,10 @@ public class CommonFunctions {
 
     public static String getDeviceId(Context context) {
         return Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+    }
+
+    public static String getBundleId() {
+        return BuildConfig.APPLICATION_ID.replace(".", "_");
     }
 
     public static void logout(Activity activity) {

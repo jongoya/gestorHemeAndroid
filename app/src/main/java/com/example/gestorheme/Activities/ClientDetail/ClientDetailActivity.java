@@ -366,9 +366,9 @@ public class ClientDetailActivity extends AppCompatActivity implements ServicesR
         scrollContentView.addView(alarmButton);
 
         if (cliente.getFechaNotificacionPersonalizada() == 0) {
-            CommonFunctions.unSelectLayout(getApplicationContext(), alarmButton, alarmImage);
+            CommonFunctions.customizeViewWithImage(getApplicationContext(), alarmButton, alarmImage, R.color.dividerColor, R.color.dividerColor);
         } else {
-            CommonFunctions.selectLayout(getApplicationContext(), alarmButton, alarmImage);
+            CommonFunctions.customizeViewWithImage(getApplicationContext(), alarmButton, alarmImage, R.color.colorPrimary, R.color.colorPrimary);
         }
     }
 
@@ -562,10 +562,10 @@ public class ClientDetailActivity extends AppCompatActivity implements ServicesR
                 if (response.code() == 200) {
                     Constants.databaseManager.clientsManager.updateFechaNotificacionPersonalizada(cliente);
                     if (cliente.getFechaNotificacionPersonalizada() == 0) {
-                        CommonFunctions.unSelectLayout(getApplicationContext(), alarmButton, alarmImage);
+                        CommonFunctions.customizeViewWithImage(getApplicationContext(), alarmButton, alarmImage, R.color.dividerColor, R.color.dividerColor);
                         deleteNotificacionPersonalizada();
                     } else {
-                        CommonFunctions.selectLayout(getApplicationContext(), alarmButton, alarmImage);
+                        CommonFunctions.customizeViewWithImage(getApplicationContext(), alarmButton, alarmImage, R.color.colorPrimary, R.color.colorPrimary);
                     }
                 }  else if (response.code() == Constants.logoutResponseValue) {
                     CommonFunctions.logout(ClientDetailActivity.this);

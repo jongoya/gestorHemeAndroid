@@ -60,9 +60,9 @@ public class NotificationListAdapter extends BaseAdapter {
                 holder.titulo.setText(getTituloForNotificationType(notifications.get(i).getNotificaciones().get(0).getType(), i));
                 holder.descripcion.setText(getDescripcionForNotificationType(notifications.get(i).getNotificaciones().get(0).getType(), i));
                 if (!notifications.get(i).getNotificaciones().get(0).isLeido()) {
-                    CommonFunctions.selectLayout(context, holder.background, holder.imagen);
+                    CommonFunctions.customizeViewWithImage(context, holder.background, holder.imagen, R.color.colorPrimary, R.color.colorPrimary);
                 } else {
-                    CommonFunctions.unSelectLayout(context, holder.background, holder.imagen);
+                    CommonFunctions.customizeViewWithImage(context, holder.background, holder.imagen, R.color.dividerColor, R.color.dividerColor);
                 }
                 break;
             case Constants.notificationCellHeaderType:

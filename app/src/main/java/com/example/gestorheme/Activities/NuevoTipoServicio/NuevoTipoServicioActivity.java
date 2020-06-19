@@ -72,7 +72,7 @@ public class NuevoTipoServicioActivity extends AppCompatActivity {
     }
 
     private void customizeButton() {
-        CommonFunctions.selectLayout(getApplicationContext(), saveButton, saveImage);
+        CommonFunctions.customizeViewWithImage(getApplicationContext(), saveButton, saveImage, R.color.colorPrimary, R.color.colorPrimary);
     }
 
     private void checkFields() {

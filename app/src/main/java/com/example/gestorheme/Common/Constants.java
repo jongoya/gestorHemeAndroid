@@ -13,6 +13,7 @@ public class Constants {
     public static String databaseEmpleadosTableName = "Empleados";
     public static String databaseTipoServiciosTableName = "TipoServicios";
     public static String databaseCierreCajaTableName = "CierreCaja";
+    public static String databaseEstiloAppTableName = "EstiloApp";
     public static String databaseClientId = "clientId";
     public static String databaseNombre = "nombre";
     public static String databaseApellidos = "apellidos";
@@ -44,6 +45,15 @@ public class Constants {
     public static String databaseTarjeta = "tarjeta";
     public static String databaseComercioId = "comercioId";
     public static String databaseFechaNotificacionPersonalizada = "fechaNotificacionPersonalizada";
+    public static String databaseEstiloId = "estiloId";
+    public static String databasePrimaryTextColor = "primaryTextColor";
+    public static String databaseSecondaryTextColor = "secondaryTextColor";
+    public static String databasePrimaryColor = "primaryColor";
+    public static String databaseSecondaryColor = "secondaryColor";
+    public static String databaseBackgroundColor = "backgroundColor";
+    public static String databaseNavigationColor = "navigationColor";
+    public static String databaseAppSmallIcon = "appSmallIcon";
+    public static String databaseAppName = "appName";
 
 
     public static final String unaSemana = "cada semana";
@@ -77,5 +87,11 @@ public class Constants {
     public static final String preferencesPasswordKey = "password";
     public static final String preferencesTokenKey = "token";
     public static final String preferencesComercioIdKey = "comercioId";
+    public static final String preferencesFondoLoginKey = "fondoLogin";
+    public static final String preferencesPrimaryColorKey = "primaryColor";
+    public static final String preferencesPrimaryTextColorKey = "primaryTextColor";
+    public static final String preferencesSecondaryTextColorKey = "secondaryTextColor";
+    public static final String preferencesIconoAppKey = "iconoApp";
+    public static final String preferencesNombreAppKey = "nombreApp";
     public static final int logoutResponseValue = 420;
 }

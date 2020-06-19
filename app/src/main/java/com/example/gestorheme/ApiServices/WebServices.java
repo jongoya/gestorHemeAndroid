@@ -3,6 +3,7 @@ package com.example.gestorheme.ApiServices;
 import com.example.gestorheme.Models.CierreCaja.CierreCajaModel;
 import com.example.gestorheme.Models.Client.ClientModel;
 import com.example.gestorheme.Models.Empleados.EmpleadoModel;
+import com.example.gestorheme.Models.EstiloPublico.EstiloPublicoModel;
 import com.example.gestorheme.Models.Login.LoginModel;
 import com.example.gestorheme.Models.LoginMasDispositivos.LoginMasDispositivosModel;
 import com.example.gestorheme.Models.Notification.NotificationModel;
@@ -109,4 +110,8 @@ public interface WebServices {
     @Headers("Content-Type: application/json")
     @POST("login_swap_devices")
     Call<LoginMasDispositivosModel> swapDevicesAndLogin(@Body LoginMasDispositivosModel login);
+
+    @GET("get_estilo_publico/{bundleId}")
+    Call<EstiloPublicoModel> getEstiloPublico(@Path("bundleId") String bundleId);
 }
+

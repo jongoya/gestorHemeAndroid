@@ -1,6 +1,7 @@
 package com.example.gestorheme.Models.LoginMasDispositivos;
 
 import com.example.gestorheme.Models.Dispositivo.DispositivoModel;
+import com.example.gestorheme.Models.EstiloApp.EstiloAppModel;
 import com.example.gestorheme.Models.Login.LoginModel;
 
 import java.io.Serializable;
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 public class LoginMasDispositivosModel implements Serializable {
     private LoginModel login;
     private ArrayList<DispositivoModel> dispositivos;
+    private EstiloAppModel estiloPrivado;
 
     public LoginMasDispositivosModel(LoginModel login, ArrayList<DispositivoModel> dispositivos) {
         this.login = login;
@@ -29,5 +31,13 @@ public class LoginMasDispositivosModel implements Serializable {
 
     public void setDispositivos(ArrayList<DispositivoModel> dispositivos) {
         this.dispositivos = dispositivos;
+    }
+
+    public EstiloAppModel getEstiloPrivado() {
+        return estiloPrivado;
+    }
+
+    public void setEstiloPrivado(EstiloAppModel estiloPrivado) {
+        this.estiloPrivado = estiloPrivado;
     }
 }

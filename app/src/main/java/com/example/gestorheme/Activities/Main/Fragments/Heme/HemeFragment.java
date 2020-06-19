@@ -60,7 +60,7 @@ public class HemeFragment extends Fragment {
     }
 
     private void customizeButton() {
-        CommonFunctions.selectLayout(getContext(), settingButton, settingsImage);
+        CommonFunctions.customizeViewWithImage(getContext(), settingButton, settingsImage, R.color.colorPrimary, R.color.colorPrimary);
     }
 
     private void setList() {
@@ -95,8 +95,8 @@ public class HemeFragment extends Fragment {
         EditText passwordInput = dialogView.findViewById(R.id.passwordInput);
         RelativeLayout aceptarButton = dialogView.findViewById(R.id.aceptarButton);
         RelativeLayout cancelarButton = dialogView.findViewById(R.id.cancelarButton);
-        CommonFunctions.selectLayout(getContext(), aceptarButton, null);
-        CommonFunctions.selectLayout(getContext(), cancelarButton, null);
+        CommonFunctions.customizeView(getContext(), aceptarButton, R.color.colorPrimary);
+        CommonFunctions.customizeView(getContext(), cancelarButton, R.color.colorPrimary);
 
         aceptarButton.setOnClickListener(new View.OnClickListener() {
             @Override
