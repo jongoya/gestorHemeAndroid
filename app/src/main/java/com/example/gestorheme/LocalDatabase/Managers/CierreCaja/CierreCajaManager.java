@@ -9,6 +9,7 @@ import com.example.gestorheme.Common.DateFunctions;
 import com.example.gestorheme.Models.CierreCaja.CierreCajaModel;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 public class CierreCajaManager {
@@ -43,8 +44,11 @@ public class CierreCajaManager {
     }
 
     public boolean cierreCajaRealizadoEnFecha(Date fecha) {
-        long begginingOfDay = DateFunctions.getBeginingOfDayFromDate(fecha).getTime();
-        long endOfDay = DateFunctions.getEndOfDayFromDate(fecha).getTime();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(DateFunctions.getBeginingOfDayFromDate(fecha));
+        long begginingOfDay = calendar.getTimeInMillis() / 1000;
+        calendar.setTime(DateFunctions.getEndOfDayFromDate(fecha));
+        long endOfDay = calendar.getTimeInMillis() / 1000;
 
         String Query = "Select * from " + Constants.databaseCierreCajaTableName + " where " + Constants.databaseFecha + " > " + begginingOfDay + " AND " + Constants.databaseFecha + " <= " + endOfDay;
         Cursor cursor = readableDatabase.rawQuery(Query, null);

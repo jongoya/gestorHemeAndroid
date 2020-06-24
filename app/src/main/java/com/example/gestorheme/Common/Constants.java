@@ -54,7 +54,7 @@ public class Constants {
     public static String databaseNavigationColor = "navigationColor";
     public static String databaseAppSmallIcon = "appSmallIcon";
     public static String databaseAppName = "appName";
-
+    public static String databaseIsEfectivo = "isEfectivo";
 
     public static final String unaSemana = "cada semana";
     public static final String dosSemanas = "cada 2 semanas";

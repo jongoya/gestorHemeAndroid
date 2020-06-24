@@ -2,7 +2,6 @@ package com.example.gestorheme.Models.Service;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class ServiceModel implements Serializable {
     private long clientId = 0;
@@ -10,8 +9,9 @@ public class ServiceModel implements Serializable {
     private long fecha = 0;
     private long empleadoId = 0;
     private ArrayList<Long> servicios = new ArrayList<>();
-    private String observaciones = "";
+    private String observacion = "";
     private double precio = 0.0;
+    private boolean efectivo;
     private long comercioId = 0;
     private String unique_deviceId;
 
@@ -56,11 +56,11 @@ public class ServiceModel implements Serializable {
     }
 
     public String getObservaciones() {
-        return observaciones;
+        return observacion;
     }
 
     public void setObservaciones(String observaciones) {
-        this.observaciones = observaciones;
+        this.observacion = observaciones;
     }
 
     public double getPrecio() {
@@ -85,5 +85,13 @@ public class ServiceModel implements Serializable {
 
     public void setUnique_deviceId(String unique_deviceId) {
         this.unique_deviceId = unique_deviceId;
+    }
+
+    public boolean isEfectivo() {
+        return efectivo;
+    }
+
+    public void setEfectivo(boolean efectivo) {
+        this.efectivo = efectivo;
     }
 }

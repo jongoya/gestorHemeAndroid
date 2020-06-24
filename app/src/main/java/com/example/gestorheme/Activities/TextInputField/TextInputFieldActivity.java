@@ -10,11 +10,14 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.gestorheme.Common.AppStyle;
+import com.example.gestorheme.Common.CommonFunctions;
 import com.example.gestorheme.R;
 
 import java.util.List;
@@ -22,15 +25,18 @@ import java.util.List;
 public class TextInputFieldActivity extends AppCompatActivity {
     private TextView textInput;
     private ImageView microImage;
+    private RelativeLayout microphoneButton;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.text_input_field_layout);
+        AppStyle.setStatusBarColor(this);
         getFields();
         setOnClickListeners();
         getInputIntent();
         customizeEditText();
+        customizeMicrophoneButton();
     }
 
     @Override
@@ -44,11 +50,16 @@ public class TextInputFieldActivity extends AppCompatActivity {
     private void getFields() {
         textInput = findViewById(R.id.text_input);
         microImage = findViewById(R.id.micro_image);
+        microphoneButton = findViewById(R.id.microphone_button);
     }
 
     private void getInputIntent() {
         textInput.setText(getIntent().getStringExtra("contenido"));
         textInput.setInputType(getIntent().getIntExtra("keyboard", InputType.TYPE_CLASS_TEXT));
+    }
+
+    private void customizeMicrophoneButton() {
+        CommonFunctions.customizeViewWithImage(getApplicationContext(), microphoneButton, microImage, AppStyle.getPrimaryColor(), AppStyle.getPrimaryColor());
     }
 
     private void customizeEditText() {
@@ -64,6 +75,8 @@ public class TextInputFieldActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+        textInput.setTextColor(AppStyle.getPrimaryTextColor());
     }
 
     private void setOnClickListeners() {

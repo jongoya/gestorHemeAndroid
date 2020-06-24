@@ -13,6 +13,7 @@ import com.example.gestorheme.Models.Service.ServiceModel;
 import com.example.gestorheme.R;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 public class CerrarCajaButton extends RelativeLayout {
@@ -36,7 +37,9 @@ public class CerrarCajaButton extends RelativeLayout {
 
                 if (preciosIncluidos) {
                     Intent intent = new Intent(context, CierreCajaActivity.class);
-                    intent.putExtra("fecha", fecha.getTime());
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(fecha);
+                    intent.putExtra("fecha", calendar.getTimeInMillis() / 1000);
                     context.startActivity(intent);
                 } else {
                     CommonFunctions.showGenericAlertMessage(activity,"Debe inlcuir el precio a todos los servicios del día");

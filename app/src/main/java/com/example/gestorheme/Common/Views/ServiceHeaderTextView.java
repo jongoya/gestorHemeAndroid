@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.widget.LinearLayout;
 
+import com.example.gestorheme.Common.AppStyle;
 import com.example.gestorheme.Common.CommonFunctions;
 
 public class ServiceHeaderTextView extends androidx.appcompat.widget.AppCompatTextView {
@@ -14,6 +15,6 @@ public class ServiceHeaderTextView extends androidx.appcompat.widget.AppCompatTe
         lp.setMargins(CommonFunctions.convertToPx(10, context), CommonFunctions.convertToPx(15, context), CommonFunctions.convertToPx(10, context), CommonFunctions.convertToPx(15, context));
         setLayoutParams(lp);
         setText(headerTitle);
-        setTextColor(Color.BLACK);
+        setTextColor(AppStyle.getPrimaryTextColor());
     }
 }

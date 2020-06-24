@@ -32,6 +32,7 @@ import com.example.gestorheme.R;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 
 public class NotificacionesFragment extends Fragment implements NotificationsRefreshInterface {
@@ -229,7 +230,9 @@ public class NotificacionesFragment extends Fragment implements NotificationsRef
         ArrayList<Long> fechasInicioDelDiaAgrupadas = new ArrayList<>();
         ArrayList<NotificationDayModel> notificacionesAgrupadas = new ArrayList<>();
         for (int i = 0; i < notificaciones.size(); i++) {
-            long beginingOfDay = DateFunctions.getBeginingOfDayFromDate(new Date(notificaciones.get(i).getFecha())).getTime();
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(new Date(notificaciones.get(i).getFecha() * 1000));
+            long beginingOfDay = calendar.getTimeInMillis() / 1000;
             if (!fechasInicioDelDiaAgrupadas.contains(beginingOfDay)) {
                 fechasInicioDelDiaAgrupadas.add(beginingOfDay);
                 notificacionesAgrupadas.add(new NotificationDayModel(notificaciones.get(i).getFecha(), new ArrayList<>(), Constants.notificationCellRowType, ""));
@@ -237,8 +240,11 @@ public class NotificacionesFragment extends Fragment implements NotificationsRef
         }
 
         for (int i = 0; i < notificacionesAgrupadas.size(); i++) {
-            long beginingOfDay = DateFunctions.getBeginingOfDayFromDate(new Date(notificacionesAgrupadas.get(i).getFecha())).getTime();
-            long endOfDay = DateFunctions.getEndOfDayFromDate(new Date(notificacionesAgrupadas.get(i).getFecha())).getTime();
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(DateFunctions.getBeginingOfDayFromDate(new Date(notificacionesAgrupadas.get(i).getFecha() * 1000)));
+            long beginingOfDay = calendar.getTimeInMillis() / 1000;
+            calendar.setTime(DateFunctions.getEndOfDayFromDate(new Date(notificacionesAgrupadas.get(i).getFecha() * 1000)));
+            long endOfDay = calendar.getTimeInMillis() / 1000;
             for (int j = 0; j < notificaciones.size(); j++) {
                 NotificationModel notificacion = notificaciones.get(j);
                 if (notificacion.getFecha() > beginingOfDay && notificacion.getFecha() < endOfDay) {
@@ -265,7 +271,9 @@ public class NotificacionesFragment extends Fragment implements NotificationsRef
         ArrayList<NotificationDayModel> notificacionesFinales = new ArrayList<>();
         ArrayList<NotificationDayModel> notificacionesNuevas = new ArrayList<>();
         ArrayList<NotificationDayModel> notificacionesAntiguas = new ArrayList<>();
-        long todayBeginingOfDay = DateFunctions.getBeginingOfDayFromDate(new Date()).getTime();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(DateFunctions.getBeginingOfDayFromDate(new Date()));
+        long todayBeginingOfDay = calendar.getTimeInMillis() / 1000;
         for (int i = 0; i < notificacionesAgrupadas.size(); i++) {
             if (notificacionesAgrupadas.get(i).getFecha() < todayBeginingOfDay) {
                 notificacionesAntiguas.add(notificacionesAgrupadas.get(i));

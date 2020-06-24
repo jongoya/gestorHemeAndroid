@@ -23,6 +23,7 @@ public class SplashActivity extends AppCompatActivity {
         checkTokenInSharedPreferences();
         if (Preferencias.checkComercioIdInSharedPreferences(getApplicationContext())) {
             Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+            intent.putExtra("login", false);
             startActivity(intent);
             finish();
         } else {

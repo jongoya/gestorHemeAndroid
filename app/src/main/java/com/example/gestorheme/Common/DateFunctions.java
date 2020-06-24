@@ -9,20 +9,23 @@ public class DateFunctions {
 
     public static String convertTimestampToBirthdayString(long timestamp) {
         SimpleDateFormat sf = new SimpleDateFormat("dd/MMMM/yyyy", Locale.getDefault());
-        Date date = new Date(timestamp);
-        return  sf.format(date);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(timestamp * 1000);
+        return sf.format(calendar.getTime());
     }
 
     public static String convertTimestampToServiceDateString(long timestamp) {
         SimpleDateFormat sf = new SimpleDateFormat("dd/MMMM/yyyy HH:mm", Locale.getDefault());
-        Date date = new Date(timestamp);
-        return  sf.format(date);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(timestamp * 1000);
+        return sf.format(calendar.getTime());
     }
 
     public static String getHoursAndMinutesFromDate(long timestamp) {
         SimpleDateFormat sf = new SimpleDateFormat("HH:mm", Locale.getDefault());
-        Date date = new Date(timestamp);
-        return  sf.format(date);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(timestamp * 1000);
+        return sf.format(calendar.getTime());
     }
 
     public static Date getBeginingOfWorkingDayFromDate(Date date) {

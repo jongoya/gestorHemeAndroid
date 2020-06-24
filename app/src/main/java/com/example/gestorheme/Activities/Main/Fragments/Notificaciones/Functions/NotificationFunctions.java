@@ -68,7 +68,7 @@ public class NotificationFunctions {
 
         for (int i = 0; i < clients.size(); i++) {
             ClientModel cliente = clients.get(i);
-            calendar.setTime(new Date(cliente.getFecha()));
+            calendar.setTimeInMillis(cliente.getFecha() * 1000);
             int clientDay = calendar.get(Calendar.DAY_OF_MONTH);
             int clientMonth = calendar.get(Calendar.MONTH);
             if (clientDay == todayDay && clientMonth == todayMonth) {
@@ -82,8 +82,11 @@ public class NotificationFunctions {
     private static ArrayList<NotificationModel> getTodayNotifications() {
         ArrayList<NotificationModel> todayNotifications = new ArrayList<>();
         ArrayList<NotificationModel> allNotifications = Constants.databaseManager.notificationsManager.getNotificationsForType(Constants.notificationCumpleañosType);
-        long begginingOfDay = DateFunctions.getBeginingOfDayFromDate(new Date()).getTime();
-        long endOfDay = DateFunctions.getEndOfDayFromDate(new Date()).getTime();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(DateFunctions.getBeginingOfDayFromDate(new Date()));
+        long begginingOfDay = calendar.getTimeInMillis() / 1000;
+        calendar.setTime(DateFunctions.getEndOfDayFromDate(new Date()));
+        long endOfDay = calendar.getTimeInMillis() / 1000;
         for (int i = 0; i < allNotifications.size(); i++) {
             NotificationModel notification = allNotifications.get(i);
             if (notification.getFecha() > begginingOfDay && notification.getFecha() < endOfDay) {
@@ -97,7 +100,7 @@ public class NotificationFunctions {
     private static NotificationModel createBirthdayNotification(ClientModel cliente, Context context) {
         NotificationModel notification = new NotificationModel();
         notification.setComercioId(Preferencias.getComercioIdFromSharedPreferences(context));
-        notification.setFecha(new Date().getTime());
+        notification.setFecha(Calendar.getInstance().getTimeInMillis() / 1000);
         notification.setClientId(cliente.getClientId());
         notification.setLeido(false);
         notification.setType(Constants.notificationCumpleañosType);
@@ -126,7 +129,7 @@ public class NotificationFunctions {
         if (clientesConCadenciaSuperada.size() > 0) {
             for (int i = 0; i < clientesConCadenciaSuperada.size(); i++) {
                 NotificationModel notification = new NotificationModel();
-                notification.setFecha(new Date().getTime());
+                notification.setFecha(Calendar.getInstance().getTimeInMillis() / 1000);
                 notification.setComercioId(Preferencias.getComercioIdFromSharedPreferences(contexto));
                 notification.setClientId(clientesConCadenciaSuperada.get(i).getClientId());
                 notification.setLeido(false);
@@ -183,7 +186,9 @@ public class NotificationFunctions {
         if (!cierreCajaExiste && serviciosExist) {
             NotificationModel notification = new NotificationModel();
             notification.setComercioId(Preferencias.getComercioIdFromSharedPreferences(contexto));
-            notification.setFecha(yesterday.getTime());
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(yesterday);
+            notification.setFecha(calendar.getTimeInMillis() / 1000);
             notification.setLeido(false);
             notification.setType(Constants.notificationcajaType);
             cierreCajas.add(notification);

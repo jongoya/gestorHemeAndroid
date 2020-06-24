@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.example.gestorheme.Activities.Main.Fragments.ListaClientes.Models.ListaClienteCellModel;
+import com.example.gestorheme.Common.AppStyle;
 import com.example.gestorheme.Common.CommonFunctions;
 import com.example.gestorheme.R;
 import com.makeramen.roundedimageview.RoundedImageView;
@@ -71,16 +72,22 @@ public class ClientListAdapter extends BaseAdapter {
                 if (clientes.get(i).getCliente().getImagen().length() == 0) {
                     holder.imagen.setImageResource(R.drawable.user_image);
                     holder.imagen.setCornerRadius(0);
+                    holder.imagen.setColorFilter(AppStyle.getPrimaryTextColor());
                 } else {
                     holder.imagen.setImageBitmap(CommonFunctions.convertBase64StringToBitmap(clientes.get(i).getCliente().getImagen()));
                     holder.imagen.setCornerRadius(CommonFunctions.convertToPx(75, context));
                 }
+                holder.nombre.setTextColor(AppStyle.getPrimaryTextColor());
+                holder.telefono.setTextColor(AppStyle.getSecondaryTextColor());
+
                 break;
             case TYPE_HEADER:
                 view = mInflater.inflate(R.layout.clientes_header_layout, null);
+                view.setBackgroundColor(AppStyle.getBackgroundColor());
                 view.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, CommonFunctions.convertToPx(40, context)));
                 holder.letra = view.findViewById(R.id.client_letter);
                 holder.letra.setText(clientes.get(i).getLetra());
+                holder.letra.setTextColor(AppStyle.getPrimaryTextColor());
                 break;
         }
 

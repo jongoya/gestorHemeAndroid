@@ -79,6 +79,7 @@
                         app:srcCompat="@drawable/right_arrow_image" />
 
                     <RelativeLayout
+                        android:id="@+id/nombreDivider"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_alignParentBottom="true"
@@ -125,6 +126,7 @@
                         app:srcCompat="@drawable/right_arrow_image" />
 
                     <RelativeLayout
+                        android:id="@+id/apellidosDivider"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_alignParentBottom="true"
@@ -171,6 +173,7 @@
                         app:srcCompat="@drawable/right_arrow_image" />
 
                     <RelativeLayout
+                        android:id="@+id/fechaDivider"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_alignParentBottom="true"
@@ -217,6 +220,7 @@
                         app:srcCompat="@drawable/right_arrow_image" />
 
                     <RelativeLayout
+                        android:id="@+id/telefonoDivider"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_alignParentBottom="true"
@@ -263,6 +267,7 @@
                         app:srcCompat="@drawable/right_arrow_image" />
 
                     <RelativeLayout
+                        android:id="@+id/emailDivider"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_alignParentBottom="true"
@@ -309,6 +314,7 @@
                         app:srcCompat="@drawable/right_arrow_image" />
 
                     <RelativeLayout
+                        android:id="@+id/direccionDivider"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_alignParentBottom="true"
@@ -395,7 +401,7 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/saveImage"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_centerInParent="true"
@@ -416,7 +422,7 @@
         app:layout_constraintEnd_toStartOf="@+id/save_button">
 
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/phoneImage"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_centerInParent="true"

@@ -212,6 +212,7 @@ public class LoginActivity extends AppCompatActivity {
         Preferencias.saveComercioIdInSharedPreferences(getApplicationContext(), model.getLogin().getComercioId());
         Constants.databaseManager.estiloAppManager.addEstiloAppToDatabase(model.getEstiloPrivado());
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        intent.putExtra("login", true);
         startActivity(intent);
         finish();
     }

@@ -1,22 +1,27 @@
 package com.example.gestorheme.Activities.ServiceDetail;
 
-import android.app.Notification;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-
 import com.example.gestorheme.Activities.ClientListSelector.ClientListSelectorActivity;
 import com.example.gestorheme.Activities.DatePicker.DatePickerActivity;
 import com.example.gestorheme.Activities.ItemSelector.ItemSelectorActivity;
 import com.example.gestorheme.Activities.Main.Fragments.ListaClientes.Models.ListaClienteCellModel;
 import com.example.gestorheme.Activities.TextInputField.TextInputFieldActivity;
+import com.example.gestorheme.Common.AppStyle;
 import com.example.gestorheme.Common.CommonFunctions;
 import com.example.gestorheme.Common.Constants;
 import com.example.gestorheme.Common.DateFunctions;
@@ -27,8 +32,6 @@ import com.example.gestorheme.Models.Service.ServiceModel;
 import com.example.gestorheme.Models.TipoServicio.TipoServicioModel;
 import com.example.gestorheme.R;
 import java.util.ArrayList;
-import java.util.Date;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -49,6 +52,27 @@ public class ServiceDetailActivity extends AppCompatActivity {
     private EditText observacionesLabel;
     private ConstraintLayout rootLayout;
     private RelativeLayout loadingLayout;
+    private Switch efectivoSwitch;
+    private TextView nombreField;
+    private TextView fechaField;
+    private TextView profesionalField;
+    private TextView serviciosField;
+    private TextView precioField;
+    private TextView efectivoField;
+    private TextView titulo;
+    private ImageView nombreArrow;
+    private ImageView fechaArrow;
+    private ImageView profesionalArrow;
+    private ImageView serviciosArrow;
+    private ImageView precioArrow;
+    private RelativeLayout nombreDivider;
+    private RelativeLayout fechaDivider;
+    private RelativeLayout profesionalDivider;
+    private RelativeLayout servicioDivider;
+    private RelativeLayout precioDivider;
+    private LinearLayout background;
+    private RelativeLayout saveButton;
+    private ImageView saveImage;
 
     private ServiceModel servicio;
     private ClientModel cliente;
@@ -59,7 +83,15 @@ public class ServiceDetailActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.service_detail_activity);
+        AppStyle.setStatusBarColor(this);
         getFields();
+        customizeLabels();
+        customizeFields();
+        customizeArrows();
+        customizeDividers();
+        customizeSwitch();
+        customizeBackground();
+        customizeButtons();
         getServiceIntent();
         setOnClickListeners();
     }
@@ -94,6 +126,27 @@ public class ServiceDetailActivity extends AppCompatActivity {
         precioLabel = findViewById(R.id.precioLabel);
         observacionesLabel = findViewById(R.id.observacionesLabel);
         rootLayout = findViewById(R.id.root);
+        efectivoSwitch = findViewById(R.id.efectivoSwitch);
+        nombreField = findViewById(R.id.nombreField);
+        fechaField = findViewById(R.id.fechaField);
+        profesionalField = findViewById(R.id.profesionalField);
+        serviciosField = findViewById(R.id.serviciosField);
+        precioField = findViewById(R.id.precioField);
+        efectivoField = findViewById(R.id.efectivoField);
+        titulo = findViewById(R.id.titulo);
+        nombreArrow = findViewById(R.id.nombreArrow);
+        fechaArrow = findViewById(R.id.fechaArrow);
+        profesionalArrow = findViewById(R.id.profesionalArrow);
+        serviciosArrow = findViewById(R.id.serviciosArrow);
+        precioArrow = findViewById(R.id.precioArrow);
+        nombreDivider = findViewById(R.id.nombreDivider);
+        fechaDivider = findViewById(R.id.fechaDivider);
+        profesionalDivider = findViewById(R.id.profesionalDivider);
+        servicioDivider = findViewById(R.id.serviciosDivider);
+        precioDivider = findViewById(R.id.precioDivider);
+        background = findViewById(R.id.background);
+        saveButton = findViewById(R.id.saveButton);
+        saveImage = findViewById(R.id.saveImage);
     }
 
     private void setOnClickListeners() {
@@ -161,6 +214,64 @@ public class ServiceDetailActivity extends AppCompatActivity {
                 checkFields();
             }
         });
+
+        efectivoSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                servicio.setEfectivo(b);
+            }
+        });
+    }
+
+    private void customizeLabels() {
+        nombreLabel.setTextColor(AppStyle.getSecondaryTextColor());
+        fechaLabel.setTextColor(AppStyle.getSecondaryTextColor());
+        profesionalLabel.setTextColor(AppStyle.getSecondaryTextColor());
+        serviciosLabel.setTextColor(AppStyle.getSecondaryTextColor());
+        precioLabel.setTextColor(AppStyle.getSecondaryTextColor());
+    }
+
+    private void customizeFields() {
+        nombreField.setTextColor(AppStyle.getPrimaryTextColor());
+        fechaField.setTextColor(AppStyle.getPrimaryTextColor());
+        profesionalField.setTextColor(AppStyle.getPrimaryTextColor());
+        serviciosField.setTextColor(AppStyle.getPrimaryTextColor());
+        precioField.setTextColor(AppStyle.getPrimaryTextColor());
+        efectivoField.setTextColor(AppStyle.getPrimaryTextColor());
+        titulo.setTextColor(AppStyle.getPrimaryTextColor());
+    }
+
+    private void customizeArrows() {
+        nombreArrow.setColorFilter(AppStyle.getSecondaryTextColor());
+        fechaArrow.setColorFilter(AppStyle.getSecondaryTextColor());
+        profesionalArrow.setColorFilter(AppStyle.getSecondaryTextColor());
+        serviciosArrow.setColorFilter(AppStyle.getSecondaryTextColor());
+        precioArrow.setColorFilter(AppStyle.getSecondaryTextColor());
+    }
+
+    private void customizeDividers() {
+        nombreDivider.setBackgroundColor(AppStyle.getSecondaryColor());
+        fechaDivider.setBackgroundColor(AppStyle.getSecondaryColor());
+        profesionalDivider.setBackgroundColor(AppStyle.getSecondaryColor());
+        servicioDivider.setBackgroundColor(AppStyle.getSecondaryColor());
+        precioDivider.setBackgroundColor(AppStyle.getSecondaryColor());
+    }
+
+    private void customizeSwitch() {
+        ColorStateList colorStates = new ColorStateList(
+                new int[][]{new int[]{android.R.attr.state_checked}, new int[]{}},
+                new int[]{AppStyle.getPrimaryColor(), AppStyle.getSecondaryColor()}
+        );
+        efectivoSwitch.setThumbTintList(colorStates);
+        efectivoSwitch.setTrackTintList(colorStates);
+    }
+
+    private void customizeBackground() {
+        background.setBackgroundColor(AppStyle.getBackgroundColor());
+    }
+
+    private void customizeButtons() {
+        CommonFunctions.customizeViewWithImage(getApplicationContext(), saveButton, saveImage, AppStyle.getPrimaryColor(), AppStyle.getPrimaryColor());
     }
 
     private void setServiceFields() {
@@ -171,6 +282,7 @@ public class ServiceDetailActivity extends AppCompatActivity {
         serviciosLabel.setText(CommonFunctions.getServiciosForServicio(servicio.getServicios()));
         precioLabel.setText(Double.toString(servicio.getPrecio()) + " €");
         observacionesLabel.setText(servicio.getObservaciones().length() > 0 ? servicio.getObservaciones() : "Añade una observación");
+        efectivoSwitch.setChecked(servicio.isEfectivo());
     }
 
     private String getServiciosString(ArrayList<TipoServicioModel> servicios) {
@@ -256,6 +368,9 @@ public class ServiceDetailActivity extends AppCompatActivity {
                 break;
             case PRECIO_FIELD_REF:
                 String texto = data.getStringExtra("TEXTO").replaceAll("[^\\d.]", "");
+                if (texto.length() == 0) {
+                    texto = "0.0";
+                }
                 servicio.setPrecio(Double.valueOf(texto));
                 precioLabel.setText(texto + " €");
                 break;

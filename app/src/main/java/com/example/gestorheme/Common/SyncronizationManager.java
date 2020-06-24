@@ -230,7 +230,7 @@ public class SyncronizationManager {
         call.enqueue(new Callback<ArrayList<NotificationModel>>() {
             @Override
             public void onResponse(Call<ArrayList<NotificationModel>> call, Response<ArrayList<NotificationModel>> response) {
-                if (response.code() == 200 && response.body().size() > 0) {
+                if (response.code() == 200) {
                     for (int i = 0; i < response.body().size(); i++) {
                         NotificationModel notification = response.body().get(i);
                         if (Constants.databaseManager.notificationsManager.getNotificationForId(notification.getNotificationId()) != null) {
@@ -270,17 +270,25 @@ public class SyncronizationManager {
     }
 
     private static void deleteLocalNotificationsIfNeeded(ArrayList<NotificationModel> serverNotifications) {
-        ArrayList<NotificationModel> localnotifications = Constants.databaseManager.notificationsManager.getNotificationsFromDatabase();
-        for (int i = 0; i < localnotifications.size(); i++) {
+        ArrayList<NotificationModel> localNotifications = Constants.databaseManager.notificationsManager.getNotificationsFromDatabase();
+        if (serverNotifications.size() == 0) {
+            for (int i = 0; i < localNotifications.size(); i++) {
+                Constants.databaseManager.notificationsManager.deleteNotificationFromDatabase(localNotifications.get(i).getNotificationId());
+            }
+
+            return;
+        }
+
+        for (int i = 0; i < localNotifications.size(); i++) {
             boolean estaEnServer = false;
             for (int j = 0; j < serverNotifications.size(); j++) {
-                if (serverNotifications.get(j).getNotificationId() == localnotifications.get(i).getNotificationId()) {
+                if (serverNotifications.get(j).getNotificationId() == localNotifications.get(i).getNotificationId()) {
                     estaEnServer = true;
                 }
             }
 
             if (!estaEnServer) {
-                Constants.databaseManager.notificationsManager.deleteNotificationFromDatabase(localnotifications.get(i).getNotificationId());
+                Constants.databaseManager.notificationsManager.deleteNotificationFromDatabase(localNotifications.get(i).getNotificationId());
             }
         }
     }
@@ -290,10 +298,9 @@ public class SyncronizationManager {
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
         cal.add(Calendar.DATE, -7);
-        Date nuevaFecha = cal.getTime();
         ArrayList<NotificationModel> notificaciones = Constants.databaseManager.notificationsManager.getNotificationsFromDatabase();
         for (int i = 0; i < notificaciones.size(); i++) {
-            if (notificaciones.get(i).getFecha() < nuevaFecha.getTime()) {
+            if (notificaciones.get(i).getFecha() < cal.getTimeInMillis() / 1000) {
                 notificacionesPorEliminar.add(notificaciones.get(i));
             }
         }

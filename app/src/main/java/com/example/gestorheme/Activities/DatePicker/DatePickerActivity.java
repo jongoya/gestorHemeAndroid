@@ -8,6 +8,8 @@ import android.widget.TimePicker;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.gestorheme.Common.AppStyle;
 import com.example.gestorheme.R;
 import java.util.Calendar;
 import java.util.Date;
@@ -22,6 +24,7 @@ public class DatePickerActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.date_picker_layout);
+        AppStyle.setStatusBarColor(this);
         getFields();
         getDatePickerIntent();
     }
@@ -48,7 +51,9 @@ public class DatePickerActivity extends AppCompatActivity {
         if (timestamp == 0) {
             date = new Date();
         } else {
-            date = new Date(timestamp);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(timestamp * 1000);
+            date = calendar.getTime();
         }
 
         Calendar calendar = Calendar.getInstance();
@@ -56,9 +61,9 @@ public class DatePickerActivity extends AppCompatActivity {
         datePicker.updateDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
 
         if (showTimePicker) {
+            timePicker.setIs24HourView(true);
             timePicker.setHour(calendar.get(Calendar.HOUR));
             timePicker.setMinute(calendar.get(Calendar.MINUTE));
-            timePicker.setIs24HourView(true);
         }
     }
 
@@ -71,6 +76,6 @@ public class DatePickerActivity extends AppCompatActivity {
             cal.set(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth(), timePicker.getHour(), timePicker.getMinute());
         }
 
-        return cal.getTime().getTime();
+        return cal.getTimeInMillis() / 1000;
     }
 }

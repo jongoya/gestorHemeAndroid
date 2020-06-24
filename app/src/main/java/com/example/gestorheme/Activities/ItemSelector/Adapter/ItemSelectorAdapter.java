@@ -5,8 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.gestorheme.Common.AppStyle;
 import com.example.gestorheme.Models.Cadencia.CadenciaModel;
 import com.example.gestorheme.Models.Empleados.EmpleadoModel;
 import com.example.gestorheme.Models.TipoServicio.TipoServicioModel;
@@ -41,8 +43,12 @@ public class ItemSelectorAdapter extends BaseAdapter {
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         view = (LayoutInflater.from(context)).inflate(R.layout.item_selector_cell, null);
-        TextView country = view.findViewById(R.id.text);
-        country.setText(getTextForItem(elements.get(i)));
+        TextView itemText = view.findViewById(R.id.text);
+        ImageView icon = view.findViewById(R.id.icon);
+        itemText.setText(getTextForItem(elements.get(i)));
+
+        itemText.setTextColor(AppStyle.getPrimaryTextColor());
+        icon.setColorFilter(AppStyle.getPrimaryTextColor());
         return view;
     }
 

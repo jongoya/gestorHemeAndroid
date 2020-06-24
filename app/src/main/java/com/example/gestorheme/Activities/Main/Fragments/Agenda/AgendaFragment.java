@@ -257,10 +257,14 @@ public class AgendaFragment extends Fragment implements ServiceItemViewInterface
 
     private ArrayList<ServiceModel> getServicesForServiceView(ArrayList<ServiceModel> servicios, Date fecha) {
         ArrayList<ServiceModel> serviciosRango = new ArrayList<>();
-        long plus15Mins = DateFunctions.add15MinsToDate(fecha).getTime();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(DateFunctions.add15MinsToDate(fecha));
+        long plus15Mins = calendar.getTimeInMillis() / 1000;
+        calendar.setTime(fecha);
+        long actualTime = calendar.getTimeInMillis() / 1000;
         for (int i = 0; i < servicios.size(); i++) {
             ServiceModel servicio = servicios.get(i);
-            if (servicio.getFecha() >= fecha.getTime() && servicio.getFecha() < plus15Mins) {
+            if (servicio.getFecha() >= actualTime && servicio.getFecha() < plus15Mins) {
                 serviciosRango.add(servicio);
             }
         }

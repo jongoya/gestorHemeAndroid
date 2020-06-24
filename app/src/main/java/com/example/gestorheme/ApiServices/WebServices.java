@@ -3,6 +3,7 @@ package com.example.gestorheme.ApiServices;
 import com.example.gestorheme.Models.CierreCaja.CierreCajaModel;
 import com.example.gestorheme.Models.Client.ClientModel;
 import com.example.gestorheme.Models.Empleados.EmpleadoModel;
+import com.example.gestorheme.Models.EstiloApp.EstiloAppModel;
 import com.example.gestorheme.Models.EstiloPublico.EstiloPublicoModel;
 import com.example.gestorheme.Models.Login.LoginModel;
 import com.example.gestorheme.Models.LoginMasDispositivos.LoginMasDispositivosModel;
@@ -113,5 +114,8 @@ public interface WebServices {
 
     @GET("get_estilo_publico/{bundleId}")
     Call<EstiloPublicoModel> getEstiloPublico(@Path("bundleId") String bundleId);
+
+    @GET("get_estilo_privado/{comercioId}")
+    Call<EstiloAppModel> getEstiloPrivado(@Path("comercioId") long comercioId);
 }
 

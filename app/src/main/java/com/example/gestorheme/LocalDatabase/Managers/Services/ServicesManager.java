@@ -1,6 +1,5 @@
 package com.example.gestorheme.LocalDatabase.Managers.Services;
 
-import android.app.Service;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -10,6 +9,7 @@ import com.example.gestorheme.Common.DateFunctions;
 import com.example.gestorheme.Models.Service.ServiceModel;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 
 public class ServicesManager {
@@ -78,8 +78,11 @@ public class ServicesManager {
 
     public ArrayList<ServiceModel> getServicesForDate(Date date) {
         ArrayList<ServiceModel> arrayServicios = new ArrayList<>();
-        long beginingOfDay = DateFunctions.getBeginingOfWorkingDayFromDate(date).getTime();
-        long endOfDay = DateFunctions.getEndOfWorkingDayFromDate(date).getTime();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(DateFunctions.getBeginingOfWorkingDayFromDate(date));
+        long beginingOfDay = calendar.getTimeInMillis() / 1000;
+        calendar.setTime(DateFunctions.getEndOfWorkingDayFromDate(date));
+        long endOfDay = calendar.getTimeInMillis() / 1000;
         Cursor cursor = readableDatabase.rawQuery("SELECT * FROM " + Constants.databaseServiciosTableName + " WHERE " + Constants.databaseFecha + " >= " + beginingOfDay + " AND " + Constants.databaseFecha + " < " + endOfDay, null);
         while (cursor.moveToNext()) {
             arrayServicios.add(parseCursorToServiceModel(cursor));
@@ -115,6 +118,7 @@ public class ServicesManager {
         cv.put(Constants.databaseObservacion, servicio.getObservaciones());
         cv.put(Constants.databasePrecio, servicio.getPrecio());
         cv.put(Constants.databaseComercioId, servicio.getComercioId());
+        cv.put(Constants.databaseIsEfectivo, servicio.isEfectivo() ? 1 : 0);
 
         return  cv;
     }
@@ -130,6 +134,7 @@ public class ServicesManager {
         service.setObservaciones(cursor.getString(cursor.getColumnIndex(Constants.databaseObservacion)));
         service.setPrecio(cursor.getDouble(cursor.getColumnIndex(Constants.databasePrecio)));
         service.setComercioId(cursor.getLong(cursor.getColumnIndex(Constants.databaseComercioId)));
+        service.setEfectivo(cursor.getInt(cursor.getColumnIndex(Constants.databaseIsEfectivo)) == 1);
 
         return service;
     }

@@ -10,16 +10,19 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import com.example.gestorheme.Activities.ClientDetail.ClientDetailActivity;
 import com.example.gestorheme.Activities.Main.Fragments.ListaClientes.Adapter.ClientListAdapter;
 import com.example.gestorheme.Activities.Main.Fragments.ListaClientes.Models.ListaClienteCellModel;
 import com.example.gestorheme.Activities.Main.MainActivity;
+import com.example.gestorheme.Common.AppStyle;
 import com.example.gestorheme.Common.CommonFunctions;
 import com.example.gestorheme.Common.Constants;
 import com.example.gestorheme.Common.SyncronizationManager;
@@ -33,6 +36,10 @@ public class ClientesFragment extends Fragment {
     private ListView clientList;
     private ClientListAdapter clientListAdapter;
     public SwipeRefreshLayout refreshLayout;
+    private ImageButton cleanButton;
+    private RelativeLayout addClientButton;
+    private ImageView imageView5;
+    private RelativeLayout filterView;
 
     private static final int TYPE_CLIENT = 0;
     private static final int TYPE_HEADER = 1;
@@ -48,6 +55,7 @@ public class ClientesFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         setViews();
+        customizeLayout();
         addClickListeners();
         setClientsTextListener();
         setListProperties();
@@ -61,10 +69,34 @@ public class ClientesFragment extends Fragment {
         setClientList();
     }
 
+    public void customizeLayout() {
+        customizeButtons();
+        customizeEditText();
+        customizeFilterView();
+    }
+
     private void setViews() {
         clientFilterField = getView().findViewById(R.id.client_filter_field);
         clientList = getView().findViewById(R.id.client_list);
         refreshLayout = getView().findViewById(R.id.refreshLayout);
+        cleanButton = getView().findViewById(R.id.clean_button);
+        addClientButton = getView().findViewById(R.id.add_client_button);
+        imageView5 = getView().findViewById(R.id.imageView5);
+        filterView = getView().findViewById(R.id.filter_view);
+    }
+
+    private void customizeEditText() {
+        CommonFunctions.customizeTextField(getActivity().getApplicationContext(), clientFilterField,
+                AppStyle.getSecondaryTextColor(), AppStyle.getPrimaryTextColor(), AppStyle.getSecondaryTextColor());
+    }
+
+    private void customizeButtons() {
+        cleanButton.setColorFilter(AppStyle.getPrimaryColor());
+        CommonFunctions.customizeViewWithImage(getActivity().getApplicationContext(), addClientButton, imageView5, AppStyle.getPrimaryColor(), AppStyle.getPrimaryColor());
+    }
+
+    private void customizeFilterView() {
+        filterView.setBackgroundColor(AppStyle.getBackgroundColor());
     }
 
     private void addClickListeners() {
@@ -125,6 +157,7 @@ public class ClientesFragment extends Fragment {
     }
 
     public void setClientList() {
+        clientList.setBackgroundColor(AppStyle.getBackgroundColor());
         clientListAdapter = new ClientListAdapter(getContext());
         ArrayList<ClientModel> clientes = Constants.databaseManager.clientsManager.getClientsFromDatabase();
         if (clientFilterField.getText().length() > 0) {

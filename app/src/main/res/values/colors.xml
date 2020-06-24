@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#FF0000</color>
-    <color name="colorPrimaryDark">#8B0000</color>
-    <color name="colorAccent">#FF0000</color>
-    <color name="dividerColor">#999898</color>
+    <color name="colorPrimary">#7CFC00</color><!--#FF0000-->
+    <color name="colorPrimaryDark">#7CFC00</color><!--#8B0000-->
+    <color name="colorAccent">#7CFC00</color><!--#FF0000-->
+    <color name="dividerColor">#7CFC00</color><!--#999898-->
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
     <color name="clear">#00FFFFFF</color>
-    <color name="backgroundColor">#EDEBEB</color>
+    <color name="backgroundColor">#7CFC00</color><!--#EDEBEB-->
 </resources>

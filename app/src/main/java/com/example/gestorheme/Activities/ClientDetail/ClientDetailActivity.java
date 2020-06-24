@@ -5,7 +5,6 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -23,7 +22,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import com.example.gestorheme.Activities.ClientDetail.Fragment.DatePickerFragment;
 import com.example.gestorheme.Activities.ClientDetail.Views.ServiceView;
 import com.example.gestorheme.Activities.DatePicker.DatePickerActivity;
@@ -31,6 +29,7 @@ import com.example.gestorheme.Activities.ItemSelector.ItemSelectorActivity;
 import com.example.gestorheme.Activities.Main.Fragments.Agenda.Interfaces.ServicesRefreshInterface;
 import com.example.gestorheme.Activities.ServiceDetail.ServiceDetailActivity;
 import com.example.gestorheme.Activities.TextInputField.TextInputFieldActivity;
+import com.example.gestorheme.Common.AppStyle;
 import com.example.gestorheme.Common.CommonFunctions;
 import com.example.gestorheme.Common.Constants;
 import com.example.gestorheme.Common.DateFunctions;
@@ -73,6 +72,26 @@ public class ClientDetailActivity extends AppCompatActivity implements ServicesR
     private TextView direccionLabel;
     private TextView cadenciaLabel;
     private EditText observacionLabel;
+    private TextView nombreField;
+    private TextView apellidosField;
+    private TextView fechaField;
+    private TextView telefonoField;
+    private TextView emailField;
+    private TextView direccionField;
+    private TextView cadenciaField;
+    private ImageView nombreArrow;
+    private ImageView apellidosArrow;
+    private ImageView fechaArrow;
+    private ImageView telefonoArrow;
+    private ImageView emailArrow;
+    private ImageView direccionArrow;
+    private ImageView cadenciaArrow;
+    private RelativeLayout nombreDivider;
+    private RelativeLayout apellidosDivider;
+    private RelativeLayout fechaDivider;
+    private RelativeLayout telefonoDivider;
+    private RelativeLayout emailDivider;
+    private RelativeLayout direccionDivider;
     private RoundedImageView clientImage;
     private LinearLayout scrollContentView;
     private RelativeLayout phoneButton;
@@ -81,6 +100,9 @@ public class ClientDetailActivity extends AppCompatActivity implements ServicesR
     private ServiceAlarmButton alarmButton;
     private ImageView alarmImage;
     private SwipeRefreshLayout refreshLayout;
+    private RelativeLayout saveButton;
+    private ImageView saveImage;
+    private ImageView phoneImage;
 
     private ClientModel cliente;
     public boolean isClientDetail = false;
@@ -92,8 +114,17 @@ public class ClientDetailActivity extends AppCompatActivity implements ServicesR
         super.onCreate(savedInstanceState);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         setContentView(R.layout.client_detail_layout);
+        AppStyle.setStatusBarColor(this);
         getClientIntent();
         getFields();
+
+        customizeLabels();
+        customizeFields();
+        customizeDividers();
+        customizeArrows();
+        customizeBackground();
+        customizeClientImage();
+        customizeButtons();
     }
 
     @Override
@@ -120,6 +151,59 @@ public class ClientDetailActivity extends AppCompatActivity implements ServicesR
         } else {
             refreshLayout.setEnabled(false);
         }
+    }
+
+    private void customizeLabels() {
+        nombreLabel.setTextColor(AppStyle.getSecondaryTextColor());
+        apellidosLabel.setTextColor(AppStyle.getSecondaryTextColor());
+        fechaLabel.setTextColor(AppStyle.getSecondaryTextColor());
+        telefonoLabel.setTextColor(AppStyle.getSecondaryTextColor());
+        emailLabel.setTextColor(AppStyle.getSecondaryTextColor());
+        direccionLabel.setTextColor(AppStyle.getSecondaryTextColor());
+        cadenciaLabel.setTextColor(AppStyle.getSecondaryTextColor());
+    }
+
+    private void customizeFields() {
+        nombreField.setTextColor(AppStyle.getPrimaryTextColor());
+        apellidosField.setTextColor(AppStyle.getPrimaryTextColor());
+        fechaField.setTextColor(AppStyle.getPrimaryTextColor());
+        telefonoField.setTextColor(AppStyle.getPrimaryTextColor());
+        emailField.setTextColor(AppStyle.getPrimaryTextColor());
+        direccionField.setTextColor(AppStyle.getPrimaryTextColor());
+        cadenciaField.setTextColor(AppStyle.getPrimaryTextColor());
+        observacionLabel.setTextColor(AppStyle.getPrimaryTextColor());
+    }
+
+    private void customizeArrows() {
+        nombreArrow.setColorFilter(AppStyle.getSecondaryTextColor());
+        apellidosArrow.setColorFilter(AppStyle.getSecondaryTextColor());
+        fechaArrow.setColorFilter(AppStyle.getSecondaryTextColor());
+        telefonoArrow.setColorFilter(AppStyle.getSecondaryTextColor());
+        emailArrow.setColorFilter(AppStyle.getSecondaryTextColor());
+        direccionArrow.setColorFilter(AppStyle.getSecondaryTextColor());
+        cadenciaArrow.setColorFilter(AppStyle.getSecondaryTextColor());
+    }
+
+    private void customizeDividers() {
+        nombreDivider.setBackgroundColor(AppStyle.getSecondaryColor());
+        apellidosDivider.setBackgroundColor(AppStyle.getSecondaryColor());
+        fechaDivider.setBackgroundColor(AppStyle.getSecondaryColor());
+        telefonoDivider.setBackgroundColor(AppStyle.getSecondaryColor());
+        emailDivider.setBackgroundColor(AppStyle.getSecondaryColor());
+        direccionDivider.setBackgroundColor(AppStyle.getSecondaryColor());
+    }
+
+    private void customizeBackground() {
+        scrollContentView.setBackgroundColor(AppStyle.getBackgroundColor());
+    }
+
+    private void customizeClientImage() {
+        clientImage.setColorFilter(AppStyle.getPrimaryTextColor());
+    }
+
+    private void customizeButtons() {
+        CommonFunctions.customizeViewWithImage(getApplicationContext(), saveButton, saveImage, AppStyle.getPrimaryColor(), AppStyle.getPrimaryColor());
+        CommonFunctions.customizeViewWithImage(getApplicationContext(), phoneButton, phoneImage, AppStyle.getPrimaryColor(), AppStyle.getPrimaryColor());
     }
 
     private void getClientIntent() {
@@ -196,6 +280,29 @@ public class ClientDetailActivity extends AppCompatActivity implements ServicesR
         phoneButton = findViewById(R.id.phone_button);
         rootLayout = findViewById(R.id.root);
         refreshLayout = findViewById(R.id.refreshLayout);
+        nombreField = findViewById(R.id.nombreField);
+        apellidosField = findViewById(R.id.apellidosField);
+        fechaField = findViewById(R.id.fechaField);
+        telefonoField = findViewById(R.id.telefonoField);
+        emailField = findViewById(R.id.emailField);
+        direccionField = findViewById(R.id.direccionField);
+        cadenciaField = findViewById(R.id.cadenciaField);
+        nombreArrow = findViewById(R.id.nombreArrow);
+        apellidosArrow = findViewById(R.id.apellidosArrow);
+        fechaArrow = findViewById(R.id.fechaArrow);
+        telefonoArrow = findViewById(R.id.telefonoArrow);
+        emailArrow = findViewById(R.id.emailArrow);
+        direccionArrow = findViewById(R.id.direccionArrow);
+        cadenciaArrow = findViewById(R.id.cadenciaArrow);
+        nombreDivider = findViewById(R.id.nombreDivider);
+        apellidosDivider = findViewById(R.id.apellidosDivider);
+        fechaDivider = findViewById(R.id.fechaDivider);
+        telefonoDivider = findViewById(R.id.telefonoDivider);
+        emailDivider = findViewById(R.id.emailDivider);
+        direccionDivider = findViewById(R.id.direccionDivider);
+        saveButton = findViewById(R.id.save_button);
+        saveImage = findViewById(R.id.saveImage);
+        phoneImage = findViewById(R.id.phoneImage);
 
         if (cliente.getClientId() == 0) {
             phoneButton.setVisibility(View.INVISIBLE);
@@ -291,14 +398,14 @@ public class ClientDetailActivity extends AppCompatActivity implements ServicesR
             }
         });
 
-        findViewById(R.id.save_button).setOnClickListener(new View.OnClickListener() {
+        saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 checkFields();
             }
         });
 
-        findViewById(R.id.phone_button).setOnClickListener(new View.OnClickListener() {
+        phoneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent phoneIntent = new Intent(Intent.ACTION_CALL);
@@ -334,6 +441,7 @@ public class ClientDetailActivity extends AppCompatActivity implements ServicesR
         if (cliente.getImagen().length() == 0) {
             clientImage.setImageResource(R.drawable.add_image);
             clientImage.setCornerRadius(0);
+            clientImage.setColorFilter(AppStyle.getPrimaryTextColor());
         } else {
             clientImage.setImageBitmap(CommonFunctions.convertBase64StringToBitmap(cliente.getImagen()));
             clientImage.setCornerRadius(CommonFunctions.convertToPx(75, getApplicationContext()));
@@ -366,9 +474,9 @@ public class ClientDetailActivity extends AppCompatActivity implements ServicesR
         scrollContentView.addView(alarmButton);
 
         if (cliente.getFechaNotificacionPersonalizada() == 0) {
-            CommonFunctions.customizeViewWithImage(getApplicationContext(), alarmButton, alarmImage, R.color.dividerColor, R.color.dividerColor);
+            CommonFunctions.customizeViewWithImage(getApplicationContext(), alarmButton, alarmImage, AppStyle.getSecondaryColor(), AppStyle.getSecondaryColor());
         } else {
-            CommonFunctions.customizeViewWithImage(getApplicationContext(), alarmButton, alarmImage, R.color.colorPrimary, R.color.colorPrimary);
+            CommonFunctions.customizeViewWithImage(getApplicationContext(), alarmButton, alarmImage, AppStyle.getPrimaryColor(), AppStyle.getPrimaryColor());
         }
     }
 
@@ -543,7 +651,7 @@ public class ClientDetailActivity extends AppCompatActivity implements ServicesR
                 calendar.set(Calendar.DAY_OF_MONTH, day);
                 calendar.set(Calendar.MONTH, month);
                 calendar.set(Calendar.YEAR, year);
-                cliente.setFechaNotificacionPersonalizada(calendar.getTime().getTime());
+                cliente.setFechaNotificacionPersonalizada(calendar.getTimeInMillis() / 1000);
                 updateFechaNotificacionPersonalizada();
             }
         });
@@ -562,10 +670,10 @@ public class ClientDetailActivity extends AppCompatActivity implements ServicesR
                 if (response.code() == 200) {
                     Constants.databaseManager.clientsManager.updateFechaNotificacionPersonalizada(cliente);
                     if (cliente.getFechaNotificacionPersonalizada() == 0) {
-                        CommonFunctions.customizeViewWithImage(getApplicationContext(), alarmButton, alarmImage, R.color.dividerColor, R.color.dividerColor);
+                        CommonFunctions.customizeViewWithImage(getApplicationContext(), alarmButton, alarmImage, AppStyle.getSecondaryColor(), AppStyle.getSecondaryColor());
                         deleteNotificacionPersonalizada();
                     } else {
-                        CommonFunctions.customizeViewWithImage(getApplicationContext(), alarmButton, alarmImage, R.color.colorPrimary, R.color.colorPrimary);
+                        CommonFunctions.customizeViewWithImage(getApplicationContext(), alarmButton, alarmImage, AppStyle.getPrimaryColor(), AppStyle.getPrimaryColor());
                     }
                 }  else if (response.code() == Constants.logoutResponseValue) {
                     CommonFunctions.logout(ClientDetailActivity.this);

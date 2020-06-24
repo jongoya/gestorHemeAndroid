@@ -13,6 +13,7 @@ import com.example.gestorheme.Common.DateFunctions;
 import com.example.gestorheme.Models.Service.ServiceModel;
 import com.example.gestorheme.R;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 public class AgendaItemView extends RelativeLayout {
@@ -41,14 +42,18 @@ public class AgendaItemView extends RelativeLayout {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, ServiceDetailActivity.class);
-                intent.putExtra("fecha", date.getTime());
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(date);
+                intent.putExtra("fecha", calendar.getTimeInMillis() / 1000);
                 context.startActivity(intent);
             }
         });
     }
 
     private void setFields(Date date) {
-        hora.setText(DateFunctions.getHoursAndMinutesFromDate(date.getTime()));
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        hora.setText(DateFunctions.getHoursAndMinutesFromDate(calendar.getTimeInMillis() / 1000));
     }
 
     private void buildServiceViews(ArrayList<ServiceModel> servicios, Context contexto, ServiceItemViewInterface delegate) {

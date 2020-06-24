@@ -1,6 +1,5 @@
 package com.example.gestorheme.Activities.CierreCaja;
 
-import android.app.Service;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
@@ -11,7 +10,6 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-
 import com.example.gestorheme.Activities.TextInputField.TextInputFieldActivity;
 import com.example.gestorheme.Common.CommonFunctions;
 import com.example.gestorheme.Common.Constants;
@@ -19,9 +17,10 @@ import com.example.gestorheme.Common.Preferencias;
 import com.example.gestorheme.Models.CierreCaja.CierreCajaModel;
 import com.example.gestorheme.Models.Notification.NotificationModel;
 import com.example.gestorheme.Models.Service.ServiceModel;
+import com.example.gestorheme.Models.TipoServicio.TipoServicioModel;
 import com.example.gestorheme.R;
-
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import retrofit2.Call;
@@ -77,12 +76,19 @@ public class CierreCajaActivity extends AppCompatActivity {
     }
 
     private void setFields() {
-        ArrayList<ServiceModel> servicios = Constants.databaseManager.servicesManager.getServicesForDate(new Date(fecha));
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(fecha * 1000);
+        ArrayList<ServiceModel> servicios = Constants.databaseManager.servicesManager.getServicesForDate(calendar.getTime());
         cierreCaja.setNumeroServicios(servicios.size());
         numeroServiciosLabel.setText(String.valueOf(servicios.size()));
-        double totalCaja = getTotalCaja(servicios);
-        cierreCaja.setTotalCaja(totalCaja);
-        totalCajaLabel.setText(String.valueOf(totalCaja) + " €");
+        cierreCaja.setTotalCaja(getTotalCaja(servicios));
+        totalCajaLabel.setText(String.valueOf(cierreCaja.getTotalCaja()) + " €");
+        cierreCaja.setTotalProductos(getTotalProductos(servicios));
+        totalProductosLabel.setText(String.valueOf(cierreCaja.getTotalProductos()) + " €");
+        cierreCaja.setEfectivo(getTotalEfectivo(servicios));
+        efectivoLabel.setText(String.valueOf(cierreCaja.getEfectivo()) + " €");
+        cierreCaja.setTarjeta(getTotalTarjeta(servicios));
+        tarjetaLabel.setText(String.valueOf(cierreCaja.getTarjeta()) + " €");
     }
 
     private double getTotalCaja(ArrayList<ServiceModel> servicios) {
@@ -92,6 +98,51 @@ public class CierreCajaActivity extends AppCompatActivity {
         }
 
         return totalCaja;
+    }
+
+    private double getTotalProductos(ArrayList<ServiceModel> servicios) {
+        double totalProductos = 0.0;
+        TipoServicioModel ventaProducto = null;
+        ArrayList<TipoServicioModel> tipoServicios = Constants.databaseManager.tipoServiciosManager.getTipoServiciosFromDatabase();
+        for (int i = 0; i < tipoServicios.size(); i++) {
+            if (tipoServicios.get(i).getNombre().compareTo("Venta producto") == 0) {
+                ventaProducto = tipoServicios.get(i);
+            }
+        }
+
+        if (ventaProducto ==  null) {
+            return totalProductos;
+        }
+
+        for (int i = 0; i < servicios.size(); i++) {
+            if (servicios.get(i).getServicios().contains(ventaProducto.getServicioId())) {
+                totalProductos += servicios.get(i).getPrecio();
+            }
+        }
+
+        return totalProductos;
+    }
+
+    private double getTotalEfectivo(ArrayList<ServiceModel> servicios) {
+        double totalEfectivo = 0.0;
+        for (int i = 0; i < servicios.size(); i++) {
+            if (servicios.get(i).isEfectivo()) {
+                totalEfectivo += servicios.get(i).getPrecio();
+            }
+        }
+
+        return totalEfectivo;
+    }
+
+    private double getTotalTarjeta(ArrayList<ServiceModel> servicios) {
+        double totalTarjeta = 0.0;
+        for (int i = 0; i < servicios.size(); i++) {
+            if (!servicios.get(i).isEfectivo()) {
+                totalTarjeta += servicios.get(i).getPrecio();
+            }
+        }
+
+        return totalTarjeta;
     }
 
     private void setOnClickListeners() {

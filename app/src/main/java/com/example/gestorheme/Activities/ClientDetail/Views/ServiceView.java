@@ -2,8 +2,11 @@ package com.example.gestorheme.Activities.ClientDetail.Views;
 
 import android.content.Context;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+
+import com.example.gestorheme.Common.AppStyle;
 import com.example.gestorheme.Common.CommonFunctions;
 import com.example.gestorheme.Common.Constants;
 import com.example.gestorheme.Common.DateFunctions;
@@ -20,6 +23,20 @@ public class ServiceView extends ConstraintLayout {
     private TextView precioLabel;
     private TextView observacionesField;
 
+    private TextView nombreField;
+    private TextView fechaField;
+    private TextView profesionalField;
+    private TextView serviciosField;
+    private TextView precioField;
+    private TextView titulo;
+
+    private RelativeLayout nombreDivider;
+    private RelativeLayout fechaDivider;
+    private RelativeLayout profesionalDivider;
+    private RelativeLayout serviciosDivider;
+    private RelativeLayout precioDivider;
+    private RelativeLayout layoutContentView;
+
     public ServiceModel service;
 
     public ServiceView(Context context, ServiceModel service, String nombreCliente, String apellidosCliente) {
@@ -27,6 +44,10 @@ public class ServiceView extends ConstraintLayout {
         View.inflate(context, R.layout.service_view, this);
         this.service = service;
         getFields();
+        cutomizeLabels();
+        customizeFields();
+        customizeDividers();
+        customizeBackground();
         setServiceDetails(nombreCliente, apellidosCliente);
     }
 
@@ -37,6 +58,47 @@ public class ServiceView extends ConstraintLayout {
         serviciosLabel = findViewById(R.id.serviciosLabel);
         precioLabel = findViewById(R.id.precioLabel);
         observacionesField = findViewById(R.id.observacionesField);
+        nombreField = findViewById(R.id.nombreField);
+        fechaField = findViewById(R.id.fechaField);
+        profesionalField = findViewById(R.id.profesionalField);
+        serviciosField = findViewById(R.id.serviciosField);
+        precioField = findViewById(R.id.precioField);
+        titulo = findViewById(R.id.titulo);
+        nombreDivider = findViewById(R.id.nombreDivider);
+        fechaDivider = findViewById(R.id.fechaDivider);
+        profesionalDivider = findViewById(R.id.profesionalDivider);
+        serviciosDivider = findViewById(R.id.serviciosDivider);
+        precioDivider = findViewById(R.id.precioDivider);
+        layoutContentView = findViewById(R.id.layoutContentView);
+    }
+
+    private void cutomizeLabels() {
+        nombreLabel.setTextColor(AppStyle.getSecondaryTextColor());
+        fechaLabel.setTextColor(AppStyle.getSecondaryTextColor());
+        profesionalLabel.setTextColor(AppStyle.getSecondaryTextColor());
+        serviciosLabel.setTextColor(AppStyle.getSecondaryTextColor());
+        precioLabel.setTextColor(AppStyle.getSecondaryTextColor());
+    }
+
+    private void customizeFields() {
+        nombreField.setTextColor(AppStyle.getPrimaryTextColor());
+        fechaField.setTextColor(AppStyle.getPrimaryTextColor());
+        profesionalField.setTextColor(AppStyle.getPrimaryTextColor());
+        serviciosField.setTextColor(AppStyle.getPrimaryTextColor());
+        precioField.setTextColor(AppStyle.getPrimaryTextColor());
+        observacionesField.setTextColor(AppStyle.getPrimaryTextColor());
+    }
+
+    private void customizeDividers() {
+        nombreDivider.setBackgroundColor(AppStyle.getSecondaryColor());
+        fechaDivider.setBackgroundColor(AppStyle.getSecondaryColor());
+        profesionalDivider.setBackgroundColor(AppStyle.getSecondaryColor());
+        serviciosDivider.setBackgroundColor(AppStyle.getSecondaryColor());
+        precioDivider.setBackgroundColor(AppStyle.getSecondaryColor());
+    }
+
+    private void customizeBackground() {
+        CommonFunctions.customizeView(getContext(), layoutContentView, AppStyle.getSecondaryColor());
     }
 
     private void setServiceDetails(String nombreCliente, String apellidosCliente) {

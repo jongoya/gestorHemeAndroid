@@ -93,16 +93,21 @@ public class StadisticasActivity extends AppCompatActivity  implements IStadisti
 
     private void addCharts() {
         ArrayList<CierreCajaModel> cierreCajas = new ArrayList<>();
+        Calendar calendar = Calendar.getInstance();
 
         if (isMensual) {
-            long fechaInicio = DateFunctions.getBeginingOfMonthFromDate(presentDate).getTime();
-            long fechaFin = DateFunctions.getEndOfMonthFromDate(presentDate).getTime();
+            calendar.setTime(DateFunctions.getBeginingOfMonthFromDate(presentDate));
+            long fechaInicio = calendar.getTimeInMillis() / 1000;
+            calendar.setTime(DateFunctions.getEndOfMonthFromDate(presentDate));
+            long fechaFin = calendar.getTimeInMillis() / 1000;
             cierreCajas = Constants.databaseManager.cierreCajaManager.getCierreCajasForRange(fechaInicio, fechaFin);
         }
 
         if (isAnual) {
-            long fechaInicio = DateFunctions.getBeginingOfYearFromDate(presentDate).getTime();
-            long fechaFin = DateFunctions.getEndOfYearFromDate(presentDate).getTime();
+            calendar.setTime(DateFunctions.getBeginingOfYearFromDate(presentDate));
+            long fechaInicio = calendar.getTimeInMillis() / 1000;
+            calendar.setTime(DateFunctions.getEndOfYearFromDate(presentDate));
+            long fechaFin = calendar.getTimeInMillis() / 1000;
             ArrayList<CierreCajaModel> cajas = Constants.databaseManager.cierreCajaManager.getCierreCajasForRange(fechaInicio, fechaFin);
             cierreCajas = StadisticasFunctions.groupCierreCajasAnual(cajas);
         }

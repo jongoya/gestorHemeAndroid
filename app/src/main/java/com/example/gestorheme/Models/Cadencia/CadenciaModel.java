@@ -103,10 +103,11 @@ public class CadenciaModel implements Serializable {
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
         cal.add(Calendar.DATE, -numeroDeDias);
-        Date date = cal.getTime();
 
-        long diferencia = new Date().getTime() - date.getTime();
-        return date.getTime() - (long)(diferencia * percentageExtra);
+        Calendar actualCalendar = Calendar.getInstance();
+        actualCalendar.setTime(new Date());
+        long diferencia = actualCalendar.getTimeInMillis() - cal.getTimeInMillis();
+        return (cal.getTimeInMillis() - (long)(diferencia * percentageExtra)) / 1000;//respuesta en segundos
     }
 
     public String getCadencia() {

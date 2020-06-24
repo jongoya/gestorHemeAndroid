@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.gestorheme.Activities.ItemSelector.Adapter.ItemSelectorAdapter;
+import com.example.gestorheme.Common.AppStyle;
 import com.example.gestorheme.Models.Cadencia.CadenciaModel;
 import com.example.gestorheme.Models.Empleados.EmpleadoModel;
 import com.example.gestorheme.Models.TipoServicio.TipoServicioModel;
@@ -29,6 +30,7 @@ public class ItemSelectorActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.item_selector_layout);
+        AppStyle.setStatusBarColor(this);
         getFields();
         getListIntent();
         setList();
