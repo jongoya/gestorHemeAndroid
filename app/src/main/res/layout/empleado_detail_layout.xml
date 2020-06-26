@@ -22,7 +22,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/textView8"
+                android:id="@+id/titulo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
@@ -69,6 +69,7 @@
                     app:srcCompat="@drawable/right_arrow_image" />
 
                 <RelativeLayout
+                    android:id="@+id/nombreDivider"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_alignParentBottom="true"
@@ -115,6 +116,7 @@
                     app:srcCompat="@drawable/right_arrow_image" />
 
                 <RelativeLayout
+                    android:id="@+id/apellidosDivider"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_alignParentBottom="true"
@@ -161,6 +163,7 @@
                     app:srcCompat="@drawable/right_arrow_image" />
 
                 <RelativeLayout
+                    android:id="@+id/fechaDivider"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_alignParentBottom="true"
@@ -207,6 +210,7 @@
                     app:srcCompat="@drawable/right_arrow_image" />
 
                 <RelativeLayout
+                    android:id="@+id/telefonoDivider"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_alignParentBottom="true"

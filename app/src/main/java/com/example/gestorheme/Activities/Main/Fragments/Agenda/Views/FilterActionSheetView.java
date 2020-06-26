@@ -5,8 +5,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.example.gestorheme.Activities.Main.Fragments.Agenda.Interfaces.FilterActionSheetInterface;
+import com.example.gestorheme.Common.AppStyle;
+import com.example.gestorheme.Common.CommonFunctions;
 import com.example.gestorheme.Common.Constants;
 import com.example.gestorheme.Models.Empleados.EmpleadoModel;
 import com.example.gestorheme.R;
@@ -16,18 +19,29 @@ import java.util.ArrayList;
 public class FilterActionSheetView extends LinearLayout {
     private LinearLayout empleadosLayout;
     private FilterActionSheetInterface delegate;
+    private RelativeLayout cancelarButton;
+    private TextView cancelarText;
 
     public FilterActionSheetView(Context context, FilterActionSheetInterface delegate) {
         super(context);
         this.delegate = delegate;
         View.inflate(context, R.layout.filter_actionsheet_layout, this);
         getFields();
+        customizeFields();
         setOnClickListeners();
         addEmpleadosViews(context);
     }
 
     private void getFields() {
         empleadosLayout = findViewById(R.id.empleados_layout);
+        cancelarButton = findViewById(R.id.mensualButton);
+        cancelarText = findViewById(R.id.cancelarText);
+    }
+
+    private void customizeFields() {
+        CommonFunctions.customizeView(getContext(), empleadosLayout, AppStyle.getSecondaryColor());
+        CommonFunctions.customizeView(getContext(), cancelarButton, AppStyle.getPrimaryColor());
+        cancelarText.setTextColor(AppStyle.getPrimaryColor());
     }
 
     private void setOnClickListeners() {
@@ -81,7 +95,7 @@ public class FilterActionSheetView extends LinearLayout {
     private void addDivisory(Context contexto) {
         View divisory = new View(contexto);
         divisory.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1));
-        divisory.setBackgroundResource(R.color.dividerColor);
+        divisory.setBackgroundColor(AppStyle.getSecondaryColor());
         empleadosLayout.addView(divisory);
     }
 }

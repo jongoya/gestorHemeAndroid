@@ -5,9 +5,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.gestorheme.Common.AppStyle;
+import com.example.gestorheme.Common.CommonFunctions;
 import com.example.gestorheme.Models.TipoServicio.TipoServicioModel;
 import com.example.gestorheme.R;
 
@@ -46,13 +49,21 @@ public class TipoServiciosListAdapter extends BaseAdapter {
         view.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
 
         holder.nombre = view.findViewById(R.id.nombre);
+        holder.img = view.findViewById(R.id.img);
+        holder.rootLayout = view.findViewById(R.id.rootLayout);
 
         holder.nombre.setText(servicios.get(i).getNombre());
+
+        holder.nombre.setTextColor(AppStyle.getPrimaryTextColor());
+        holder.img.setColorFilter(AppStyle.getPrimaryTextColor());
+        CommonFunctions.customizeView(contexto, holder.rootLayout, AppStyle.getSecondaryColor());
         return view;
     }
 
 
     private static class ViewHolder {
         private TextView nombre;
+        private ImageView img;
+        private RelativeLayout rootLayout;
     }
 }

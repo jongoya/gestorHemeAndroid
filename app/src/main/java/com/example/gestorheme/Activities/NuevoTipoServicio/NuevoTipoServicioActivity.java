@@ -7,18 +7,16 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-
 import com.example.gestorheme.Activities.TextInputField.TextInputFieldActivity;
+import com.example.gestorheme.Common.AppStyle;
 import com.example.gestorheme.Common.CommonFunctions;
 import com.example.gestorheme.Common.Constants;
 import com.example.gestorheme.Common.Preferencias;
 import com.example.gestorheme.Models.TipoServicio.TipoServicioModel;
 import com.example.gestorheme.R;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -32,6 +30,9 @@ public class NuevoTipoServicioActivity extends AppCompatActivity {
     private ImageView saveImage;
     private ConstraintLayout rootLayout;
     private RelativeLayout loadingState;
+    private TextView nombreField;
+    private TextView titulo;
+    private ImageView arrow;
 
     private TipoServicioModel servicio = new TipoServicioModel();
 
@@ -39,9 +40,10 @@ public class NuevoTipoServicioActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.nuevo_tipo_servicio_layout);
+        AppStyle.setStatusBarColor(this);
         getFields();
         setOnClickListener();
-        customizeButton();
+        customizeLayout();
     }
 
     private void getFields() {
@@ -50,6 +52,9 @@ public class NuevoTipoServicioActivity extends AppCompatActivity {
         nombreLabel = findViewById(R.id.nombreLabel);
         saveImage = findViewById(R.id.saveImage);
         rootLayout = findViewById(R.id.root);
+        nombreField = findViewById(R.id.nombreField);
+        arrow = findViewById(R.id.arrow);
+        titulo = findViewById(R.id.titulo);
     }
 
     private void setOnClickListener() {
@@ -72,7 +77,16 @@ public class NuevoTipoServicioActivity extends AppCompatActivity {
     }
 
     private void customizeButton() {
-        CommonFunctions.customizeViewWithImage(getApplicationContext(), saveButton, saveImage, R.color.colorPrimary, R.color.colorPrimary);
+        CommonFunctions.customizeViewWithImage(getApplicationContext(), saveButton, saveImage, AppStyle.getPrimaryColor(), AppStyle.getPrimaryColor());
+    }
+
+    private void customizeLayout() {
+        customizeButton();
+        rootLayout.setBackgroundColor(AppStyle.getBackgroundColor());
+        nombreField.setTextColor(AppStyle.getPrimaryTextColor());
+        nombreLabel.setTextColor(AppStyle.getSecondaryTextColor());
+        arrow.setColorFilter(AppStyle.getSecondaryColor());
+        titulo.setTextColor(AppStyle.getPrimaryTextColor());
     }
 
     private void checkFields() {

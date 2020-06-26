@@ -19,6 +19,7 @@ import androidx.appcompat.content.res.AppCompatResources;
 import com.example.gestorheme.Activities.ColorPicker.ColorPickerActivity;
 import com.example.gestorheme.Activities.EmpleadoDetail.EmpleadoDetailActivity;
 import com.example.gestorheme.Activities.Empleados.Interfaces.EmpleadosListInterface;
+import com.example.gestorheme.Common.AppStyle;
 import com.example.gestorheme.Common.CommonFunctions;
 import com.example.gestorheme.Common.Constants;
 import com.example.gestorheme.Common.OnSwipeTouchListener;
@@ -98,6 +99,10 @@ public class EmpleadosListAdapter extends BaseAdapter {
                 deleteEmpleado(empleado);
             }
         });
+
+        holder.img.setColorFilter(AppStyle.getPrimaryTextColor());
+        holder.nombre.setTextColor(AppStyle.getPrimaryTextColor());
+        CommonFunctions.customizeView(contexto, holder.background, AppStyle.getSecondaryColor());
 
         return view;
     }

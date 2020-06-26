@@ -6,6 +6,7 @@
     android:background="@color/clear">
 
     <RelativeLayout
+        android:id="@+id/rootLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
@@ -14,22 +15,22 @@
         android:background="@drawable/heme_cell_rounded_view">
 
         <ImageView
-            android:id="@+id/imageView12"
+            android:id="@+id/img"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_marginLeft="15dp"
             android:layout_marginTop="15dp"
             android:layout_marginRight="10dp"
             android:layout_marginBottom="15dp"
-            android:tint="@android:color/black"
-            android:src="@drawable/servicio_image" />
+            android:src="@drawable/servicio_image"
+            android:tint="@android:color/black" />
 
         <TextView
             android:id="@+id/nombre"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/imageView12"
+            android:layout_toRightOf="@id/img"
             android:textColor="@android:color/black" />
     </RelativeLayout>
 

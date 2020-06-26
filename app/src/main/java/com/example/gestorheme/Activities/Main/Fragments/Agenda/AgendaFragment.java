@@ -1,5 +1,6 @@
 package com.example.gestorheme.Activities.Main.Fragments.Agenda;
 
+import android.media.Image;
 import android.os.Bundle;
 import android.transition.ChangeBounds;
 import android.transition.Scene;
@@ -10,8 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CalendarView;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,6 +30,7 @@ import com.example.gestorheme.Activities.Main.Fragments.Agenda.Views.AgendaItemV
 import com.example.gestorheme.Activities.Main.Fragments.Agenda.Views.CerrarCajaButton;
 import com.example.gestorheme.Activities.Main.Fragments.Agenda.Views.ClientItemView;
 import com.example.gestorheme.Activities.Main.Fragments.Agenda.Views.FilterActionSheetView;
+import com.example.gestorheme.Common.AppStyle;
 import com.example.gestorheme.Common.CommonFunctions;
 import com.example.gestorheme.Common.Constants;
 import com.example.gestorheme.Common.DateFunctions;
@@ -54,6 +58,13 @@ public class AgendaFragment extends Fragment implements ServiceItemViewInterface
     private TextView filterText;
     private HorizontalCalendar horizontalCalendar;
     private RelativeLayout loadingStateView;
+    private RelativeLayout filterButton;
+    private RelativeLayout clientButton;
+    private ImageView clientImage;
+    private ImageView calendarImage;
+    private NestedScrollView scrollView;
+    private RelativeLayout calendarBackground;
+
     private boolean clientesVisible = false;
     private long empleadoFilteredId = 0;
 
@@ -81,6 +92,9 @@ public class AgendaFragment extends Fragment implements ServiceItemViewInterface
         } else {
             buildAgendaDay();
         }
+
+        customizeButtons();
+        customizeBackground();
     }
 
     private void getFields() {
@@ -90,6 +104,25 @@ public class AgendaFragment extends Fragment implements ServiceItemViewInterface
         calendarButton = getView().findViewById(R.id.calendarButton);
         filterText = getView().findViewById(R.id.filterText);
         refreshLayout = getView().findViewById(R.id.refreshLayout);
+        filterButton = getView().findViewById(R.id.filterButton);
+        clientButton = getView().findViewById(R.id.clientButton);
+        clientImage = getView().findViewById(R.id.clientImage);
+        calendarImage = getView().findViewById(R.id.calendarImage);
+        scrollView = getView().findViewById(R.id.scrollView);
+        calendarBackground = getView().findViewById(R.id.calendarBackground);
+    }
+
+    private void customizeButtons() {
+        CommonFunctions.customizeView(getActivity().getApplicationContext(), filterButton, AppStyle.getPrimaryColor());
+        filterText.setTextColor(AppStyle.getPrimaryColor());
+        CommonFunctions.customizeViewWithImage(getActivity().getApplicationContext(), calendarButton, calendarImage, AppStyle.getPrimaryColor(), AppStyle.getPrimaryColor());
+        CommonFunctions.customizeViewWithImage(getActivity().getApplicationContext(), clientButton, clientImage, AppStyle.getPrimaryColor(), AppStyle.getPrimaryColor());
+        calendarBackground.setBackgroundColor(AppStyle.getBackgroundColor());
+        root.setBackgroundColor(AppStyle.getBackgroundColor());
+    }
+
+    private void customizeBackground() {
+        scrollView.setBackgroundColor(AppStyle.getBackgroundColor());
     }
 
     private void setOnClickListeners() {
@@ -144,7 +177,7 @@ public class AgendaFragment extends Fragment implements ServiceItemViewInterface
             }
         });
 
-        getView().findViewById(R.id.clientButton).setOnClickListener(new View.OnClickListener() {
+        clientButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (clientesVisible) {
@@ -157,7 +190,7 @@ public class AgendaFragment extends Fragment implements ServiceItemViewInterface
             }
         });
 
-        getView().findViewById(R.id.filterButton).setOnClickListener(new View.OnClickListener() {
+        filterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showFilterDialog();
@@ -179,8 +212,9 @@ public class AgendaFragment extends Fragment implements ServiceItemViewInterface
         startDate.setTime(DateFunctions.remove2MonthsToDate(presentDate));
         Calendar endDate = Calendar.getInstance();
         endDate.setTime(DateFunctions.add2MonthsToDate(presentDate));
-        horizontalCalendar = new HorizontalCalendar.Builder(root, R.id.horizontalCalendarView).range(startDate, endDate).datesNumberOnScreen(5).build();
+        horizontalCalendar = new HorizontalCalendar.Builder(root, R.id.horizontalCalendarView).datesNumberOnScreen(5).range(startDate, endDate).configure().textColor(AppStyle.getPrimaryTextColor(), AppStyle.getPrimaryColor()).end().build();
         horizontalCalendar.goToday(true);
+        horizontalCalendar.getCalendarView().setBackgroundColor(AppStyle.getBackgroundColor());
         horizontalCalendar.setCalendarListener(new HorizontalCalendarListener() {
             @Override
             public void onDateSelected(Calendar date, int position) {

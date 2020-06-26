@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.example.gestorheme.Activities.Main.Fragments.Notificaciones.Models.NotificationDayModel;
+import com.example.gestorheme.Common.AppStyle;
 import com.example.gestorheme.Common.CommonFunctions;
 import com.example.gestorheme.Common.Constants;
 import com.example.gestorheme.Models.Client.ClientModel;
@@ -57,19 +58,28 @@ public class NotificationListAdapter extends BaseAdapter {
                 holder.descripcion = view.findViewById(R.id.descripcion);
                 holder.imagen = view.findViewById(R.id.cumpleImage);
                 holder.background = view.findViewById(R.id.background);
+                holder.rootLayout = view.findViewById(R.id.rootLayout);
                 holder.titulo.setText(getTituloForNotificationType(notifications.get(i).getNotificaciones().get(0).getType(), i));
                 holder.descripcion.setText(getDescripcionForNotificationType(notifications.get(i).getNotificaciones().get(0).getType(), i));
                 if (!notifications.get(i).getNotificaciones().get(0).isLeido()) {
-                    CommonFunctions.customizeViewWithImage(context, holder.background, holder.imagen, R.color.colorPrimary, R.color.colorPrimary);
+                    CommonFunctions.customizeViewWithImage(context, holder.background, holder.imagen, AppStyle.getPrimaryColor(), AppStyle.getPrimaryTextColor());
                 } else {
-                    CommonFunctions.customizeViewWithImage(context, holder.background, holder.imagen, R.color.dividerColor, R.color.dividerColor);
+                    CommonFunctions.customizeViewWithImage(context, holder.background, holder.imagen, AppStyle.getSecondaryColor(), AppStyle.getPrimaryTextColor());
                 }
+
+                holder.rootLayout.setBackgroundColor(AppStyle.getBackgroundColor());
+                holder.titulo.setTextColor(AppStyle.getPrimaryTextColor());
+                holder.descripcion.setTextColor(AppStyle.getSecondaryTextColor());
                 break;
             case Constants.notificationCellHeaderType:
                 view = mInflater.inflate(R.layout.notification_cell_header, null);
                 view.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
                 holder.titulo = view.findViewById(R.id.titulo);
+                holder.rootLayout = view.findViewById(R.id.rootLayout);
                 holder.titulo.setText(notifications.get(i).getTituloHeader());
+
+                holder.titulo.setTextColor(AppStyle.getPrimaryTextColor());
+                holder.rootLayout.setBackgroundColor(AppStyle.getBackgroundColor());
                 break;
         }
 
@@ -81,6 +91,7 @@ public class NotificationListAdapter extends BaseAdapter {
         private TextView descripcion;
         private ImageView imagen;
         private RelativeLayout background;
+        private RelativeLayout rootLayout;
     }
 
     private String getTituloForNotificationType(String type, int position) {

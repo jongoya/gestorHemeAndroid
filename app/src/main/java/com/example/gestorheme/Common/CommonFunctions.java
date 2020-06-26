@@ -112,24 +112,6 @@ public class CommonFunctions {
         imagen.setColorFilter(imageColor, android.graphics.PorterDuff.Mode.MULTIPLY);
     }
 
-    /*public static void selectLayout(Context contexto, View layout, ImageView imagen) {
-        GradientDrawable unwrappedDrawable = (GradientDrawable) AppCompatResources.getDrawable(contexto, R.drawable.rounded_view);
-        unwrappedDrawable.setStroke(CommonFunctions.convertToPx(1, contexto), contexto.getResources().getColor(R.color.colorPrimary));
-        layout.setBackground(unwrappedDrawable);
-        if (imagen != null) {
-            imagen.setColorFilter(ContextCompat.getColor(contexto, R.color.colorPrimary), android.graphics.PorterDuff.Mode.MULTIPLY);
-        }
-    }
-
-    public static void unSelectLayout(Context contexto, View layout, ImageView imagen) {
-        GradientDrawable unwrappedDrawable = (GradientDrawable)AppCompatResources.getDrawable(contexto, R.drawable.rounded_view);
-        unwrappedDrawable.setStroke(CommonFunctions.convertToPx(1, contexto), contexto.getResources().getColor(R.color.dividerColor));
-        layout.setBackground(unwrappedDrawable);
-        if (imagen != null) {
-            imagen.setColorFilter(ContextCompat.getColor(contexto, R.color.dividerColor), android.graphics.PorterDuff.Mode.MULTIPLY);
-        }
-    }*/
-
     public static String getDeviceModel() {
         String fabricante = Build.MANUFACTURER;
         String modelo = Build.MODEL;

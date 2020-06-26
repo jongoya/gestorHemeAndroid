@@ -10,21 +10,19 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
-
 import com.example.gestorheme.Activities.DatePicker.DatePickerActivity;
 import com.example.gestorheme.Activities.TextInputField.TextInputFieldActivity;
+import com.example.gestorheme.Common.AppStyle;
 import com.example.gestorheme.Common.CommonFunctions;
 import com.example.gestorheme.Common.Constants;
 import com.example.gestorheme.Common.DateFunctions;
 import com.example.gestorheme.Common.Preferencias;
 import com.example.gestorheme.Models.Empleados.EmpleadoModel;
 import com.example.gestorheme.R;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -52,6 +50,21 @@ public class EmpleadoDetailActivity extends AppCompatActivity {
     private TextView telefonoLabel;
     private TextView emailLabel;
 
+    private TextView nombreField;
+    private TextView apellidosField;
+    private TextView fechaField;
+    private TextView telefonoField;
+    private TextView emailField;
+    private TextView titulo;
+    private ImageView nombreArrow;
+    private ImageView apellidosArrow;
+    private ImageView fechaArrow;
+    private ImageView telefonoArrow;
+    private ImageView emailArrow;
+    private RelativeLayout nombreDivider;
+    private RelativeLayout apellidosDivider;
+    private RelativeLayout fechaDivider;
+    private RelativeLayout telefonoDivider;
     private ImageView saveImage;
     private ImageView callImage;
 
@@ -61,6 +74,7 @@ public class EmpleadoDetailActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.empleado_detail_layout);
+        AppStyle.setStatusBarColor(this);
         getFields();
         getEmpleadoIntent();
         setOnClickListeners();
@@ -71,6 +85,13 @@ public class EmpleadoDetailActivity extends AppCompatActivity {
             empleado = new EmpleadoModel();
             callButton.setVisibility(View.INVISIBLE);
         }
+
+        customizeLabels();
+        customizeFields();
+        customizeArrows();
+        customizeDividers();
+        customizeBackground();
+        customizeButtons();
     }
 
     @Override
@@ -98,6 +119,62 @@ public class EmpleadoDetailActivity extends AppCompatActivity {
         saveImage = findViewById(R.id.saveImage);
         callImage = findViewById(R.id.callImage);
         rootLayout = findViewById(R.id.root);
+        nombreField = findViewById(R.id.nombreField);
+        apellidosField = findViewById(R.id.apellidosField);
+        fechaField = findViewById(R.id.fechaField);
+        telefonoField = findViewById(R.id.telefonoField);
+        emailField = findViewById(R.id.emailField);
+        nombreArrow = findViewById(R.id.nombreArrow);
+        apellidosArrow = findViewById(R.id.apellidosArrow);
+        fechaArrow = findViewById(R.id.fechaArrow);
+        telefonoArrow = findViewById(R.id.telefonoArrow);
+        emailArrow = findViewById(R.id.emailArrow);
+        nombreDivider = findViewById(R.id.nombreDivider);
+        apellidosDivider = findViewById(R.id.apellidosDivider);
+        fechaDivider = findViewById(R.id.fechaDivider);
+        telefonoDivider = findViewById(R.id.telefonoDivider);
+        titulo = findViewById(R.id.titulo);
+    }
+
+    private void customizeLabels() {
+        nombreLabel.setTextColor(AppStyle.getSecondaryTextColor());
+        apellidosLabel.setTextColor(AppStyle.getSecondaryTextColor());
+        fechaLabel.setTextColor(AppStyle.getSecondaryTextColor());
+        telefonoLabel.setTextColor(AppStyle.getSecondaryTextColor());
+        emailLabel.setTextColor(AppStyle.getSecondaryTextColor());
+    }
+
+    private void customizeFields() {
+        nombreField.setTextColor(AppStyle.getPrimaryTextColor());
+        apellidosField.setTextColor(AppStyle.getPrimaryTextColor());
+        fechaField.setTextColor(AppStyle.getPrimaryTextColor());
+        telefonoField.setTextColor(AppStyle.getPrimaryTextColor());
+        emailField.setTextColor(AppStyle.getPrimaryTextColor());
+        titulo.setTextColor(AppStyle.getPrimaryTextColor());
+    }
+
+    private void customizeArrows() {
+        nombreArrow.setColorFilter(AppStyle.getSecondaryColor());
+        apellidosArrow.setColorFilter(AppStyle.getSecondaryColor());
+        fechaArrow.setColorFilter(AppStyle.getSecondaryColor());
+        telefonoArrow.setColorFilter(AppStyle.getSecondaryColor());
+        emailArrow.setColorFilter(AppStyle.getSecondaryColor());
+    }
+
+    private void customizeDividers() {
+        nombreDivider.setBackgroundColor(AppStyle.getSecondaryColor());
+        apellidosDivider.setBackgroundColor(AppStyle.getSecondaryColor());
+        telefonoDivider.setBackgroundColor(AppStyle.getSecondaryColor());
+        fechaDivider.setBackgroundColor(AppStyle.getSecondaryColor());
+    }
+
+    private void customizeBackground() {
+        rootLayout.setBackgroundColor(AppStyle.getBackgroundColor());
+    }
+
+    private void customizeButtons() {
+        CommonFunctions.customizeViewWithImage(getApplicationContext(), saveButton, saveImage, AppStyle.getPrimaryColor(), AppStyle.getPrimaryColor());
+        CommonFunctions.customizeViewWithImage(getApplicationContext(), callButton, callImage, AppStyle.getPrimaryColor(), AppStyle.getPrimaryColor());
     }
 
     private void setOnClickListeners() {

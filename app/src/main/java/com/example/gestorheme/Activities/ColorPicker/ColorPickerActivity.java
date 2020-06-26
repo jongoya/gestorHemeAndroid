@@ -4,11 +4,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.example.gestorheme.Common.AppStyle;
 import com.example.gestorheme.Common.CommonFunctions;
 import com.example.gestorheme.Common.Constants;
 import com.example.gestorheme.Models.Empleados.EmpleadoModel;
@@ -16,7 +16,6 @@ import com.example.gestorheme.R;
 import com.skydoves.colorpickerpreference.ColorEnvelope;
 import com.skydoves.colorpickerpreference.ColorListener;
 import com.skydoves.colorpickerpreference.ColorPickerView;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -33,6 +32,7 @@ public class ColorPickerActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.color_picker_layout);
+        AppStyle.setStatusBarColor(this);
         getEmpleadoIntent();
         getFields();
         customizeButton();
@@ -51,7 +51,7 @@ public class ColorPickerActivity extends AppCompatActivity {
     }
 
     private void customizeButton() {
-        CommonFunctions.customizeViewWithImage(getApplicationContext(),saveButton, saveImage, R.color.colorPrimary, R.color.colorPrimary);
+        CommonFunctions.customizeViewWithImage(getApplicationContext(),saveButton, saveImage, AppStyle.getPrimaryColor(), AppStyle.getPrimaryColor());
     }
 
     private void setListeners() {

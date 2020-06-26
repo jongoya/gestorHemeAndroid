@@ -6,22 +6,20 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import com.example.gestorheme.Activities.EmpleadoDetail.EmpleadoDetailActivity;
 import com.example.gestorheme.Activities.Empleados.Adapter.EmpleadosListAdapter;
 import com.example.gestorheme.Activities.Empleados.Interfaces.EmpleadosListInterface;
 import com.example.gestorheme.Activities.Empleados.Interfaces.EmpleadosRefreshInterface;
+import com.example.gestorheme.Common.AppStyle;
 import com.example.gestorheme.Common.CommonFunctions;
 import com.example.gestorheme.Common.Constants;
 import com.example.gestorheme.Common.SyncronizationManager;
 import com.example.gestorheme.Models.Empleados.EmpleadoModel;
 import com.example.gestorheme.R;
-
 import java.util.ArrayList;
 
 public class EmpleadosActivity extends AppCompatActivity implements EmpleadosListInterface, EmpleadosRefreshInterface {
@@ -40,9 +38,11 @@ public class EmpleadosActivity extends AppCompatActivity implements EmpleadosLis
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.empleados_layout);
+        AppStyle.setStatusBarColor(this);
         getFields();
         getEmpleadosIntent();
         customizeButtons();
+        customizeBackground();
         setOnClickListeners();
         setRefreshLayoutListener();
     }
@@ -78,7 +78,11 @@ public class EmpleadosActivity extends AppCompatActivity implements EmpleadosLis
     }
 
     private void customizeButtons() {
-        CommonFunctions.customizeViewWithImage(getApplicationContext(), plusButton, plusImage, R.color.colorPrimary, R.color.colorPrimary);
+        CommonFunctions.customizeViewWithImage(getApplicationContext(), plusButton, plusImage, AppStyle.getPrimaryColor(), AppStyle.getPrimaryColor());
+    }
+
+    private void customizeBackground() {
+        rootLayout.setBackgroundColor(AppStyle.getBackgroundColor());
     }
 
     private void setOnClickListeners() {

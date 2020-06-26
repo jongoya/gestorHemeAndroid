@@ -6,9 +6,9 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.example.gestorheme.Activities.Main.Fragments.Agenda.Interfaces.ServiceItemViewInterface;
 import com.example.gestorheme.Activities.ServiceDetail.ServiceDetailActivity;
+import com.example.gestorheme.Common.AppStyle;
 import com.example.gestorheme.Common.DateFunctions;
 import com.example.gestorheme.Models.Service.ServiceModel;
 import com.example.gestorheme.R;
@@ -19,11 +19,13 @@ import java.util.Date;
 public class AgendaItemView extends RelativeLayout {
     private TextView hora;
     private LinearLayout servicesContent;
+    private RelativeLayout divider;
 
     public AgendaItemView(Context context, Date date, ArrayList<ServiceModel> servicios, ServiceItemViewInterface delegate) {
         super(context);
         View.inflate(context, R.layout.agenda_item_view, this);
         getFields();
+        customizeDivider();
         setOnClickListeners(context, date);
         setFields(date);
 
@@ -35,6 +37,7 @@ public class AgendaItemView extends RelativeLayout {
     private void getFields() {
         hora = findViewById(R.id.time);
         servicesContent = findViewById(R.id.services_content);
+        divider = findViewById(R.id.divider2);
     }
 
     private void setOnClickListeners(final Context context, final Date date) {
@@ -53,7 +56,12 @@ public class AgendaItemView extends RelativeLayout {
     private void setFields(Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
+        hora.setTextColor(AppStyle.getPrimaryTextColor());
         hora.setText(DateFunctions.getHoursAndMinutesFromDate(calendar.getTimeInMillis() / 1000));
+    }
+
+    private void customizeDivider() {
+        divider.setBackgroundColor(AppStyle.getSecondaryColor());
     }
 
     private void buildServiceViews(ArrayList<ServiceModel> servicios, Context contexto, ServiceItemViewInterface delegate) {

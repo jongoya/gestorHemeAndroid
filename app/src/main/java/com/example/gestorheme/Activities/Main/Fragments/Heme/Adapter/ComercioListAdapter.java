@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.gestorheme.Activities.Main.Fragments.Notificaciones.Adapter.NotificationListAdapter;
+import com.example.gestorheme.Common.AppStyle;
 import com.example.gestorheme.Models.Comercio.ComercioModel;
 import com.example.gestorheme.R;
 
@@ -56,6 +57,10 @@ public class ComercioListAdapter extends BaseAdapter {
         holder.titulo.setText(model.getTitulo());
         holder.descripcion.setText(model.getDescripcion());
         holder.image.setImageResource(model.getRefImagen());
+
+        holder.image.setColorFilter(AppStyle.getPrimaryTextColor());
+        holder.titulo.setTextColor(AppStyle.getPrimaryTextColor());
+        holder.descripcion.setTextColor(AppStyle.getPrimaryTextColor());
 
         return view;
     }

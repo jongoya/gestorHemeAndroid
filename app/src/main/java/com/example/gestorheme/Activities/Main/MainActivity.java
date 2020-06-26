@@ -127,15 +127,15 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (agendaFragment != null && agendaFragment.isVisible()) {
-            //TODO
+            agendaFragment.onResume();
         }
 
         if (notificacionesFragment != null && notificacionesFragment.isVisible()) {
-            //TODO
+            notificacionesFragment.customizeFields();
         }
 
         if (hemeFragment != null && hemeFragment.isVisible()) {
-            //TODO
+            hemeFragment.customizeLayout();
         }
     }
 }

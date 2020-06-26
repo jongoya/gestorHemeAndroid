@@ -2,7 +2,9 @@ package com.example.gestorheme.Activities.Main.Fragments.Notificaciones;
 
 import android.content.Intent;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.sax.RootElement;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +16,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -23,6 +26,7 @@ import com.example.gestorheme.Activities.Main.Fragments.Notificaciones.Interface
 import com.example.gestorheme.Activities.Main.Fragments.Notificaciones.Models.NotificationDayModel;
 import com.example.gestorheme.Activities.NotificationsDetail.BirthdayDetail;
 import com.example.gestorheme.Activities.NotificationsDetail.CadenciaDetail;
+import com.example.gestorheme.Common.AppStyle;
 import com.example.gestorheme.Common.CommonFunctions;
 import com.example.gestorheme.Common.Constants;
 import com.example.gestorheme.Common.DateFunctions;
@@ -46,6 +50,7 @@ public class NotificacionesFragment extends Fragment implements NotificationsRef
     private TextView personalizadaText;
     private ListView notificationsList;
     private TextView emptyState;
+    RelativeLayout buttonsView;
     private SwipeRefreshLayout refreshLayout;
     private NotificationListAdapter adapter;
     private int tabSelected = 0;
@@ -60,10 +65,12 @@ public class NotificacionesFragment extends Fragment implements NotificationsRef
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getFields();
+        customizeFields();
         setButtonsWidth();
         setOnClickListeners();
         initializeList();
         setRefreshListener();
+        cumpleañosButton.performClick();
     }
 
     @Override
@@ -84,6 +91,24 @@ public class NotificacionesFragment extends Fragment implements NotificationsRef
         notificationsList = getView().findViewById(R.id.notificationsList);
         emptyState = getView().findViewById(R.id.emptyState);
         refreshLayout = getView().findViewById(R.id.refreshLayout);
+        buttonsView = getView().findViewById(R.id.buttonsView);
+    }
+
+    public void customizeFields() {
+        customizeButtons();
+        customizeViews();
+    }
+
+    private void customizeButtons() {
+        CommonFunctions.customizeView(getActivity().getApplicationContext(), cumpleañosButton, AppStyle.getPrimaryColor());
+        CommonFunctions.customizeView(getActivity().getApplicationContext(), cadenciaButton, AppStyle.getPrimaryColor());
+        CommonFunctions.customizeView(getActivity().getApplicationContext(), cajaButton, AppStyle.getPrimaryColor());
+        CommonFunctions.customizeView(getActivity().getApplicationContext(), personalizadaButton, AppStyle.getPrimaryColor());
+    }
+
+    private void customizeViews() {
+        notificationsList.setBackgroundColor(AppStyle.getBackgroundColor());
+        buttonsView.setBackgroundColor(AppStyle.getBackgroundColor());
     }
 
     private void setButtonsWidth() {
@@ -156,16 +181,27 @@ public class NotificacionesFragment extends Fragment implements NotificationsRef
                 updateList();
             }
         });
+        buttonsView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //no implementar
+            }
+        });
     }
 
     private void fillButton(RelativeLayout view, TextView textView) {
-        view.setBackgroundTintMode(PorterDuff.Mode.SRC_IN);
+        GradientDrawable unwrappedDrawable = (GradientDrawable) AppCompatResources.getDrawable(getActivity().getApplicationContext(), R.drawable.heme_cell_rounded_view);
+        unwrappedDrawable.setColor(AppStyle.getPrimaryColor());
+        view.setBackground(unwrappedDrawable);
         textView.setTextColor(getResources().getColor(R.color.white, null));
     }
 
     private void unFillButton(RelativeLayout view, TextView textView) {
-        view.setBackgroundTintMode(PorterDuff.Mode.ADD);
-        textView.setTextColor(getResources().getColor(R.color.colorPrimary, null));
+        GradientDrawable unwrappedDrawable = (GradientDrawable) AppCompatResources.getDrawable(getActivity().getApplicationContext(), R.drawable.heme_cell_rounded_view);
+        unwrappedDrawable.setStroke(CommonFunctions.convertToPx(1, getActivity().getApplicationContext()), AppStyle.getPrimaryColor());
+        unwrappedDrawable.setColor(getResources().getColor(R.color.white));
+        view.setBackground(unwrappedDrawable);
+        textView.setTextColor(AppStyle.getPrimaryColor());
     }
 
     private void setRefreshListener() {

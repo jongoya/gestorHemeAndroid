@@ -3,10 +3,13 @@ package com.example.gestorheme.Activities.Main.Fragments.Agenda.Views;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.gestorheme.Activities.ClientDetail.ClientDetailActivity;
+import com.example.gestorheme.Common.AppStyle;
+import com.example.gestorheme.Common.CommonFunctions;
 import com.example.gestorheme.Common.Constants;
 import com.example.gestorheme.Common.DateFunctions;
 import com.example.gestorheme.Models.Client.ClientModel;
@@ -19,11 +22,15 @@ import java.util.Date;
 public class ClientItemView extends RelativeLayout {
     private TextView nombreLabel;
     private TextView horariosLabel;
+    private RelativeLayout background;
+    private ImageView imagen;
+    private RelativeLayout rootLayout;
 
     public ClientItemView(Context context, ClientModel cliente, Date presentDate) {
         super(context);
         View.inflate(context, R.layout.agenda_client_item_view, this);
         getFields();
+        customizeFields();
         setOnClickListeners(context, cliente);
         setFields(cliente, presentDate);
     }
@@ -31,8 +38,18 @@ public class ClientItemView extends RelativeLayout {
     private void getFields() {
         nombreLabel = findViewById(R.id.nombreLabel);
         horariosLabel = findViewById(R.id.horariosLabel);
+        background = findViewById(R.id.background);
+        imagen = findViewById(R.id.image);
+        rootLayout = findViewById(R.id.root);
     }
 
+    private void customizeFields() {
+        nombreLabel.setTextColor(AppStyle.getPrimaryTextColor());
+        horariosLabel.setTextColor(AppStyle.getSecondaryTextColor());
+        imagen.setColorFilter(AppStyle.getPrimaryTextColor());
+        CommonFunctions.customizeView(getContext(), background, AppStyle.getSecondaryColor());
+        rootLayout.setBackgroundColor(AppStyle.getBackgroundColor());
+    }
     private void setFields(ClientModel cliente, Date presentDate) {
         ArrayList<ServiceModel> servicios = Constants.databaseManager.servicesManager.getServicesForDate(presentDate);
         nombreLabel.setText(cliente.getNombre() + " " + cliente.getApellidos());

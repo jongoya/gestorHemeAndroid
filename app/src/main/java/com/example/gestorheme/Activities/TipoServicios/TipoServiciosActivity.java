@@ -6,20 +6,19 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import com.example.gestorheme.Activities.NuevoTipoServicio.NuevoTipoServicioActivity;
 import com.example.gestorheme.Activities.TipoServicios.Adapter.TipoServiciosListAdapter;
 import com.example.gestorheme.Activities.TipoServicios.Interfaces.TipoServiciosRefreshInterface;
+import com.example.gestorheme.Common.AppStyle;
 import com.example.gestorheme.Common.CommonFunctions;
 import com.example.gestorheme.Common.Constants;
 import com.example.gestorheme.Common.SyncronizationManager;
 import com.example.gestorheme.Models.TipoServicio.TipoServicioModel;
 import com.example.gestorheme.R;
-
 import java.util.ArrayList;
 
 public class TipoServiciosActivity extends AppCompatActivity implements TipoServiciosRefreshInterface {
@@ -27,6 +26,7 @@ public class TipoServiciosActivity extends AppCompatActivity implements TipoServ
     private RelativeLayout addButton;
     private ImageView addImage;
     private SwipeRefreshLayout refreshLayout;
+    private ConstraintLayout rootLayout;
 
     private TipoServiciosListAdapter adapter;
 
@@ -34,8 +34,10 @@ public class TipoServiciosActivity extends AppCompatActivity implements TipoServ
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tipo_servicios_activity_layout);
+        AppStyle.setStatusBarColor(this);
         getFields();
         customizeButton();
+        customizeBackground();
         setOnClickListener();
         setRefreshLayoutListener();
     }
@@ -51,10 +53,15 @@ public class TipoServiciosActivity extends AppCompatActivity implements TipoServ
         addButton = findViewById(R.id.saveButton);
         addImage = findViewById(R.id.saveImage);
         refreshLayout = findViewById(R.id.refreshLayout);
+        rootLayout = findViewById(R.id.root);
     }
 
     private void customizeButton() {
-        CommonFunctions.customizeViewWithImage(getApplicationContext(), addButton, addImage, R.color.colorPrimary, R.color.colorPrimary);
+        CommonFunctions.customizeViewWithImage(getApplicationContext(), addButton, addImage, AppStyle.getPrimaryColor(), AppStyle.getPrimaryColor());
+    }
+
+    private void customizeBackground() {
+        rootLayout.setBackgroundColor(AppStyle.getBackgroundColor());
     }
 
     private void setRefreshLayoutListener() {

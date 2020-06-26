@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.example.gestorheme.Common.AppStyle;
 import com.example.gestorheme.Models.Client.ClientModel;
 import com.example.gestorheme.R;
 import java.util.ArrayList;
@@ -41,6 +42,7 @@ public class CadenciaDetailListAdapter extends BaseAdapter {
         view = mInflater.inflate(R.layout.cadencia_detail_list_cell, null);
         TextView nombre= view.findViewById(R.id.nombre);
         nombre.setText(clientes.get(i).getNombre() + " " + clientes.get(i).getApellidos());
+        nombre.setTextColor(AppStyle.getPrimaryTextColor());
 
         return view;
     }

@@ -1,7 +1,6 @@
 package com.example.gestorheme.Activities.Main.Fragments.Heme;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -12,17 +11,19 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import com.example.gestorheme.Activities.Main.Fragments.Heme.Adapter.ComercioListAdapter;
 import com.example.gestorheme.Activities.Settings.SettingsActivity;
 import com.example.gestorheme.Activities.Stadisticas.StadisticasActivity;
+import com.example.gestorheme.Common.AppStyle;
 import com.example.gestorheme.Common.CommonFunctions;
 import com.example.gestorheme.Common.Preferencias;
 import com.example.gestorheme.Models.Comercio.ComercioModel;
@@ -48,7 +49,7 @@ public class HemeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getFields();
-        customizeButton();
+        customizeLayout();
         setList();
         setOnClickListeners();
     }
@@ -59,8 +60,17 @@ public class HemeFragment extends Fragment {
         settingsImage = getView().findViewById(R.id.settingsImage);
     }
 
+    public void customizeLayout() {
+        customizeButton();
+        cuatomizeListBackground();
+    }
+
     private void customizeButton() {
-        CommonFunctions.customizeViewWithImage(getContext(), settingButton, settingsImage, R.color.colorPrimary, R.color.colorPrimary);
+        CommonFunctions.customizeViewWithImage(getContext(), settingButton, settingsImage, AppStyle.getPrimaryColor(), AppStyle.getPrimaryColor());
+    }
+
+    private void cuatomizeListBackground() {
+        comercioList.setBackgroundColor(AppStyle.getBackgroundColor());
     }
 
     private void setList() {
@@ -95,8 +105,18 @@ public class HemeFragment extends Fragment {
         EditText passwordInput = dialogView.findViewById(R.id.passwordInput);
         RelativeLayout aceptarButton = dialogView.findViewById(R.id.aceptarButton);
         RelativeLayout cancelarButton = dialogView.findViewById(R.id.cancelarButton);
-        CommonFunctions.customizeView(getContext(), aceptarButton, R.color.colorPrimary);
-        CommonFunctions.customizeView(getContext(), cancelarButton, R.color.colorPrimary);
+        ConstraintLayout rootLayout = dialogView.findViewById(R.id.root);
+        TextView titulo = dialogView.findViewById(R.id.titulo);
+        TextView aceptarText = dialogView.findViewById(R.id.aceptarText);
+        TextView cancelarText = dialogView.findViewById(R.id.cancelarText);
+
+        titulo.setTextColor(AppStyle.getPrimaryTextColor());
+        aceptarText.setTextColor(AppStyle.getPrimaryTextColor());
+        cancelarText.setTextColor(AppStyle.getPrimaryTextColor());
+        CommonFunctions.customizeView(getContext(), aceptarButton, AppStyle.getSecondaryColor());
+        CommonFunctions.customizeView(getContext(), cancelarButton, AppStyle.getSecondaryColor());
+        CommonFunctions.customizeView(getContext(), rootLayout, AppStyle.getSecondaryColor());
+        CommonFunctions.customizeTextField(getContext(), passwordInput, AppStyle.getSecondaryColor(), AppStyle.getPrimaryTextColor(), AppStyle.getSecondaryTextColor());
 
         aceptarButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -3,14 +3,18 @@ package com.example.gestorheme.Activities.ClientListSelector;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
-
+import android.widget.RelativeLayout;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-
+import androidx.constraintlayout.widget.ConstraintLayout;
 import com.example.gestorheme.Activities.Main.Fragments.ListaClientes.Adapter.ClientListAdapter;
 import com.example.gestorheme.Activities.Main.Fragments.ListaClientes.Models.ListaClienteCellModel;
+import com.example.gestorheme.Common.AppStyle;
 import com.example.gestorheme.Common.CommonFunctions;
 import com.example.gestorheme.Common.Constants;
 import com.example.gestorheme.Models.Client.ClientModel;
@@ -22,6 +26,10 @@ public class ClientListSelectorActivity extends AppCompatActivity {
     private static final int TYPE_CLIENT = 0;
     private static final int TYPE_HEADER = 1;
     private ListView clientList;
+    private ConstraintLayout root;
+    private ImageButton cleanButton;
+    private RelativeLayout filterView;
+    private EditText clientFilterField;
 
     private ClientListAdapter clientListAdapter;
 
@@ -29,7 +37,13 @@ public class ClientListSelectorActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.client_list_selector_layout);
+        AppStyle.setStatusBarColor(this);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         getFields();
+        customizeFields();
+        customizeEditText();
+        customizeFilterView();
+        customizeButtons();
 
         setListProperties();
         setClientList();
@@ -37,6 +51,26 @@ public class ClientListSelectorActivity extends AppCompatActivity {
 
     private void getFields() {
         clientList = findViewById(R.id.clientList);
+        root = findViewById(R.id.root);
+        cleanButton = findViewById(R.id.clean_button);
+        filterView = findViewById(R.id.filter_view);
+        clientFilterField = findViewById(R.id.client_filter_field);
+    }
+
+    private void customizeFields() {
+        root.setBackgroundColor(AppStyle.getBackgroundColor());
+    }
+
+    private void customizeEditText() {
+        CommonFunctions.customizeTextField(getApplicationContext(), clientFilterField, AppStyle.getSecondaryTextColor(), AppStyle.getPrimaryTextColor(), AppStyle.getSecondaryTextColor());
+    }
+
+    private void customizeButtons() {
+        cleanButton.setColorFilter(AppStyle.getPrimaryColor());
+    }
+
+    private void customizeFilterView() {
+        filterView.setBackgroundColor(AppStyle.getBackgroundColor());
     }
 
     private void setListProperties() {
@@ -53,6 +87,7 @@ public class ClientListSelectorActivity extends AppCompatActivity {
     }
 
     private void setClientList() {
+        clientList.setBackgroundColor(AppStyle.getBackgroundColor());
         clientListAdapter = new ClientListAdapter(this);
         ArrayList<ClientModel> clientes = Constants.databaseManager.clientsManager.getClientsFromDatabase();
 

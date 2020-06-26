@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.example.gestorheme.Activities.Main.Fragments.Agenda.Interfaces.ServiceItemViewInterface;
 import com.example.gestorheme.Activities.ServiceDetail.ServiceDetailActivity;
+import com.example.gestorheme.Common.AppStyle;
 import com.example.gestorheme.Common.CommonFunctions;
 import com.example.gestorheme.Common.Constants;
 import com.example.gestorheme.Common.OnSwipeTouchListener;
@@ -39,6 +40,7 @@ public class ServiceItemView extends RelativeLayout {
         View.inflate(context, R.layout.service_item_view, this);
         this.delegate = delegate;
         getFields();
+        customizeFields();
         setOnClickListeners(servicio, context);
         setFields(servicio);
     }
@@ -48,6 +50,12 @@ public class ServiceItemView extends RelativeLayout {
         serviciosLabel = findViewById(R.id.serviciosLabel);
         profesionalLabel = findViewById(R.id.profesionalLabel);
         backgroundLayout = findViewById(R.id.background);
+    }
+
+    private void customizeFields() {
+        nombreLabel.setTextColor(AppStyle.getPrimaryTextColor());
+        serviciosLabel.setTextColor(AppStyle.getPrimaryTextColor());
+        profesionalLabel.setTextColor(AppStyle.getPrimaryTextColor());
     }
 
     private void setOnClickListeners(final ServiceModel servicio, final Context context) {

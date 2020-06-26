@@ -18,6 +18,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import com.example.gestorheme.Activities.Main.Fragments.Notificaciones.Interfaces.ClientSelectorActionSheetInterface;
 import com.example.gestorheme.Activities.Main.Fragments.Notificaciones.Views.ClientSelectorActionSheet;
+import com.example.gestorheme.Common.AppStyle;
 import com.example.gestorheme.Common.CommonFunctions;
 import com.example.gestorheme.Common.Constants;
 import com.example.gestorheme.Models.Client.ClientModel;
@@ -46,14 +47,17 @@ public class BirthdayDetail extends AppCompatActivity implements ClientSelectorA
     private ImageView callImage;
     private ImageView wassapImage;
     private ImageView messageImage;
+    private ImageView icono;
     private int comunicationOptionSelected = 0;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.birthday_layout);
+        AppStyle.setStatusBarColor(this);
         getBirthdayIntent();
         getFields();
+        customizeFields();
         setOnClickListeners();
         setNotificationContent();
     }
@@ -74,6 +78,15 @@ public class BirthdayDetail extends AppCompatActivity implements ClientSelectorA
         this.notificaciones = (ArrayList<NotificationModel>) getIntent().getSerializableExtra("notificaciones");
     }
 
+    private void customizeFields() {
+        icono.setColorFilter(AppStyle.getPrimaryTextColor());
+        nombresField.setTextColor(AppStyle.getPrimaryTextColor());
+        titulo.setTextColor(AppStyle.getPrimaryTextColor());
+        CommonFunctions.customizeViewWithImage(getApplicationContext(), callButton, callImage, AppStyle.getPrimaryColor(), AppStyle.getPrimaryColor());
+        CommonFunctions.customizeViewWithImage(getApplicationContext(), wassapButton, wassapImage, AppStyle.getPrimaryColor(), AppStyle.getPrimaryColor());
+        CommonFunctions.customizeViewWithImage(getApplicationContext(), messageButton, messageImage, AppStyle.getPrimaryColor(), AppStyle.getPrimaryColor());
+    }
+
     private void getFields() {
         nombresField = findViewById(R.id.nombres);
         backgroundImage = findViewById(R.id.imagen);
@@ -85,6 +98,7 @@ public class BirthdayDetail extends AppCompatActivity implements ClientSelectorA
         callImage = findViewById(R.id.callImage);
         wassapImage = findViewById(R.id.wassapImage);
         messageImage = findViewById(R.id.messageImage);
+        icono = findViewById(R.id.icono);
     }
 
     private void setNotificationContent() {
@@ -98,10 +112,6 @@ public class BirthdayDetail extends AppCompatActivity implements ClientSelectorA
             titulo.setText("¡Notificación personalizada!");
             nombresField.setText(notificaciones.get(0).getDescripcion());
         }
-
-        CommonFunctions.customizeViewWithImage(getApplicationContext(), callButton, callImage, R.color.dividerColor, R.color.dividerColor);
-        CommonFunctions.customizeViewWithImage(getApplicationContext(), wassapButton, wassapImage, R.color.dividerColor, R.color.dividerColor);
-        CommonFunctions.customizeViewWithImage(getApplicationContext(), messageButton, messageImage, R.color.dividerColor, R.color.dividerColor);
     }
 
     private void setNames() {

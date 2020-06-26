@@ -7,11 +7,10 @@
     android:background="@color/white">
 
     <RelativeLayout
-        android:id="@+id/relativeLayout"
+        android:id="@+id/calendarBackground"
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:layout_marginTop="5dp"
-        android:background="@color/backgroundColor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -39,16 +38,18 @@
         android:weekNumberColor="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/refreshLayout"
-        app:layout_constraintTop_toBottomOf="@+id/relativeLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/calendarBackground" />
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/refreshLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:background="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/relativeLayout"
+        app:layout_constraintTop_toBottomOf="@+id/calendarBackground"
         app:layout_constraintVertical_bias="1.0">
 
         <androidx.core.widget.NestedScrollView
@@ -61,7 +62,6 @@
                 android:id="@+id/agendaContentView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/backgroundColor"
                 android:orientation="vertical" />
         </androidx.core.widget.NestedScrollView>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
@@ -76,7 +76,7 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <ImageView
-            android:id="@+id/imageView8"
+            android:id="@+id/calendarImage"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_centerInParent="true"
@@ -95,7 +95,7 @@
         app:layout_constraintEnd_toStartOf="@+id/calendarButton">
 
         <ImageView
-            android:id="@+id/imageView9"
+            android:id="@+id/clientImage"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_centerInParent="true"

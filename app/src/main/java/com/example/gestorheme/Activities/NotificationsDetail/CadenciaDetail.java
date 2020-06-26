@@ -1,12 +1,14 @@
 package com.example.gestorheme.Activities.NotificationsDetail;
 
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.gestorheme.Activities.Main.Fragments.Notificaciones.Adapter.CadenciaDetailListAdapter;
+import com.example.gestorheme.Common.AppStyle;
 import com.example.gestorheme.Common.CommonFunctions;
 import com.example.gestorheme.Common.Constants;
 import com.example.gestorheme.Models.Client.ClientModel;
@@ -22,6 +24,7 @@ public class CadenciaDetail extends AppCompatActivity {
     private ListView clientList;
     private RelativeLayout rootLayout;
     private RelativeLayout loadingState;
+    private ImageView icono;
     private CadenciaDetailListAdapter adapter;
 
     private ArrayList<NotificationModel> notificaciones;
@@ -32,6 +35,7 @@ public class CadenciaDetail extends AppCompatActivity {
         setContentView(R.layout.cadencia_notification_layout);
         getCadenciaIntent();
         getFields();
+        customizeFields();
         setFields();
         setClientList();
     }
@@ -53,6 +57,12 @@ public class CadenciaDetail extends AppCompatActivity {
         descripcionField = findViewById(R.id.descripcion);
         clientList = findViewById(R.id.clientList);
         rootLayout = findViewById(R.id.root);
+        icono = findViewById(R.id.icono);
+    }
+
+    private void customizeFields() {
+        descripcionField.setTextColor(AppStyle.getPrimaryTextColor());
+        icono.setColorFilter(AppStyle.getPrimaryTextColor());
     }
 
     private void setFields() {

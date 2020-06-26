@@ -7,7 +7,7 @@
     android:background="@color/backgroundColor">
 
     <RelativeLayout
-        android:id="@+id/relativeLayout2"
+        android:id="@+id/buttonsView"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:background="@color/white"
@@ -23,9 +23,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:background="@drawable/rounded_view"
-            android:backgroundTint="@color/colorPrimary"
-            android:backgroundTintMode="src_in">
+            android:background="@drawable/rounded_view">
 
             <TextView
                 android:id="@+id/cumpleText"
@@ -51,8 +49,6 @@
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:layout_toRightOf="@id/cumpleButton"
-            android:background="@drawable/rounded_view"
-            android:backgroundTint="@color/colorPrimary"
             android:backgroundTintMode="add">
 
             <TextView
@@ -79,8 +75,6 @@
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:layout_toRightOf="@id/cadenciaButton"
-            android:background="@drawable/rounded_view"
-            android:backgroundTint="@color/colorPrimary"
             android:backgroundTintMode="add">
 
             <TextView
@@ -108,8 +102,6 @@
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:layout_toRightOf="@id/cajaButton"
-            android:background="@drawable/rounded_view"
-            android:backgroundTint="@color/colorPrimary"
             android:backgroundTintMode="add">
 
             <TextView
@@ -136,7 +128,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/relativeLayout2">
+        app:layout_constraintTop_toBottomOf="@+id/buttonsView">
 
         <ListView
             android:id="@+id/notificationsList"
@@ -155,6 +147,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/refreshLayout"
         app:layout_constraintStart_toStartOf="@+id/refreshLayout"
-        app:layout_constraintTop_toBottomOf="@+id/relativeLayout2" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonsView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

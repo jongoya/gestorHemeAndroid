@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/backgroundColor">
@@ -25,7 +26,7 @@
             app:srcCompat="@drawable/empleado_image" />
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/empleadosLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -57,7 +58,7 @@
             app:srcCompat="@drawable/servicio_image" />
 
         <TextView
-            android:id="@+id/textView6"
+            android:id="@+id/serviciosLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -89,7 +90,7 @@
             app:srcCompat="@drawable/calendar_image" />
 
         <TextView
-            android:id="@+id/textView7"
+            android:id="@+id/agendaLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
