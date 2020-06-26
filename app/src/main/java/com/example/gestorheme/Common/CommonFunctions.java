@@ -13,14 +13,11 @@ import android.os.Build;
 import android.provider.Settings;
 import android.util.Base64;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.content.res.AppCompatResources;
-import androidx.core.content.ContextCompat;
 
 import com.example.gestorheme.Activities.Login.LoginActivity;
 import com.example.gestorheme.BuildConfig;
@@ -137,8 +134,8 @@ public class CommonFunctions {
                         Constants.databaseManager.deleteAllRecordsFromDatabase();
                         Preferencias.eliminarTodasLasPreferencias(activity.getApplicationContext());
                         Intent intent = new Intent(activity, LoginActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         activity.startActivity(intent);
-                        activity.finish();
                     }
                 });
         alertDialog.show();
