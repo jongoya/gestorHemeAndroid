@@ -130,12 +130,11 @@ public class NotificationListAdapter extends BaseAdapter {
     }
 
     private String createDateStringForNotifcacion(long fecha) {
-        Date date = new Date(fecha);
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
+        calendar.setTimeInMillis(fecha * 1000);
         int dia = calendar.get(Calendar.DAY_OF_MONTH);
         int año = calendar.get(Calendar.YEAR);
 
-        return String.valueOf(dia) + " de " + new SimpleDateFormat("MMMM").format(date) + " de " + String.valueOf(año);
+        return String.valueOf(dia) + " de " + new SimpleDateFormat("MMMM").format(calendar.getTime()) + " de " + String.valueOf(año);
     }
 }

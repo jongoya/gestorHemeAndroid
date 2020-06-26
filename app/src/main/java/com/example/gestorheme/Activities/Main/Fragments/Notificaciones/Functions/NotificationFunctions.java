@@ -1,5 +1,6 @@
 package com.example.gestorheme.Activities.Main.Fragments.Notificaciones.Functions;
 import android.content.Context;
+import android.provider.CalendarContract;
 
 import com.example.gestorheme.Common.Constants;
 import com.example.gestorheme.Common.DateFunctions;
@@ -9,12 +10,9 @@ import com.example.gestorheme.Models.CierreCaja.CierreCajaModel;
 import com.example.gestorheme.Models.Client.ClientModel;
 import com.example.gestorheme.Models.Notification.NotificationModel;
 import com.example.gestorheme.Models.Service.ServiceModel;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -172,8 +170,11 @@ public class NotificationFunctions {
     private static ArrayList<NotificationModel> checkCierreCajas(Context contexto) {
         ArrayList<NotificationModel> cierreCajas = new ArrayList<>();
         Date yesterday = DateFunctions.remove1DayToDate(new Date());
-        long begginingOfDay = DateFunctions.getBeginingOfDayFromDate(yesterday).getTime();
-        long endOfDay = DateFunctions.getEndOfDayFromDate(yesterday).getTime();
+        Calendar calendar1 = Calendar.getInstance();
+        calendar1.setTime(DateFunctions.getBeginingOfDayFromDate(yesterday));
+        long begginingOfDay = calendar1.getTimeInMillis() / 1000;
+        calendar1.setTime(DateFunctions.getEndOfDayFromDate(yesterday));
+        long endOfDay = calendar1.getTimeInMillis() / 1000;
 
         boolean cierreCajaExiste = checkCierreCajasInRange(begginingOfDay, endOfDay);
         boolean serviciosExist = Constants.databaseManager.servicesManager.getServicesForDate(yesterday).size() > 0;

@@ -74,7 +74,7 @@ public class Constants {
 
     public static final String notificationCumpleañosType = "cumpleaños";
     public static final String notificationCadenciaType = "cadencia";
-    public static final String notificationcajaType = "caja";
+    public static final String notificationcajaType = "cajaCierre";
     public static final String notificationpersonalizadaType = "personalizada";
 
     public static final String notificationCellRowType = "row";

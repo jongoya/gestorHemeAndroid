@@ -83,6 +83,10 @@ public class AppStyle {
 
     public static int getNavigationColor() {
         EstiloAppModel model = Constants.databaseManager.estiloAppManager.getEstiloAppFromDatabase();
+        if (model == null) {
+            return Color.parseColor("#F2F2F7");
+        }
+
         if (model.getNavigationColor().length() == 0) {
             return Color.parseColor("#F2F2F7");
         }
