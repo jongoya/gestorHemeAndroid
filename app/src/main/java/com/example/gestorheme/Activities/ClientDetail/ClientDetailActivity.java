@@ -244,7 +244,7 @@ public class ClientDetailActivity extends AppCompatActivity implements ServicesR
                 });
             }
 
-            if (serviceView.service.getFecha() > new Date().getTime()) {
+            if (serviceView.service.getFecha() > Calendar.getInstance().getTimeInMillis() / 1000) {
                 futurosServicios.add(serviceView);
             } else {
                 antiguosServicios.add(serviceView);
@@ -252,7 +252,7 @@ public class ClientDetailActivity extends AppCompatActivity implements ServicesR
         }
 
         if (futurosServicios.size() > 0) {
-            addServiceHeader("FUTUROS SERVICIOS");
+            addServiceHeader("PRÓXIMOS SERVICIOS");
             for (int j = 0; j < futurosServicios.size(); j++) {
                 scrollContentView.addView(futurosServicios.get(j));
             }

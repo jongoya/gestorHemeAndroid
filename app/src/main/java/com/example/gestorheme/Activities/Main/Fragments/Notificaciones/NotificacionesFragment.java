@@ -175,8 +175,8 @@ public class NotificacionesFragment extends Fragment implements NotificationsRef
             public void onClick(View view) {
                 unFillButton(cumpleañosButton, cumpleText);
                 unFillButton(cadenciaButton, cadenciaText);
-                unFillButton(cajaButton, cajaText);
                 fillButton(personalizadaButton, personalizadaText);
+                unFillButton(cajaButton, cajaText);
                 tabSelected = 3;
                 updateList();
             }
@@ -267,7 +267,7 @@ public class NotificacionesFragment extends Fragment implements NotificationsRef
         ArrayList<NotificationDayModel> notificacionesAgrupadas = new ArrayList<>();
         for (int i = 0; i < notificaciones.size(); i++) {
             Calendar calendar = Calendar.getInstance();
-            calendar.setTime(new Date(notificaciones.get(i).getFecha() * 1000));
+            calendar.setTime(DateFunctions.getBeginingOfDayFromDate(new Date(notificaciones.get(i).getFecha() * 1000)));
             long beginingOfDay = calendar.getTimeInMillis() / 1000;
             if (!fechasInicioDelDiaAgrupadas.contains(beginingOfDay)) {
                 fechasInicioDelDiaAgrupadas.add(beginingOfDay);

@@ -223,8 +223,11 @@ public class NotificationFunctions {
 
     private static ArrayList<NotificationModel> checkNotificacionesPersonalizadas(Context contexto) {
         ArrayList<ClientModel> clientes = Constants.databaseManager.clientsManager.getClientsFromDatabase();
-        long begginingOfDay = DateFunctions.getBeginingOfDayFromDate(new Date()).getTime();
-        long endOfDay = DateFunctions.getEndOfDayFromDate(new Date()).getTime();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(DateFunctions.getBeginingOfDayFromDate(new Date()));
+        long begginingOfDay = calendar.getTimeInMillis() / 1000;
+        calendar.setTime(DateFunctions.getEndOfDayFromDate(new Date()));
+        long endOfDay = calendar.getTimeInMillis() / 1000;
         ArrayList<NotificationModel> notificaciones = new ArrayList<>();
         for (int i = 0; i < clientes.size(); i++) {
             ClientModel cliente = clientes.get(i);
