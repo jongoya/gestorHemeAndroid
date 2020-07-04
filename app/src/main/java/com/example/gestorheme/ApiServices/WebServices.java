@@ -36,6 +36,12 @@ public interface WebServices {
     @GET("get_servicios/{comercioId}")
     Call<ArrayList<ServiceModel>> getAllServicios(@Path("comercioId") long comercioId);
 
+    @GET("get_servicios_client/{comercioId}/{clientId}")
+    Call<ArrayList<ServiceModel>> getServiciosForClientId(@Path("comercioId") long comercioId, @Path("clientId") long clientId);
+
+    @GET ("get_servicios_range/{comercioId}/{fechaInicio}/{fechaFin}")
+    Call<ArrayList<ServiceModel>> getServiciosPorRango(@Path("comercioId") long comercioId, @Path("fechaInicio") long fechaInicio, @Path("fechaFin") long fechaFin);
+
     @Headers("Content-Type: application/json")
     @POST("save_servicio")
     Call<ServiceModel> saveService(@Body ServiceModel service);

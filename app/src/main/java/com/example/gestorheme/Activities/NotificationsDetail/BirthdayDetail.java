@@ -281,6 +281,8 @@ public class BirthdayDetail extends AppCompatActivity implements ClientSelectorA
                 } else {
                     CommonFunctions.showGenericAlertMessage(BirthdayDetail.this, "Error actualizando la notificación");
                 }
+
+                Constants.mainActivityReference.updateNotificationBadge();
             }
 
             @Override

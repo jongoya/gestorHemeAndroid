@@ -374,6 +374,8 @@ public class CierreCajaActivity extends AppCompatActivity {
                 } else {
                     CommonFunctions.showGenericAlertMessage(CierreCajaActivity.this, "Error eliminando la notificación");
                 }
+
+                Constants.mainActivityReference.updateNotificationBadge();
             }
 
             @Override

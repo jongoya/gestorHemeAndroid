@@ -26,7 +26,6 @@ import com.example.gestorheme.Activities.ClientDetail.Fragment.DatePickerFragmen
 import com.example.gestorheme.Activities.ClientDetail.Views.ServiceView;
 import com.example.gestorheme.Activities.DatePicker.DatePickerActivity;
 import com.example.gestorheme.Activities.ItemSelector.ItemSelectorActivity;
-import com.example.gestorheme.Activities.Main.Fragments.Agenda.Interfaces.ServicesRefreshInterface;
 import com.example.gestorheme.Activities.ServiceDetail.ServiceDetailActivity;
 import com.example.gestorheme.Activities.TextInputField.TextInputFieldActivity;
 import com.example.gestorheme.Common.AppStyle;
@@ -47,12 +46,11 @@ import com.makeramen.roundedimageview.RoundedImageView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ClientDetailActivity extends AppCompatActivity implements ServicesRefreshInterface {
+public class ClientDetailActivity extends AppCompatActivity {
     private static final int NOMBRE_FIELD_REF = 0;
     private static final int APELLIDOS_FIELD_REF = 1;
     private static final int TELEFONO_FIELD_REF = 2;
@@ -424,7 +422,7 @@ public class ClientDetailActivity extends AppCompatActivity implements ServicesR
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                SyncronizationManager.getServiciosFromServer(ClientDetailActivity.this, getApplicationContext());
+                getServicesForClientId();
             }
         });
     }
@@ -699,14 +697,32 @@ public class ClientDetailActivity extends AppCompatActivity implements ServicesR
         }
     }
 
-    @Override
-    public void servicesLoaded() {
-        refreshLayout.setRefreshing(false);
-        onResume();
-    }
+    private void getServicesForClientId() {
+        Call <ArrayList<ServiceModel>> call = Constants.webServices.getServiciosForClientId(Preferencias.getComercioIdFromSharedPreferences(getApplicationContext()), cliente.getClientId());
+        call.enqueue(new Callback<ArrayList<ServiceModel>>() {
+            @Override
+            public void onResponse(Call<ArrayList<ServiceModel>> call, Response<ArrayList<ServiceModel>> response) {
+                if (response.code() == 200 && response.body().size() > 0) {
+                    for (int i = 0; i < response.body().size(); i++) {
+                        ServiceModel service = response.body().get(i);
+                        if (Constants.databaseManager.servicesManager.getServiceForServiceId(service.getServiceId()) != null) {
+                            Constants.databaseManager.servicesManager.updateServiceInDatabase(service);
+                        } else {
+                            Constants.databaseManager.servicesManager.addServiceToDatabase(service);
+                        }
 
-    @Override
-    public void errorLoadingServices() {
-        refreshLayout.setRefreshing(false);
+                        SyncronizationManager.deleteLocalServicesIfNeeded(response.body());
+
+                        refreshLayout.setRefreshing(false);
+                        onResume();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<ServiceModel>> call, Throwable t) {
+                refreshLayout.setRefreshing(false);
+            }
+        });
     }
 }

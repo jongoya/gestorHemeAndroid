@@ -265,6 +265,8 @@ public class NotificationFunctions {
         notificaciones.addAll(checkCadencias(context));
         notificaciones.addAll(checkNotificacionesPersonalizadas(context));
         saveNotifications(notificaciones);
+
+        Constants.mainActivityReference.updateNotificationBadge();
     }
 
     private static void saveNotifications(ArrayList<NotificationModel> notifications) {

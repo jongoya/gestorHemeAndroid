@@ -67,7 +67,7 @@ public class ClientListAdapter extends BaseAdapter {
                 holder.nombre = view.findViewById(R.id.nombre);
                 holder.telefono = view.findViewById(R.id.telefono);
                 holder.imagen = view.findViewById(R.id.imagen);
-                holder.nombre.setText(clientes.get(i).getCliente().getNombre() + " " + clientes.get(i).getCliente().getApellidos());
+                holder.nombre.setText(clientes.get(i).getCliente().getApellidos() + ", " + clientes.get(i).getCliente().getNombre());
                 holder.telefono.setText("Telefono: " + clientes.get(i).getCliente().getTelefono());
                 if (clientes.get(i).getCliente().getImagen().length() == 0) {
                     holder.imagen.setImageResource(R.drawable.user_image);

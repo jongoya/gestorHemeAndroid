@@ -34,6 +34,7 @@ import com.example.gestorheme.Common.AppStyle;
 import com.example.gestorheme.Common.CommonFunctions;
 import com.example.gestorheme.Common.Constants;
 import com.example.gestorheme.Common.DateFunctions;
+import com.example.gestorheme.Common.Preferencias;
 import com.example.gestorheme.Common.SyncronizationManager;
 import com.example.gestorheme.Models.Client.ClientModel;
 import com.example.gestorheme.Models.Empleados.EmpleadoModel;
@@ -46,8 +47,11 @@ import java.util.Date;
 
 import devs.mulham.horizontalcalendar.HorizontalCalendar;
 import devs.mulham.horizontalcalendar.utils.HorizontalCalendarListener;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-public class AgendaFragment extends Fragment implements ServiceItemViewInterface, FilterActionSheetInterface, ServicesRefreshInterface {
+public class AgendaFragment extends Fragment implements ServiceItemViewInterface, FilterActionSheetInterface {
     private LinearLayout scrollContentView;
     private CalendarView calendarView;
     private SwipeRefreshLayout refreshLayout;
@@ -202,7 +206,7 @@ public class AgendaFragment extends Fragment implements ServiceItemViewInterface
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                SyncronizationManager.getServiciosFromServer(AgendaFragment.this, getActivity().getApplicationContext());
+                getServicesForRange();
             }
         });
     }
@@ -371,18 +375,41 @@ public class AgendaFragment extends Fragment implements ServiceItemViewInterface
         buildAgendaDay();
     }
 
-    @Override
-    public void servicesLoaded() {
-        refreshLayout.setRefreshing(false);
-        if (clientesVisible) {
-            buildClientesDay();
-        } else {
-            buildAgendaDay();
-        }
-    }
+    private void getServicesForRange() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(DateFunctions.getBeginingOfWorkingDayFromDate(presentDate));
+        long beginingOfDay = calendar.getTimeInMillis() / 1000;
+        calendar.setTime(DateFunctions.getEndOfWorkingDayFromDate(presentDate));
+        long endOfDay = calendar.getTimeInMillis() / 1000;
+        Call<ArrayList<ServiceModel>> call = Constants.webServices.getServiciosPorRango(Preferencias.getComercioIdFromSharedPreferences(getContext()), beginingOfDay, endOfDay);
+        call.enqueue(new Callback<ArrayList<ServiceModel>>() {
+            @Override
+            public void onResponse(Call<ArrayList<ServiceModel>> call, Response<ArrayList<ServiceModel>> response) {
+                if (response.code() == 200 && response.body().size() > 0) {
+                    for (int i = 0; i < response.body().size(); i++) {
+                        ServiceModel service = response.body().get(i);
+                        if (Constants.databaseManager.servicesManager.getServiceForServiceId(service.getServiceId()) != null) {
+                            Constants.databaseManager.servicesManager.updateServiceInDatabase(service);
+                        } else {
+                            Constants.databaseManager.servicesManager.addServiceToDatabase(service);
+                        }
 
-    @Override
-    public void errorLoadingServices() {
-        refreshLayout.setRefreshing(false);
+                        SyncronizationManager.deleteLocalServicesIfNeeded(response.body());
+
+                        refreshLayout.setRefreshing(false);
+                        if (clientesVisible) {
+                            buildClientesDay();
+                        } else {
+                            buildAgendaDay();
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<ServiceModel>> call, Throwable t) {
+                refreshLayout.setRefreshing(false);
+            }
+        });
     }
 }

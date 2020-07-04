@@ -1,5 +1,6 @@
 package com.example.gestorheme.Common;
 
+import com.example.gestorheme.Activities.Main.MainActivity;
 import com.example.gestorheme.ApiServices.RetrofitClientInstance;
 import com.example.gestorheme.ApiServices.WebServices;
 import com.example.gestorheme.LocalDatabase.DatabaseManager;
@@ -94,4 +95,7 @@ public class Constants {
     public static final String preferencesIconoAppKey = "iconoApp";
     public static final String preferencesNombreAppKey = "nombreApp";
     public static final int logoutResponseValue = 420;
+
+
+    public static MainActivity mainActivityReference;
 }

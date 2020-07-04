@@ -11,14 +11,17 @@ import com.example.gestorheme.Activities.Main.Fragments.Agenda.AgendaFragment;
 import com.example.gestorheme.Activities.Main.Fragments.Heme.HemeFragment;
 import com.example.gestorheme.Activities.Main.Fragments.ListaClientes.ClientesFragment;
 import com.example.gestorheme.Activities.Main.Fragments.Notificaciones.NotificacionesFragment;
-import com.example.gestorheme.ApiServices.WebServices;
 import com.example.gestorheme.Common.AppStyle;
 import com.example.gestorheme.Common.Constants;
 import com.example.gestorheme.Common.Preferencias;
 import com.example.gestorheme.Common.SyncronizationManager;
 import com.example.gestorheme.Models.EstiloApp.EstiloAppModel;
+import com.example.gestorheme.Models.Notification.NotificationModel;
 import com.example.gestorheme.R;
+import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -36,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Constants.mainActivityReference = this;
         getLoginIntent();
         setViews();
         customizeNavigationBar();
@@ -45,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
         if (!isLoginFlow) {
             getEstiloPrivado();
         }
+
+        updateNotificationBadge();
     }
 
     private void getLoginIntent() {
@@ -137,5 +143,29 @@ public class MainActivity extends AppCompatActivity {
         if (hemeFragment != null && hemeFragment.isVisible()) {
             hemeFragment.customizeLayout();
         }
+    }
+
+    public void updateNotificationBadge() {
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                BadgeDrawable badge = bottomNavigationBar.getOrCreateBadge(R.id.nav_notificaciones);
+                ArrayList<NotificationModel> notificaciones = Constants.databaseManager.notificationsManager.getNotificationsFromDatabase();
+                int notificacionesPorLeer = 0;
+                for (int i = 0; i < notificaciones.size(); i++) {
+                    if (!notificaciones.get(i).isLeido()) {
+                        notificacionesPorLeer++;
+                    }
+                }
+
+                if (notificacionesPorLeer > 0) {
+                    badge.setBackgroundColor(AppStyle.getPrimaryColor());
+                    badge.setVisible(true);
+                    badge.setNumber(notificacionesPorLeer);
+                } else {
+                    badge.setVisible(false);
+                }
+            }
+        });
     }
 }

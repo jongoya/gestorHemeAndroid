@@ -110,6 +110,8 @@ public class CadenciaDetail extends AppCompatActivity {
                 } else {
                     CommonFunctions.showGenericAlertMessage(CadenciaDetail.this, "Error actualizando la notificación");
                 }
+
+                Constants.mainActivityReference.updateNotificationBadge();
             }
 
             @Override
