@@ -24,8 +24,10 @@ public class EstiloAppManager {
 
     public EstiloAppModel getEstiloAppFromDatabase() {
         Cursor cursor = readableDatabase.rawQuery("SELECT * FROM " + Constants.databaseEstiloAppTableName, null);
-        while (cursor.moveToNext()) {
-            return parseCursorToEstiloAppModel(cursor);
+        if (cursor.moveToNext()) {
+            EstiloAppModel model = parseCursorToEstiloAppModel(cursor);
+            cursor.close();
+            return model;
         }
 
         cursor.close();

@@ -216,7 +216,7 @@ public class AgendaFragment extends Fragment implements ServiceItemViewInterface
         startDate.setTime(DateFunctions.remove2MonthsToDate(presentDate));
         Calendar endDate = Calendar.getInstance();
         endDate.setTime(DateFunctions.add2MonthsToDate(presentDate));
-        horizontalCalendar = new HorizontalCalendar.Builder(root, R.id.horizontalCalendarView).datesNumberOnScreen(5).range(startDate, endDate).configure().textColor(AppStyle.getPrimaryTextColor(), AppStyle.getPrimaryColor()).end().build();
+        horizontalCalendar = new HorizontalCalendar.Builder(root, R.id.horizontalCalendarView).datesNumberOnScreen(5).range(startDate, endDate).configure().textColor(AppStyle.getPrimaryTextColor(), AppStyle.getPrimaryColor()).textSize(14, 18, 14).end().build();
         horizontalCalendar.goToday(true);
         horizontalCalendar.getCalendarView().setBackgroundColor(AppStyle.getBackgroundColor());
         horizontalCalendar.setCalendarListener(new HorizontalCalendarListener() {
@@ -385,6 +385,7 @@ public class AgendaFragment extends Fragment implements ServiceItemViewInterface
         call.enqueue(new Callback<ArrayList<ServiceModel>>() {
             @Override
             public void onResponse(Call<ArrayList<ServiceModel>> call, Response<ArrayList<ServiceModel>> response) {
+                refreshLayout.setRefreshing(false);
                 if (response.code() == 200 && response.body().size() > 0) {
                     for (int i = 0; i < response.body().size(); i++) {
                         ServiceModel service = response.body().get(i);
@@ -395,8 +396,6 @@ public class AgendaFragment extends Fragment implements ServiceItemViewInterface
                         }
 
                         SyncronizationManager.deleteLocalServicesIfNeeded(response.body());
-
-                        refreshLayout.setRefreshing(false);
                         if (clientesVisible) {
                             buildClientesDay();
                         } else {

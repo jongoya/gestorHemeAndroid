@@ -23,12 +23,13 @@
             android:layout_toLeftOf="@id/clean_button"
             android:background="@drawable/edittext_style"
             android:ems="10"
+            android:focusableInTouchMode="true"
             android:hint="Nombre"
-            android:inputType="textPersonName"
             android:imeOptions="actionDone"
+            android:inputType="textPersonName"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:focusableInTouchMode="true"/>
+            android:textSize="14sp" />
 
         <ImageButton
             android:id="@+id/clean_button"

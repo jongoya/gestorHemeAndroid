@@ -49,6 +49,7 @@ public class BirthdayDetail extends AppCompatActivity implements ClientSelectorA
     private ImageView messageImage;
     private ImageView icono;
     private int comunicationOptionSelected = 0;
+    private ClientModel selectedClient;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -190,7 +191,10 @@ public class BirthdayDetail extends AppCompatActivity implements ClientSelectorA
         Intent phoneIntent = new Intent(Intent.ACTION_CALL);
         phoneIntent.setData(Uri.parse("tel:" + cliente.getTelefono()));
         if (ActivityCompat.checkSelfPermission(BirthdayDetail.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-            CommonFunctions.showGenericAlertMessage(BirthdayDetail.this, "No dispone de permisos para realizar llamadas");
+            selectedClient = cliente;
+            ActivityCompat.requestPermissions(BirthdayDetail.this,
+                    new String[]{Manifest.permission.CALL_PHONE},
+                    0);
             return;
         }
 
@@ -206,7 +210,10 @@ public class BirthdayDetail extends AppCompatActivity implements ClientSelectorA
 
     private void sendMessage(ClientModel cliente) {
         if (ActivityCompat.checkSelfPermission(BirthdayDetail.this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
-            CommonFunctions.showGenericAlertMessage(BirthdayDetail.this, "No dispone de permisos para enviar mensajes");
+            selectedClient = cliente;
+            ActivityCompat.requestPermissions(BirthdayDetail.this,
+                    new String[]{Manifest.permission.SEND_SMS},
+                    1);
             return;
         }
 
@@ -291,5 +298,27 @@ public class BirthdayDetail extends AppCompatActivity implements ClientSelectorA
                 CommonFunctions.showGenericAlertMessage(BirthdayDetail.this, "Error actualizando la notificación");
             }
         });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case 0: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    makeCall(selectedClient);
+                } else {
+                    CommonFunctions.showGenericAlertMessage(BirthdayDetail.this, "No dispone de permisos para realizar llamadas");
+                }
+                return;
+            }
+
+            case 1:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    sendMessage(selectedClient);
+                } else {
+                    CommonFunctions.showGenericAlertMessage(BirthdayDetail.this, "No dispone de permisos para enviar mensajes");
+                }
+                return;
+        }
     }
 }

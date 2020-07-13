@@ -8,6 +8,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.gestorheme.Activities.Stadisticas.ValueFormatter.AxisFormatter;
+import com.example.gestorheme.Common.AppStyle;
 import com.example.gestorheme.Models.CierreCaja.CierreCajaModel;
 import com.example.gestorheme.R;
 import com.github.mikephil.charting.charts.LineChart;
@@ -53,6 +54,7 @@ public class StadisticaView extends RelativeLayout {
 
     private void setFields() {
         titulo.setText(title);
+        titulo.setTextColor(AppStyle.getPrimaryColor());
         if (valores.size() == 0) {
             valor.setText("No hay valores para este rango");
             return;
@@ -148,18 +150,19 @@ public class StadisticaView extends RelativeLayout {
         chart.getDescription().setEnabled(false);
         chart.getXAxis().setTextSize(12);
         chart.getXAxis().setTypeface(Typeface.DEFAULT_BOLD);
+        chart.getXAxis().setTextColor(AppStyle.getPrimaryColor());
     }
 
     private LineData createDataSet(ArrayList<Entry> dataEntries) {
         LineDataSet dataSet = new LineDataSet(dataEntries, title);
-        dataSet.setColor(getResources().getColor(R.color.colorPrimary));
+        dataSet.setColor(AppStyle.getPrimaryColor());
         dataSet.setLineWidth(2);
-        dataSet.setCircleColor(getResources().getColor(R.color.colorPrimary));
+        dataSet.setCircleColor(AppStyle.getPrimaryColor());
         dataSet.setCircleRadius(6);
-        dataSet.setCircleHoleColor(getResources().getColor(R.color.colorPrimary));
+        dataSet.setCircleHoleColor(AppStyle.getPrimaryColor());
         dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
         dataSet.setValueTextSize(10);
-        dataSet.setHighLightColor(getResources().getColor(R.color.colorPrimary));
+        dataSet.setHighLightColor(AppStyle.getPrimaryColor());
         dataSet.setHighlightEnabled(false);
 
         return new LineData(dataSet);

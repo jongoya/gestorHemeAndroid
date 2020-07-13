@@ -59,7 +59,7 @@ public class StadisticaDetailListAdapter extends BaseAdapter {
         CierreCajaModel cierreCaja = cierreCajas.get(i);
 
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date(cierreCaja.getFecha()));
+        calendar.setTimeInMillis(cierreCaja.getFecha() * 1000);
         holder.fecha.setText(String.valueOf(calendar.get(Calendar.YEAR)));
 
         if (isMensual) {

@@ -47,7 +47,8 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_toRightOf="@id/nombreField"
-            android:gravity="right" />
+            android:gravity="right"
+            android:lines="1" />
 
         <RelativeLayout
             android:id="@+id/nombreDivider"
@@ -78,7 +79,8 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_toRightOf="@id/fechaField"
-            android:gravity="right" />
+            android:gravity="right"
+            android:lines="1" />
 
         <RelativeLayout
             android:id="@+id/fechaDivider"
@@ -109,7 +111,8 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_toRightOf="@id/profesionalField"
-            android:gravity="right" />
+            android:gravity="right"
+            android:lines="1" />
 
         <RelativeLayout
             android:id="@+id/profesionalDivider"
@@ -140,7 +143,8 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_toRightOf="@id/serviciosField"
-            android:gravity="right" />
+            android:gravity="right"
+            android:lines="1" />
 
         <RelativeLayout
             android:id="@+id/serviciosDivider"
@@ -171,7 +175,8 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_toRightOf="@id/precioField"
-            android:gravity="right" />
+            android:gravity="right"
+            android:lines="1" />
 
         <RelativeLayout
             android:id="@+id/precioDivider"
