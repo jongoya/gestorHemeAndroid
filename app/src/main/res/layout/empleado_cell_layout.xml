@@ -45,7 +45,7 @@
             android:src="@drawable/empleado_image" />
 
         <TextView
-            android:id="@+id/nombre"
+            android:id="@+id/nombreLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"

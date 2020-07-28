@@ -23,6 +23,7 @@ import androidx.fragment.app.Fragment;
 import com.example.gestorheme.Activities.Main.Fragments.Heme.Adapter.ComercioListAdapter;
 import com.example.gestorheme.Activities.Settings.SettingsActivity;
 import com.example.gestorheme.Activities.Stadisticas.StadisticasActivity;
+import com.example.gestorheme.Activities.StockProductos.StockProductosActivity;
 import com.example.gestorheme.Common.AppStyle;
 import com.example.gestorheme.Common.CommonFunctions;
 import com.example.gestorheme.Common.Preferencias;
@@ -75,13 +76,23 @@ public class HemeFragment extends Fragment {
 
     private void setList() {
         opciones.add(new ComercioModel(R.drawable.cash_image, "CAJA", "Las estadististicas de los cierres de caja de la peluqueria Heme"));
+        opciones.add(new ComercioModel(R.drawable.stock_image, "STOCK PRODUCTOS", "Stock de los productos de la tienda"));
         adapter = new ComercioListAdapter(getContext(), opciones);
         comercioList.setAdapter(adapter);
         comercioList.setDivider(null);
         comercioList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                showPasswordDialog();
+                switch (i) {
+                    case 0:
+                        showPasswordDialog();
+                        break;
+                    case 1:
+                        openStockProductosActivity();
+                        break;
+                    default:
+                        break;
+                }
             }
         });
     }
@@ -146,5 +157,10 @@ public class HemeFragment extends Fragment {
 
         dialogBuilder.setView(dialogView);
         dialogBuilder.show();
+    }
+
+    private void openStockProductosActivity() {
+        Intent intent = new Intent(getActivity(), StockProductosActivity.class);
+        getActivity().startActivity(intent);
     }
 }

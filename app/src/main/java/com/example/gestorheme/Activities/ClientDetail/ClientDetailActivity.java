@@ -22,6 +22,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import com.example.gestorheme.Activities.Cesta.CestaActivity;
 import com.example.gestorheme.Activities.ClientDetail.Fragment.DatePickerFragment;
 import com.example.gestorheme.Activities.ClientDetail.Views.ServiceView;
 import com.example.gestorheme.Activities.DatePicker.DatePickerActivity;
@@ -37,9 +39,11 @@ import com.example.gestorheme.Common.SyncronizationManager;
 import com.example.gestorheme.Common.Views.AddServiceButton;
 import com.example.gestorheme.Common.Views.ServiceAlarmButton;
 import com.example.gestorheme.Common.Views.ServiceHeaderTextView;
+import com.example.gestorheme.Models.Cesta.CestaModel;
 import com.example.gestorheme.Models.Client.ClientModel;
 import com.example.gestorheme.Models.Notification.NotificationModel;
 import com.example.gestorheme.Models.Service.ServiceModel;
+import com.example.gestorheme.Models.Venta.VentaModel;
 import com.example.gestorheme.Models.WebServicesModels.ClientesMasServiciosModel;
 import com.example.gestorheme.R;
 import com.makeramen.roundedimageview.RoundedImageView;
@@ -228,7 +232,7 @@ public class ClientDetailActivity extends AppCompatActivity {
         ArrayList<ServiceView> antiguosServicios = new ArrayList<>();
         for (int i = 0; i < services.size(); i++) {
             ServiceModel servicio = services.get(i);
-            ServiceView serviceView = new ServiceView(this, servicio, servicio.getClientId() != 0 ? "" : cliente.getNombre(), servicio.getClientId() != 0 ? "" : cliente.getApellidos());
+            ServiceView serviceView = new ServiceView(this, servicio, null, servicio.getClientId() != 0 ? "" : cliente.getNombre(), servicio.getClientId() != 0 ? "" : cliente.getApellidos());
             if (isClientDetail) {
                 serviceView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -260,6 +264,28 @@ public class ClientDetailActivity extends AppCompatActivity {
             addServiceHeader("ANTIGUOS SERVICIOS");
             for (int j = 0; j < antiguosServicios.size(); j++) {
                 scrollContentView.addView(antiguosServicios.get(j));
+            }
+        }
+        
+        if (isClientDetail) {
+            ArrayList<CestaModel> cestas = Constants.databaseManager.cestaManager.getCestasForClientId(cliente.getClientId());
+            if (cestas.size() > 0) {
+                addServiceHeader("VENTA PRODUCTOS");
+                for (int i = 0; i < cestas.size(); i++) {
+                    ServiceView serviceView = new ServiceView(this, null, cestas.get(i), "", "");
+                    int finalI = i;
+                    serviceView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            ArrayList<VentaModel> ventas = Constants.databaseManager.ventaManager.getVentas(cestas.get(finalI).getCestaId());
+                            Intent intent = new Intent(ClientDetailActivity.this, CestaActivity.class);
+                            intent.putExtra("ventas", ventas);
+                            intent.putExtra("cesta", cestas.get(finalI));
+                            ClientDetailActivity.this.startActivity(intent);
+                        }
+                    });
+                    scrollContentView.addView(serviceView);
+                }
             }
         }
     }
@@ -711,7 +737,7 @@ public class ClientDetailActivity extends AppCompatActivity {
                             Constants.databaseManager.servicesManager.addServiceToDatabase(service);
                         }
 
-                        SyncronizationManager.deleteLocalServicesIfNeeded(response.body());
+                        SyncronizationManager.deleteLocalServicesIfNeeded(response.body(), Constants.databaseManager.servicesManager.getServicesForClient(cliente.getClientId()));
 
                         refreshLayout.setRefreshing(false);
                         onResume();

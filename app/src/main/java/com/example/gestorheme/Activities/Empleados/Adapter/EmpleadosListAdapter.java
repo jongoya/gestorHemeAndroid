@@ -26,7 +26,6 @@ import com.example.gestorheme.Common.OnSwipeTouchListener;
 import com.example.gestorheme.Models.Empleados.EmpleadoModel;
 import com.example.gestorheme.Models.Service.ServiceModel;
 import com.example.gestorheme.R;
-import com.makeramen.roundedimageview.RoundedImageView;
 
 import java.util.ArrayList;
 
@@ -71,7 +70,7 @@ public class EmpleadosListAdapter extends BaseAdapter {
         view = mInflater.inflate(R.layout.empleado_cell_layout, null);
         view.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
 
-        holder.nombre = view.findViewById(R.id.nombre);
+        holder.nombre = view.findViewById(R.id.nombreLabel);
         holder.img = view.findViewById(R.id.img);
         holder.colorLayout = view.findViewById(R.id.colorLayout);
         holder.background = view.findViewById(R.id.background);

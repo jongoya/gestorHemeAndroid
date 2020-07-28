@@ -5,7 +5,7 @@
     android:background="@color/clear">
 
     <TextView
-        android:id="@+id/nombre"
+        android:id="@+id/nombreLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"

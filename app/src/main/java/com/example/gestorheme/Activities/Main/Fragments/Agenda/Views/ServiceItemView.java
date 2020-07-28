@@ -10,16 +10,20 @@ import android.view.animation.TranslateAnimation;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.gestorheme.Activities.Cesta.CestaActivity;
 import com.example.gestorheme.Activities.Main.Fragments.Agenda.Interfaces.ServiceItemViewInterface;
 import com.example.gestorheme.Activities.ServiceDetail.ServiceDetailActivity;
 import com.example.gestorheme.Common.AppStyle;
 import com.example.gestorheme.Common.CommonFunctions;
 import com.example.gestorheme.Common.Constants;
 import com.example.gestorheme.Common.OnSwipeTouchListener;
+import com.example.gestorheme.Models.Cesta.CestaModel;
 import com.example.gestorheme.Models.Client.ClientModel;
 import com.example.gestorheme.Models.Empleados.EmpleadoModel;
+import com.example.gestorheme.Models.Producto.ProductoModel;
 import com.example.gestorheme.Models.Service.ServiceModel;
 import com.example.gestorheme.Models.TipoServicio.TipoServicioModel;
+import com.example.gestorheme.Models.Venta.VentaModel;
 import com.example.gestorheme.R;
 import java.util.ArrayList;
 
@@ -35,14 +39,19 @@ public class ServiceItemView extends RelativeLayout {
     private int xDelta = 0;
     private ServiceItemViewInterface delegate;
 
-    public ServiceItemView(Context context, ServiceModel servicio, ServiceItemViewInterface delegate) {
+    public ServiceItemView(Context context, ServiceModel servicio, CestaModel cesta, ServiceItemViewInterface delegate) {
         super(context);
         View.inflate(context, R.layout.service_item_view, this);
         this.delegate = delegate;
         getFields();
         customizeFields();
-        setOnClickListeners(servicio, context);
-        setFields(servicio);
+        setOnClickListeners(servicio, cesta, context);
+
+        if (servicio != null) {
+            setServiceFields(servicio);
+        } else {
+            setCestaFields(cesta);
+        }
     }
 
     private void getFields() {
@@ -58,41 +67,56 @@ public class ServiceItemView extends RelativeLayout {
         profesionalLabel.setTextColor(AppStyle.getPrimaryTextColor());
     }
 
-    private void setOnClickListeners(final ServiceModel servicio, final Context context) {
-        findViewById(R.id.cross_view).setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                deleteService(servicio);
-            }
-        });
-
-        backgroundLayout.setOnTouchListener(new OnSwipeTouchListener(context) {
-            @Override
-            public void onSwipeLeft() {
-                super.onSwipeLeft();
-                if (xDelta == 0) {
-                    leftSwipeAnimation(context);
+    private void setOnClickListeners(final ServiceModel servicio, CestaModel cesta, final Context context) {
+        if (servicio != null) {
+            findViewById(R.id.cross_view).setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    deleteService(servicio);
                 }
-            }
+            });
+        }
 
-            @Override
-            public void onSwipeRight() {
-                super.onSwipeRight();
-                if (xDelta == 1) {
-                    rightSwipeAnimation(context);
+        if (servicio != null) {
+            backgroundLayout.setOnTouchListener(new OnSwipeTouchListener(context) {
+                @Override
+                public void onSwipeLeft() {
+                    super.onSwipeLeft();
+                    if (xDelta == 0) {
+                        leftSwipeAnimation(context);
+                    }
                 }
-            }
 
-            @Override
-            public void onClick() {
-                super.onClick();
-                ClientModel cliente = Constants.databaseManager.clientsManager.getClientForClientId(servicio.getClientId());
-                Intent intent = new Intent(context, ServiceDetailActivity.class);
-                intent.putExtra("servicio", servicio);
-                intent.putExtra("cliente", cliente);
-                context.startActivity(intent);
-            }
-        });
+                @Override
+                public void onSwipeRight() {
+                    super.onSwipeRight();
+                    if (xDelta == 1) {
+                        rightSwipeAnimation(context);
+                    }
+                }
+
+                @Override
+                public void onClick() {
+                    super.onClick();
+                    ClientModel cliente = Constants.databaseManager.clientsManager.getClientForClientId(servicio.getClientId());
+                    Intent intent = new Intent(context, ServiceDetailActivity.class);
+                    intent.putExtra("servicio", servicio);
+                    intent.putExtra("cliente", cliente);
+                    context.startActivity(intent);
+                }
+            });
+        } else {
+            backgroundLayout.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ArrayList<VentaModel> ventas = Constants.databaseManager.ventaManager.getVentas(cesta.getCestaId());
+                    Intent intent = new Intent(context, CestaActivity.class);
+                    intent.putExtra("ventas", ventas);
+                    intent.putExtra("cesta", cesta);
+                    context.startActivity(intent);
+                }
+            });
+        }
     }
 
     private void leftSwipeAnimation(final Context context) {
@@ -147,13 +171,25 @@ public class ServiceItemView extends RelativeLayout {
         });
     }
 
-    private void setFields(ServiceModel servicio) {
+    private void setServiceFields(ServiceModel servicio) {
         EmpleadoModel empleado = Constants.databaseManager.empleadosManager.getEmpleadoForEmpleadoId(servicio.getEmpleadoId());
         ClientModel cliente = Constants.databaseManager.clientsManager.getClientForClientId(servicio.getClientId());
-        nombreLabel.setText(cliente.getNombre() + " " + cliente.getApellidos());
+        if (cliente == null) {
+            nombreLabel.setText("Actualizando...");
+        } else {
+            nombreLabel.setText(cliente.getNombre() + " " + cliente.getApellidos());
+        }
         serviciosLabel.setText(getServicesStringFromIds(servicio.getServicios()));
         profesionalLabel.setText(empleado.getNombre());
         backgroundLayout.getBackground().setColorFilter(Color.rgb((int)empleado.getRedColorValue(),(int)empleado.getGreenColorValue(), (int)empleado.getBlueColorValue()), PorterDuff.Mode.SRC_ATOP);
+    }
+
+    private void setCestaFields(CestaModel cesta) {
+        ClientModel cliente = Constants.databaseManager.clientsManager.getClientForClientId(cesta.getClientId());
+        nombreLabel.setText("Venta producto");
+        serviciosLabel.setText(cliente.getNombre() + " " + cliente.getApellidos());
+        profesionalLabel.setText("Precio: " + String.valueOf(calculatePriceForCesta(cesta)) + " €");
+        backgroundLayout.getBackground().setColorFilter(AppStyle.getPrimaryColor(), PorterDuff.Mode.SRC_ATOP);
     }
 
     private String getServicesStringFromIds(ArrayList tipoServicios) {
@@ -163,6 +199,17 @@ public class ServiceItemView extends RelativeLayout {
             serviciosString += servicio.getNombre() + ", ";
         }
         return serviciosString;
+    }
+
+    private double calculatePriceForCesta(CestaModel cesta) {
+        double precio = 0.0;
+        ArrayList<VentaModel> ventas = Constants.databaseManager.ventaManager.getVentas(cesta.getCestaId());
+        for (int i = 0; i < ventas.size(); i++) {
+            ProductoModel producto = Constants.databaseManager.productoManager.getProductoWithProductId(ventas.get(i).getProductoId());
+            precio += ventas.get(i).getCantidad() * producto.getPrecio();
+        }
+
+        return precio;
     }
 
     private void deleteService(ServiceModel servicio) {

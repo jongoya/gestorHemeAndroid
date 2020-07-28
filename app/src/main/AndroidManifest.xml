@@ -1,16 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.gestorheme">
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.SEND_SMS" />
+    <meta-data
+        android:name="com.google.android.gms.vision.DEPENDENCIES"
+        android:value="barcode" />
 
     <application
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/app_icon"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        tools:replace="android:allowBackup"
         android:theme="@style/AppTheme">
         <activity android:name=".Activities.Splash.SplashActivity">
             <intent-filter>
@@ -59,6 +68,12 @@
         </activity>
         <activity android:name=".Activities.Login.LoginActivity">
         </activity>
+        <activity android:name=".Activities.StockProductos.StockProductosActivity">
+        </activity>
+        <activity android:name=".Activities.ScannerBarcode.ScannerBarcodeActivity">
+        </activity>
+        <activity android:name=".Activities.ProductDetail.ProductDetailActivity"></activity>
+        <activity android:name=".Activities.Cesta.CestaActivity"></activity>
     </application>
 
 </manifest>

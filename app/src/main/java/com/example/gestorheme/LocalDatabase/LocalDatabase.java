@@ -22,6 +22,13 @@ public class LocalDatabase extends SQLiteOpenHelper {
     private static final String ESTILOAPP_TABLE_CREATE = "CREATE TABLE " + Constants.databaseEstiloAppTableName + "(" + Constants.databaseEstiloId + " INTEGER, " + Constants.databasePrimaryTextColor + " TEXT, " +
             Constants.databaseSecondaryTextColor + " TEXT, " + Constants.databasePrimaryColor + " TEXT, " + Constants.databaseSecondaryColor + " TEXT, " +
             Constants.databaseBackgroundColor + " TEXT, " + Constants.databaseNavigationColor + " TEXT, " + Constants.databaseAppSmallIcon + " TEXT, " + Constants.databaseAppName + " TEXT," + Constants.databaseComercioId + " TEXT)";
+    private static final String PRODUCTOS_TABLE_CREATE = "CREATE TABLE " + Constants.databaseProductoTableName + "(" + Constants.databaseProductoId + " INTEGER, " + Constants.databaseNombre + " TEXT, " +
+            Constants.databaseCodigoBarras + " TEXT, " + Constants.databaseImagen + " TEXT, " + Constants.databaseNumProductos + " INTEGER, " +
+            Constants.databaseComercioId + " INTEGER, " + Constants.databasePrecio + " REAL)";
+    private static final String CESTA_TABLE_CREATE = "CREATE TABLE " + Constants.databaseCestaTableName + "(" + Constants.databaseCestaId + " INTEGER, " + Constants.databaseClientId + " INTEGER, " +
+            Constants.databaseFecha + " INTEGER, " + Constants.databaseIsEfectivo + " INTEGER, " + Constants.databaseComercioId + " INTEGER)";
+    private static final String VENTA_TABLE_CREATE = "CREATE TABLE " + Constants.databaseVentaTableName + "(" + Constants.databaseCestaId + " INTEGER, " + Constants.databaseVentaId + " INTEGER, " +
+            Constants.databaseProductoId + " INTEGER, " + Constants.databaseCantidad + " INTEGER, " + Constants.databaseComercioId + " INTEGER)";
 
     private static final String DB_NAME = Constants.databaseName;
     private static final int DB_VERSION = 1;
@@ -39,6 +46,9 @@ public class LocalDatabase extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(TIPOSERVICIOS_TABLE_CREATE);
         sqLiteDatabase.execSQL(CIERRECAJA_TABLE_CREATE);
         sqLiteDatabase.execSQL(ESTILOAPP_TABLE_CREATE);
+        sqLiteDatabase.execSQL(PRODUCTOS_TABLE_CREATE);
+        sqLiteDatabase.execSQL(CESTA_TABLE_CREATE);
+        sqLiteDatabase.execSQL(VENTA_TABLE_CREATE);
     }
 
     @Override

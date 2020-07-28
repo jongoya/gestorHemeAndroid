@@ -10,6 +10,7 @@ import com.example.gestorheme.Activities.Main.Fragments.Agenda.Interfaces.Servic
 import com.example.gestorheme.Activities.ServiceDetail.ServiceDetailActivity;
 import com.example.gestorheme.Common.AppStyle;
 import com.example.gestorheme.Common.DateFunctions;
+import com.example.gestorheme.Models.Cesta.CestaModel;
 import com.example.gestorheme.Models.Service.ServiceModel;
 import com.example.gestorheme.R;
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ public class AgendaItemView extends RelativeLayout {
     private LinearLayout servicesContent;
     private RelativeLayout divider;
 
-    public AgendaItemView(Context context, Date date, ArrayList<ServiceModel> servicios, ServiceItemViewInterface delegate) {
+    public AgendaItemView(Context context, Date date, ArrayList<ServiceModel> servicios, ArrayList<CestaModel> cestas, ServiceItemViewInterface delegate) {
         super(context);
         View.inflate(context, R.layout.agenda_item_view, this);
         getFields();
@@ -29,8 +30,8 @@ public class AgendaItemView extends RelativeLayout {
         setOnClickListeners(context, date);
         setFields(date);
 
-        if (servicios.size() > 0) {
-            buildServiceViews(servicios, context, delegate);
+        if (servicios.size() + cestas.size() > 0) {
+            buildServiceViews(servicios, cestas, context, delegate);
         }
     }
 
@@ -64,9 +65,15 @@ public class AgendaItemView extends RelativeLayout {
         divider.setBackgroundColor(AppStyle.getSecondaryColor());
     }
 
-    private void buildServiceViews(ArrayList<ServiceModel> servicios, Context contexto, ServiceItemViewInterface delegate) {
+    private void buildServiceViews(ArrayList<ServiceModel> servicios, ArrayList<CestaModel> cestas, Context contexto, ServiceItemViewInterface delegate) {
         for (int i = 0; i < servicios.size(); i++) {
-            ServiceItemView serviceView = new ServiceItemView(contexto, servicios.get(i), delegate);
+            ServiceItemView serviceView = new ServiceItemView(contexto, servicios.get(i), null, delegate);
+            serviceView.setClipChildren(false);
+            servicesContent.addView(serviceView);
+        }
+
+        for (int i = 0; i < cestas.size(); i++) {
+            ServiceItemView serviceView = new ServiceItemView(contexto, null, cestas.get(i), delegate);
             serviceView.setClipChildren(false);
             servicesContent.addView(serviceView);
         }

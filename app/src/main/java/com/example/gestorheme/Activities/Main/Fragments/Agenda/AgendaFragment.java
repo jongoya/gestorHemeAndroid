@@ -1,6 +1,6 @@
 package com.example.gestorheme.Activities.Main.Fragments.Agenda;
 
-import android.media.Image;
+import android.content.Intent;
 import android.os.Bundle;
 import android.transition.ChangeBounds;
 import android.transition.Scene;
@@ -14,7 +14,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,22 +22,26 @@ import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.example.gestorheme.Activities.Cesta.CestaActivity;
 import com.example.gestorheme.Activities.Main.Fragments.Agenda.Interfaces.FilterActionSheetInterface;
 import com.example.gestorheme.Activities.Main.Fragments.Agenda.Interfaces.ServiceItemViewInterface;
-import com.example.gestorheme.Activities.Main.Fragments.Agenda.Interfaces.ServicesRefreshInterface;
 import com.example.gestorheme.Activities.Main.Fragments.Agenda.Views.AgendaItemView;
 import com.example.gestorheme.Activities.Main.Fragments.Agenda.Views.CerrarCajaButton;
 import com.example.gestorheme.Activities.Main.Fragments.Agenda.Views.ClientItemView;
 import com.example.gestorheme.Activities.Main.Fragments.Agenda.Views.FilterActionSheetView;
+import com.example.gestorheme.Activities.ScannerBarcode.ScannerBarcodeActivity;
 import com.example.gestorheme.Common.AppStyle;
 import com.example.gestorheme.Common.CommonFunctions;
 import com.example.gestorheme.Common.Constants;
 import com.example.gestorheme.Common.DateFunctions;
 import com.example.gestorheme.Common.Preferencias;
 import com.example.gestorheme.Common.SyncronizationManager;
+import com.example.gestorheme.Models.Cesta.CestaModel;
 import com.example.gestorheme.Models.Client.ClientModel;
 import com.example.gestorheme.Models.Empleados.EmpleadoModel;
+import com.example.gestorheme.Models.Producto.ProductoModel;
 import com.example.gestorheme.Models.Service.ServiceModel;
+import com.example.gestorheme.Models.Venta.VentaModel;
 import com.example.gestorheme.R;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import java.util.ArrayList;
@@ -68,9 +71,12 @@ public class AgendaFragment extends Fragment implements ServiceItemViewInterface
     private ImageView calendarImage;
     private NestedScrollView scrollView;
     private RelativeLayout calendarBackground;
+    private RelativeLayout barcodeButton;
+    private ImageView barcodeImage;
 
     private boolean clientesVisible = false;
     private long empleadoFilteredId = 0;
+    private int BARCODE_REF = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -114,6 +120,8 @@ public class AgendaFragment extends Fragment implements ServiceItemViewInterface
         calendarImage = getView().findViewById(R.id.calendarImage);
         scrollView = getView().findViewById(R.id.scrollView);
         calendarBackground = getView().findViewById(R.id.calendarBackground);
+        barcodeButton = getView().findViewById(R.id.barcodeButton);
+        barcodeImage = getView().findViewById(R.id.barcodeImage);
     }
 
     private void customizeButtons() {
@@ -123,6 +131,7 @@ public class AgendaFragment extends Fragment implements ServiceItemViewInterface
         CommonFunctions.customizeViewWithImage(getActivity().getApplicationContext(), clientButton, clientImage, AppStyle.getPrimaryColor(), AppStyle.getPrimaryColor());
         calendarBackground.setBackgroundColor(AppStyle.getBackgroundColor());
         root.setBackgroundColor(AppStyle.getBackgroundColor());
+        CommonFunctions.customizeViewWithImage(getActivity().getApplicationContext(), barcodeButton, barcodeImage, AppStyle.getPrimaryColor(), AppStyle.getPrimaryColor());
     }
 
     private void customizeBackground() {
@@ -200,6 +209,14 @@ public class AgendaFragment extends Fragment implements ServiceItemViewInterface
                 showFilterDialog();
             }
         });
+
+        barcodeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), ScannerBarcodeActivity.class);
+                startActivityForResult(intent, BARCODE_REF);
+            }
+        });
     }
 
     private void setRefreshListener() {
@@ -216,7 +233,7 @@ public class AgendaFragment extends Fragment implements ServiceItemViewInterface
         startDate.setTime(DateFunctions.remove2MonthsToDate(presentDate));
         Calendar endDate = Calendar.getInstance();
         endDate.setTime(DateFunctions.add2MonthsToDate(presentDate));
-        horizontalCalendar = new HorizontalCalendar.Builder(root, R.id.horizontalCalendarView).datesNumberOnScreen(5).range(startDate, endDate).configure().textColor(AppStyle.getPrimaryTextColor(), AppStyle.getPrimaryColor()).textSize(14, 18, 14).end().build();
+        horizontalCalendar = new HorizontalCalendar.Builder(root, R.id.horizontalCalendarView).datesNumberOnScreen(5).range(startDate, endDate).configure().textColor(AppStyle.getPrimaryTextColor(), AppStyle.getPrimaryColor()).textSize(12, 14, 12).end().build();
         horizontalCalendar.goToday(true);
         horizontalCalendar.getCalendarView().setBackgroundColor(AppStyle.getBackgroundColor());
         horizontalCalendar.setCalendarListener(new HorizontalCalendarListener() {
@@ -253,14 +270,16 @@ public class AgendaFragment extends Fragment implements ServiceItemViewInterface
             servicios = filterServiciosWithEmpleadoId(servicios);
         }
 
+        ArrayList<CestaModel> cestas = Constants.databaseManager.cestaManager.getCestasForDay(presentDate);
+
         Date fecha = DateFunctions.getBeginingOfWorkingDayFromDate(presentDate);
         for (int i = 0; i < 50; i++) {
-            AgendaItemView agendaItem = new AgendaItemView(getContext(), fecha, getServicesForServiceView(servicios, fecha), this);
+            AgendaItemView agendaItem = new AgendaItemView(getContext(), fecha, getServicesForServiceView(servicios, fecha), getCestasForServiceView(cestas, fecha), this);
             scrollContentView.addView(agendaItem);
             fecha = DateFunctions.add15MinsToDate(fecha);
         }
 
-        if (!Constants.databaseManager.cierreCajaManager.cierreCajaRealizadoEnFecha(presentDate) && servicios.size() > 0) {
+        if (!Constants.databaseManager.cierreCajaManager.cierreCajaRealizadoEnFecha(presentDate) && servicios.size() + cestas.size() > 0) {
             addCierreDeCajaButton();
         }
     }
@@ -308,6 +327,23 @@ public class AgendaFragment extends Fragment implements ServiceItemViewInterface
         }
 
         return serviciosRango;
+    }
+
+    private ArrayList<CestaModel> getCestasForServiceView(ArrayList<CestaModel> cestas, Date fecha) {
+        ArrayList<CestaModel> cestasRango = new ArrayList<>();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(DateFunctions.add15MinsToDate(fecha));
+        long plus15Mins = calendar.getTimeInMillis() / 1000;
+        calendar.setTime(fecha);
+        long actualTime = calendar.getTimeInMillis() / 1000;
+        for (int i = 0; i < cestas.size(); i++) {
+            CestaModel cesta = cestas.get(i);
+            if (cesta.getFecha() >= actualTime && cesta.getFecha() < plus15Mins) {
+                cestasRango.add(cesta);
+            }
+        }
+
+        return cestasRango;
     }
 
     private void addCierreDeCajaButton() {
@@ -395,7 +431,7 @@ public class AgendaFragment extends Fragment implements ServiceItemViewInterface
                             Constants.databaseManager.servicesManager.addServiceToDatabase(service);
                         }
 
-                        SyncronizationManager.deleteLocalServicesIfNeeded(response.body());
+                        SyncronizationManager.deleteLocalServicesIfNeeded(response.body(), Constants.databaseManager.servicesManager.getServicesForDate(presentDate));
                         if (clientesVisible) {
                             buildClientesDay();
                         } else {
@@ -410,5 +446,32 @@ public class AgendaFragment extends Fragment implements ServiceItemViewInterface
                 refreshLayout.setRefreshing(false);
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == getActivity().RESULT_CANCELED) {
+            return;
+        }
+
+        if (requestCode == BARCODE_REF) {
+            String barcode = data.getExtras().getString("barcode");
+            ProductoModel producto = Constants.databaseManager.productoManager.getProductoWithBarcode(barcode);
+
+            if (producto == null) {
+                CommonFunctions.showGenericAlertMessage(getActivity(), "Este producto no se encuentra en stock");
+                return;
+            }
+
+            if (producto.getNumProductos() == 0) {
+                CommonFunctions.showGenericAlertMessage(getActivity(), "Este producto se encuentra agotado");
+                return;
+            }
+
+            Intent intent = new Intent(getActivity(), CestaActivity.class);
+            intent.putExtra("venta", new VentaModel(producto.getProductoId()));
+            startActivity(intent);
+        }
     }
 }

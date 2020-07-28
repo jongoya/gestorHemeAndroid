@@ -44,11 +44,12 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:textColor="@color/black"
-            android:textColorHint="@color/dividerColor" />
+            android:textColorHint="@color/dividerColor"
+            android:textSize="14dp" />
 
         <EditText
             android:id="@+id/passwordField"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_below="@id/usuarioField"
             android:layout_marginTop="10dp"
@@ -57,7 +58,8 @@
             android:hint="Contraseña"
             android:inputType="textPassword"
             android:paddingLeft="10dp"
-            android:paddingRight="10dp" />
+            android:paddingRight="10dp"
+            android:textSize="14dp" />
 
         <Button
             android:id="@+id/loginButton"
@@ -68,6 +70,7 @@
             android:background="@drawable/rounded_view"
             android:text="Login"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            android:textColor="@color/black" />
+            android:textColor="@color/black"
+            android:textSize="14dp" />
     </RelativeLayout>
 </RelativeLayout>

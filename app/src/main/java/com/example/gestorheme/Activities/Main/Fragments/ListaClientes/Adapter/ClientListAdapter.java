@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.example.gestorheme.Activities.Main.Fragments.ListaClientes.Models.ListaClienteCellModel;
@@ -64,7 +63,7 @@ public class ClientListAdapter extends BaseAdapter {
             case TYPE_CLIENT:
                 view = mInflater.inflate(R.layout.clientes_cell_layout, null);
                 view.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, CommonFunctions.convertToPx(80, context)));
-                holder.nombre = view.findViewById(R.id.nombre);
+                holder.nombre = view.findViewById(R.id.nombreLabel);
                 holder.telefono = view.findViewById(R.id.telefono);
                 holder.imagen = view.findViewById(R.id.imagen);
                 holder.nombre.setText(clientes.get(i).getCliente().getApellidos() + ", " + clientes.get(i).getCliente().getNombre());

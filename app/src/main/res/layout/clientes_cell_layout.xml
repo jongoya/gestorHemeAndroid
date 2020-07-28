@@ -22,7 +22,7 @@
         android:src="@drawable/user_image" />
 
     <TextView
-        android:id="@+id/nombre"
+        android:id="@+id/nombreLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
@@ -40,7 +40,7 @@
         android:id="@+id/telefono"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/nombre"
+        android:layout_below="@id/nombreLabel"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="5dp"
         android:layout_marginRight="10dp"

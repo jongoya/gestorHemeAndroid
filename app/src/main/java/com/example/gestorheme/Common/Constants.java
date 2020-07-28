@@ -15,6 +15,15 @@ public class Constants {
     public static String databaseTipoServiciosTableName = "TipoServicios";
     public static String databaseCierreCajaTableName = "CierreCaja";
     public static String databaseEstiloAppTableName = "EstiloApp";
+    public static String databaseProductoTableName = "Producto";
+    public static String databaseCestaTableName = "Cesta";
+    public static String databaseVentaTableName = "Venta";
+    public static String databaseProductoId = "productoId";
+    public static String databaseCodigoBarras = "codigoBarras";
+    public static String databaseNumProductos = "numProductos";
+    public static String databaseCestaId = "cestaId";
+    public static String databaseVentaId = "ventaId";
+    public static String databaseCantidad = "cantidad";
     public static String databaseClientId = "clientId";
     public static String databaseNombre = "nombre";
     public static String databaseApellidos = "apellidos";

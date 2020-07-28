@@ -6,7 +6,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.gestorheme.Common.AppStyle;
-import com.example.gestorheme.Models.Empleados.EmpleadoModel;
 import com.example.gestorheme.R;
 
 public class FilterEmpleadoView extends RelativeLayout {
@@ -14,7 +13,7 @@ public class FilterEmpleadoView extends RelativeLayout {
     public FilterEmpleadoView(Context context, String nombreEmpleado) {
         super(context);
         View.inflate(context, R.layout.filter_empleado_view, this);
-        ((TextView)findViewById(R.id.nombre)).setText(nombreEmpleado);
-        ((TextView)findViewById(R.id.nombre)).setTextColor(AppStyle.getPrimaryColor());
+        ((TextView)findViewById(R.id.nombreLabel)).setText(nombreEmpleado);
+        ((TextView)findViewById(R.id.nombreLabel)).setTextColor(AppStyle.getPrimaryColor());
     }
 }

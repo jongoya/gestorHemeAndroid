@@ -40,7 +40,7 @@ public class CadenciaDetailListAdapter extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
         LayoutInflater mInflater = (LayoutInflater) contexto.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         view = mInflater.inflate(R.layout.cadencia_detail_list_cell, null);
-        TextView nombre= view.findViewById(R.id.nombre);
+        TextView nombre= view.findViewById(R.id.nombreLabel);
         nombre.setText(clientes.get(i).getNombre() + " " + clientes.get(i).getApellidos());
         nombre.setTextColor(AppStyle.getPrimaryTextColor());
 

@@ -15,10 +15,13 @@ import com.example.gestorheme.Common.AppStyle;
 import com.example.gestorheme.Common.CommonFunctions;
 import com.example.gestorheme.Common.Constants;
 import com.example.gestorheme.Common.Preferencias;
+import com.example.gestorheme.Models.Cesta.CestaModel;
 import com.example.gestorheme.Models.CierreCaja.CierreCajaModel;
 import com.example.gestorheme.Models.Notification.NotificationModel;
+import com.example.gestorheme.Models.Producto.ProductoModel;
 import com.example.gestorheme.Models.Service.ServiceModel;
 import com.example.gestorheme.Models.TipoServicio.TipoServicioModel;
+import com.example.gestorheme.Models.Venta.VentaModel;
 import com.example.gestorheme.R;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -160,51 +163,55 @@ public class CierreCajaActivity extends AppCompatActivity {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(fecha * 1000);
         ArrayList<ServiceModel> servicios = Constants.databaseManager.servicesManager.getServicesForDate(calendar.getTime());
+        ArrayList<CestaModel> cestas = Constants.databaseManager.cestaManager.getCestasForDay(calendar.getTime());
         cierreCaja.setNumeroServicios(servicios.size());
         numeroServiciosLabel.setText(String.valueOf(servicios.size()));
-        cierreCaja.setTotalCaja(getTotalCaja(servicios));
+
+        cierreCaja.setTotalCaja(getTotalCaja(servicios, cestas));
         totalCajaLabel.setText(String.valueOf(cierreCaja.getTotalCaja()) + " €");
-        cierreCaja.setTotalProductos(getTotalProductos(servicios));
+
+        cierreCaja.setTotalProductos(getTotalProductos(cestas));
         totalProductosLabel.setText(String.valueOf(cierreCaja.getTotalProductos()) + " €");
-        cierreCaja.setEfectivo(getTotalEfectivo(servicios));
+
+        cierreCaja.setEfectivo(getTotalEfectivo(servicios, cestas));
         efectivoLabel.setText(String.valueOf(cierreCaja.getEfectivo()) + " €");
-        cierreCaja.setTarjeta(getTotalTarjeta(servicios));
+
+        cierreCaja.setTarjeta(getTotalTarjeta(servicios, cestas));
         tarjetaLabel.setText(String.valueOf(cierreCaja.getTarjeta()) + " €");
     }
 
-    private double getTotalCaja(ArrayList<ServiceModel> servicios) {
+    private double getTotalCaja(ArrayList<ServiceModel> servicios, ArrayList<CestaModel> cestas) {
         double totalCaja = 0;
         for (int i = 0; i < servicios.size(); i++) {
             totalCaja += servicios.get(i).getPrecio();
         }
 
-        return totalCaja;
-    }
-
-    private double getTotalProductos(ArrayList<ServiceModel> servicios) {
-        double totalProductos = 0.0;
-        TipoServicioModel ventaProducto = null;
-        ArrayList<TipoServicioModel> tipoServicios = Constants.databaseManager.tipoServiciosManager.getTipoServiciosFromDatabase();
-        for (int i = 0; i < tipoServicios.size(); i++) {
-            if (tipoServicios.get(i).getNombre().compareTo("Venta producto") == 0) {
-                ventaProducto = tipoServicios.get(i);
+        for (int i = 0; i < cestas.size(); i++) {
+            ArrayList<VentaModel> ventas = Constants.databaseManager.ventaManager.getVentas(cestas.get(i).getCestaId());
+            for (int j = 0; j < ventas.size(); j++) {
+                ProductoModel producto = Constants.databaseManager.productoManager.getProductoWithProductId(ventas.get(j).getProductoId());
+                totalCaja += producto.getPrecio() * ventas.get(j).getCantidad();
             }
         }
 
-        if (ventaProducto ==  null) {
-            return totalProductos;
-        }
+        return totalCaja;
+    }
 
-        for (int i = 0; i < servicios.size(); i++) {
-            if (servicios.get(i).getServicios().contains(ventaProducto.getServicioId())) {
-                totalProductos += servicios.get(i).getPrecio();
+    private double getTotalProductos(ArrayList<CestaModel> cestas) {
+        double totalProductos = 0.0;
+
+        for (int i = 0; i < cestas.size(); i++) {
+            ArrayList<VentaModel> ventas = Constants.databaseManager.ventaManager.getVentas(cestas.get(i).getCestaId());
+            for (int j = 0; j < ventas.size(); j++) {
+                ProductoModel producto = Constants.databaseManager.productoManager.getProductoWithProductId(ventas.get(j).getProductoId());
+                totalProductos += producto.getPrecio() * ventas.get(j).getCantidad();
             }
         }
 
         return totalProductos;
     }
 
-    private double getTotalEfectivo(ArrayList<ServiceModel> servicios) {
+    private double getTotalEfectivo(ArrayList<ServiceModel> servicios, ArrayList<CestaModel> cestas) {
         double totalEfectivo = 0.0;
         for (int i = 0; i < servicios.size(); i++) {
             if (servicios.get(i).isEfectivo()) {
@@ -212,14 +219,34 @@ public class CierreCajaActivity extends AppCompatActivity {
             }
         }
 
+        for (int i = 0; i < cestas.size(); i++) {
+            if (cestas.get(i).isEfectivo()) {
+                ArrayList<VentaModel> ventas = Constants.databaseManager.ventaManager.getVentas(cestas.get(i).getCestaId());
+                for (int j = 0; j < ventas.size(); j++) {
+                    ProductoModel producto = Constants.databaseManager.productoManager.getProductoWithProductId(ventas.get(j).getProductoId());
+                    totalEfectivo += producto.getPrecio() * ventas.get(j).getCantidad();
+                }
+            }
+        }
+
         return totalEfectivo;
     }
 
-    private double getTotalTarjeta(ArrayList<ServiceModel> servicios) {
+    private double getTotalTarjeta(ArrayList<ServiceModel> servicios, ArrayList<CestaModel> cestas) {
         double totalTarjeta = 0.0;
         for (int i = 0; i < servicios.size(); i++) {
             if (!servicios.get(i).isEfectivo()) {
                 totalTarjeta += servicios.get(i).getPrecio();
+            }
+        }
+
+        for (int i = 0; i < cestas.size(); i++) {
+            if (!cestas.get(i).isEfectivo()) {
+                ArrayList<VentaModel> ventas = Constants.databaseManager.ventaManager.getVentas(cestas.get(i).getCestaId());
+                for (int j = 0; j < ventas.size(); j++) {
+                    ProductoModel producto = Constants.databaseManager.productoManager.getProductoWithProductId(ventas.get(j).getProductoId());
+                    totalTarjeta += producto.getPrecio() * ventas.get(j).getCantidad();
+                }
             }
         }
 

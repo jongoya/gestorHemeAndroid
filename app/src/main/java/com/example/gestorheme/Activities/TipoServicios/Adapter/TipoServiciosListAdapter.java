@@ -48,7 +48,7 @@ public class TipoServiciosListAdapter extends BaseAdapter {
         view = mInflater.inflate(R.layout.tipo_servicio_item_layout, null);
         view.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
 
-        holder.nombre = view.findViewById(R.id.nombre);
+        holder.nombre = view.findViewById(R.id.nombreLabel);
         holder.img = view.findViewById(R.id.img);
         holder.rootLayout = view.findViewById(R.id.rootLayout);
 

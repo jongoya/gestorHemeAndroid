@@ -1,6 +1,7 @@
 package com.example.gestorheme.Common;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
 import com.example.gestorheme.Activities.Empleados.Interfaces.EmpleadosRefreshInterface;
 import com.example.gestorheme.Activities.Main.Fragments.ListaClientes.ClientesFragment;
@@ -8,12 +9,16 @@ import com.example.gestorheme.Activities.Main.Fragments.Notificaciones.Functions
 import com.example.gestorheme.Activities.Main.Fragments.Notificaciones.Interfaces.NotificationsRefreshInterface;
 import com.example.gestorheme.Activities.Main.MainActivity;
 import com.example.gestorheme.Activities.TipoServicios.Interfaces.TipoServiciosRefreshInterface;
+import com.example.gestorheme.Models.Cesta.CestaModel;
 import com.example.gestorheme.Models.CierreCaja.CierreCajaModel;
 import com.example.gestorheme.Models.Client.ClientModel;
 import com.example.gestorheme.Models.Empleados.EmpleadoModel;
 import com.example.gestorheme.Models.Notification.NotificationModel;
+import com.example.gestorheme.Models.Producto.ProductoModel;
 import com.example.gestorheme.Models.Service.ServiceModel;
 import com.example.gestorheme.Models.TipoServicio.TipoServicioModel;
+import com.example.gestorheme.Models.Venta.VentaModel;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -30,6 +35,9 @@ public class SyncronizationManager {
         getServiciosFromServer(context);
         getAllCierreCajas(context);
         getAllNotifications(null, context, null);
+        getProductos(context);
+        getCestas(context);
+        getVentas(context);
     }
 
     public static void getAllClients(MainActivity activity, Context contexto) {
@@ -170,7 +178,7 @@ public class SyncronizationManager {
                                 }
                             }
 
-                            deleteLocalServicesIfNeeded(response.body());
+                            deleteLocalServicesIfNeeded(response.body(), Constants.databaseManager.servicesManager.getServicesFromDatabase());
                         }
                     }).start();
                 }
@@ -183,8 +191,7 @@ public class SyncronizationManager {
         });
     }
 
-    public static void deleteLocalServicesIfNeeded(ArrayList<ServiceModel> serverServices) {
-        ArrayList<ServiceModel> localServices = Constants.databaseManager.servicesManager.getServicesFromDatabase();
+    public static void deleteLocalServicesIfNeeded(ArrayList<ServiceModel> serverServices, ArrayList<ServiceModel> localServices) {
         for (int i = 0; i < localServices.size(); i++) {
             boolean estaEnServer = false;
             for (int j = 0; j < serverServices.size(); j++) {
@@ -350,6 +357,143 @@ public class SyncronizationManager {
                     fragment.refreshLayout.setRefreshing(false);
                     fragment.setClientList();
                 }
+            }
+        });
+    }
+
+    public static void deleteLocalProductosIfNeeded(ArrayList<ProductoModel> serverProductos, ArrayList<ProductoModel> localProductos) {
+        for (int i = 0; i < localProductos.size(); i++) {
+            boolean estaEnServer = false;
+            for (int j = 0; j < serverProductos.size(); j++) {
+                if (serverProductos.get(j).getProductoId() == localProductos.get(i).getProductoId()) {
+                    estaEnServer = true;
+                }
+            }
+
+            if (!estaEnServer) {
+                Constants.databaseManager.servicesManager.deleteServiceFromDatabase(localProductos.get(i).getProductoId());
+            }
+        }
+    }
+
+    public static void deleteLocalCestasIfNeeded(ArrayList<CestaModel> serverCestas, ArrayList<CestaModel> localCestas) {
+        for (int i = 0; i < localCestas.size(); i++) {
+            boolean estaEnServer = false;
+            for (int j = 0; j < serverCestas.size(); j++) {
+                if (serverCestas.get(j).getCestaId() == localCestas.get(i).getCestaId()) {
+                    estaEnServer = true;
+                }
+            }
+
+            if (!estaEnServer) {
+                Constants.databaseManager.cestaManager.deleteCesta(localCestas.get(i));
+            }
+        }
+    }
+
+    public static void deleteLocalVentasIfNeeded(ArrayList<VentaModel> serverVentas, ArrayList<VentaModel> localVentas) {
+        for (int i = 0; i < localVentas.size(); i++) {
+            boolean estaEnServer = false;
+            for (int j = 0; j < serverVentas.size(); j++) {
+                if (serverVentas.get(j).getVentaId() == localVentas.get(i).getVentaId()) {
+                    estaEnServer = true;
+                }
+            }
+
+            if (!estaEnServer) {
+                Constants.databaseManager.ventaManager.deleteVenta(localVentas.get(i));
+            }
+        }
+    }
+
+    public static void getProductos(Context context) {
+        Call<ArrayList<ProductoModel>> call = Constants.webServices.getProductos(Preferencias.getComercioIdFromSharedPreferences(context));
+        call.enqueue(new Callback<ArrayList<ProductoModel>>() {
+            @Override
+            public void onResponse(Call<ArrayList<ProductoModel>> call, Response<ArrayList<ProductoModel>> response) {
+                if (response.code() == 200) {
+                    ArrayList<ProductoModel> productos = response.body();
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            for (ProductoModel producto: productos) {
+                                if (Constants.databaseManager.productoManager.getProductoWithProductId(producto.getProductoId()) == null) {
+                                    Constants.databaseManager.productoManager.saveProducto(producto);
+                                } else {
+                                    Constants.databaseManager.productoManager.updateProducto(producto);
+                                }
+                            }
+                            ArrayList<ProductoModel> localProductos = Constants.databaseManager.productoManager.getAllProductos();
+                            deleteLocalProductosIfNeeded(productos, localProductos);
+
+                        }
+                    }).start();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<ProductoModel>> call, Throwable t) {
+            }
+        });
+    }
+
+    public static void getCestas(Context contexto) {
+        Call<ArrayList<CestaModel>> call = Constants.webServices.getCestas(Preferencias.getComercioIdFromSharedPreferences(contexto));
+        call.enqueue(new Callback<ArrayList<CestaModel>>() {
+            @Override
+            public void onResponse(Call<ArrayList<CestaModel>> call, Response<ArrayList<CestaModel>> response) {
+                if (response.code() == 200) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            for (CestaModel cesta: response.body()) {
+                                if (Constants.databaseManager.cestaManager.getCesta(cesta.getCestaId()) == null) {
+                                    Constants.databaseManager.cestaManager.saveCesta(cesta);
+                                } else {
+                                    Constants.databaseManager.cestaManager.updateCesta(cesta);
+                                }
+                            }
+
+                            ArrayList<CestaModel> localCestas = Constants.databaseManager.cestaManager.getAllCestas();
+                            deleteLocalCestasIfNeeded(response.body(), localCestas);
+                        }
+                    }).start();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<CestaModel>> call, Throwable t) {
+            }
+        });
+    }
+
+    public static void getVentas(Context context) {
+        Call<ArrayList<VentaModel>> call = Constants.webServices.getVentas(Preferencias.getComercioIdFromSharedPreferences(context));
+        call.enqueue(new Callback<ArrayList<VentaModel>>() {
+            @Override
+            public void onResponse(Call<ArrayList<VentaModel>> call, Response<ArrayList<VentaModel>> response) {
+                if (response.code() == 200) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            for (VentaModel venta: response.body()) {
+                                if (Constants.databaseManager.ventaManager.getVenta(venta.getVentaId()) == null) {
+                                    Constants.databaseManager.ventaManager.saveVenta(venta);
+                                } else {
+                                    Constants.databaseManager.ventaManager.updateVenta(venta);
+                                }
+                            }
+
+                            ArrayList<VentaModel> localVentas = Constants.databaseManager.ventaManager.getAllVentas();
+                            deleteLocalVentasIfNeeded(response.body(), localVentas);
+                        }
+                    }).start();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<VentaModel>> call, Throwable t) {
+
             }
         });
     }

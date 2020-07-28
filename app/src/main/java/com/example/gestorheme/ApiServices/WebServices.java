@@ -1,5 +1,7 @@
 package com.example.gestorheme.ApiServices;
 
+import com.example.gestorheme.Models.Cesta.CestaModel;
+import com.example.gestorheme.Models.CestaMasVentas.CestaMasVentasModel;
 import com.example.gestorheme.Models.CierreCaja.CierreCajaModel;
 import com.example.gestorheme.Models.Client.ClientModel;
 import com.example.gestorheme.Models.Empleados.EmpleadoModel;
@@ -8,8 +10,10 @@ import com.example.gestorheme.Models.EstiloPublico.EstiloPublicoModel;
 import com.example.gestorheme.Models.Login.LoginModel;
 import com.example.gestorheme.Models.LoginMasDispositivos.LoginMasDispositivosModel;
 import com.example.gestorheme.Models.Notification.NotificationModel;
+import com.example.gestorheme.Models.Producto.ProductoModel;
 import com.example.gestorheme.Models.Service.ServiceModel;
 import com.example.gestorheme.Models.TipoServicio.TipoServicioModel;
+import com.example.gestorheme.Models.Venta.VentaModel;
 import com.example.gestorheme.Models.WebServicesModels.ClientesMasServiciosModel;
 import java.util.ArrayList;
 import retrofit2.Call;
@@ -123,5 +127,30 @@ public interface WebServices {
 
     @GET("get_estilo_privado/{comercioId}")
     Call<EstiloAppModel> getEstiloPrivado(@Path("comercioId") long comercioId);
+
+    @GET("get_productos/{comercioId}")
+    Call<ArrayList<ProductoModel>> getProductos(@Path("comercioId") long comercioId);
+
+    @Headers("Content-Type: application/json")
+    @POST("save_producto")
+    Call<ProductoModel> saveProducto(@Body ProductoModel producto);
+
+    @Headers("Content-Type: application/json")
+    @PUT("update_producto")
+    Call<ProductoModel> updateProducto(@Body ProductoModel producto);
+
+    @Headers("Content-Type: application/json")
+    @POST("save_cesta")
+    Call<CestaMasVentasModel> saveCesta(@Body CestaMasVentasModel model);
+
+    @Headers("Content-Type: application/json")
+    @PUT("update_cesta")
+    Call<CestaMasVentasModel> updateCesta(@Body CestaMasVentasModel model);
+
+    @GET("get_cestas/{comercioId}")
+    Call<ArrayList<CestaModel>> getCestas(@Path("comercioId") long comercioId);
+
+    @GET("get_ventas/{comercioId}")
+    Call<ArrayList<VentaModel>> getVentas(@Path("comercioId") long comercioId);
 }
 
