@@ -2,6 +2,8 @@ package com.example.gestorheme.Activities.ClientListSelector;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -47,6 +49,8 @@ public class ClientListSelectorActivity extends AppCompatActivity {
 
         setListProperties();
         setClientList();
+        setClientsTextListener();
+        setCLientsFieldCleanClick();
     }
 
     private void getFields() {
@@ -86,12 +90,36 @@ public class ClientListSelectorActivity extends AppCompatActivity {
         });
     }
 
+    private void setCLientsFieldCleanClick(){
+        cleanButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                clientFilterField.setText("");
+            }
+        });
+    }
+
     private void setClientList() {
         clientList.setBackgroundColor(AppStyle.getBackgroundColor());
         clientListAdapter = new ClientListAdapter(this);
         ArrayList<ClientModel> clientes = Constants.databaseManager.clientsManager.getClientsFromDatabase();
+        if (clientFilterField.getText().length() > 0) {
+            clientes = filterClientsWithText(clientes, clientFilterField.getText().toString());
+        }
 
         sortClients(clientes);
+    }
+
+    private ArrayList<ClientModel> filterClientsWithText(ArrayList<ClientModel> clientes, String text) {
+        ArrayList<ClientModel> clientesFiltrados = new ArrayList<>();
+        for (int i = 0; i < clientes.size(); i++) {
+            String nombreCompleto = clientes.get(i).getNombre() + " " + clientes.get(i).getApellidos();
+            if (nombreCompleto.toLowerCase().contains(text.toLowerCase())) {
+                clientesFiltrados.add(clientes.get(i));
+            }
+        }
+
+        return clientesFiltrados;
     }
 
     private void sortClients(ArrayList<ClientModel> clientes) {
@@ -130,5 +158,20 @@ public class ClientListSelectorActivity extends AppCompatActivity {
         }
 
         return clients;
+    }
+
+    private void setClientsTextListener() {
+        clientFilterField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                setClientList();
+            }
+        });
     }
 }
